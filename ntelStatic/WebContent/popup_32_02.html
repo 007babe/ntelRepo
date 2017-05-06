@@ -1,0 +1,165 @@
+<div id="divModalDialog" class="modal-dialog">
+    <div class="modal-content">
+        <!-- header Start -->
+        <div class="modal-header p-header">
+            <!-- 닫기(x) 버튼 Start -->
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <!-- 닫기(x) 버튼 End -->
+            <!-- header title Start -->
+            <h4 class="modal-title p-title">유심입고</h4>
+            <!-- header title End -->
+        </div>
+        <!-- header End -->
+        <!-- body Start -->
+        <div class="modal-body p-body">
+            <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+                <form name="frmPopupInStock">
+                <table class="t-table" style="width: 478px;">
+                    <tbody>
+                        <tr>
+                            <td class="t-label">매장</td>
+                            <td class="t-content">
+                                <span>
+                                    이노텔
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">입고직원</td>
+                            <td class="t-content">
+                                <span>
+                                    <select class="form-control form-box" id="sellerNm" name="sellerNm">
+                                        <option>정혜진[총괄]</option>
+                                        <option>노형우[대표]</option>
+                                        <option>김관태[시다]</option>
+                                    </select>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">입고일</td>
+                            <td class="t-content">
+                                <span>
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="2017-03-17">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">거래처</td>
+                            <td class="t-content">
+                                <span>
+                                    <select class="form-control form-box" id="sellerNm" name="sellerNm">
+                                        <option>KT[비즈]-제이에스 (KT)</option>
+                                    </select>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-white-s al" colspan="2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">모델명</td>
+                            <td class="t-content">
+                                <span>
+                                    <!--
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="">
+                                    -->
+                                    <input type="text" placeholder="모델명을 입력하세요" class="typeahead_2 form-control form-box"/>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">단말기정보</td>
+                            <td class="t-content">
+                                <span>
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">색상</td>
+                            <td class="t-content">
+                                <span>
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">상태</td>
+                            <td class="t-content">
+                                <span>
+                                    <select class="form-control form-box" id="sellerNm" name="sellerNm">
+                                        <option>정혜진[총괄]</option>
+                                        <option>노형우[대표]</option>
+                                        <option>김관태[시다]</option>
+                                    </select>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">입고가격</td>
+                            <td class="t-content">
+                                <span>
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-white-s al" colspan="2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">일련번호</td>
+                            <td class="t-content">
+                                <span>
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-white-s al" colspan="2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="t-label">메모</td>
+                            <td class="t-content">
+                                <span>
+                                    <input type="text" id="closeDt" class="form-control form-box" style="text-align: center;" value="">
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </div>
+        <!-- body End -->
+        <!-- Footer Start -->
+        <div class="modal-footer p-footer">
+            <span>
+                <button id="btnReg" type="button" class="form-btn form-btn-n" style="width: 120px;">입고 및 바로개통</button>
+            </span>
+            <span>
+                <button type="button" class="form-btn form-btn-n" style="width: 60px;" data-dismiss="modal">닫기</button>
+            </span>
+        </div>
+        <!-- Footer End -->
+    </div>
+</div>
+<script>
+$(function(){
+    // 등록버튼 클릭 시
+    $("#btnReg").click(function(){
+        _modalDialog = $("#divModalDialog");
+        _modalDialogParent = $("#divModalDialog").parent();
+
+        alert("입고 및 바로개통 하시겠습니까?");
+
+
+        // 입고처리 후 닫기
+        _modalDialogParent.modal('hide');
+
+    });
+});
+</script>

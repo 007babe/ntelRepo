@@ -1,0 +1,945 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko"  lang="ko">
+<head>
+    <!-- Meta Start -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta End -->
+    
+    <!-- Title Start -->
+    <title>엔텔... 모바일의 패러다임을 개척하다.</title>
+    <!-- Title End -->
+    
+    <!-- CSS Link Start -->
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+    <link href="css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+    
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- CSS Link End -->
+
+    <style>
+        /* Additional style to fix warning dialog position */
+        #alertmod_dataGrid {
+            top: 900px !important;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="wrapper">
+<!-- Left Navi Start -->
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element"> 
+                    <span>
+                        <img alt="image" class="img-circle" src="img/profile_small_roh.png"/>
+                    </span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear"> 
+                            <span class="block m-t-xs"> 
+                                <strong class="font-bold">노형우</strong>
+                            </span> 
+                            <span class="text-muted text-xs block">
+                                대표 <b class="caret"></b>
+                            </span> 
+                        </span> 
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="#">권한 : 총괄</a></li>
+                        <li><a href="#">종류 : 정기</a></li>
+                        <li><a href="#">결제 : 매월5일</a></a></li>
+                        <li><a href="#">등급 : 기본형</a></li>
+                        <li><a href="#">매장 : 1개</a></li>
+                        <li><a href="#">직원 : 3명</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    <img alt="image" class="img-circle" src="img/profile_small_roh.png"/>
+                </div>
+            </li>
+            
+            <!-- Left Navi :: Left Menu Start -->
+            <li>
+                <a href="menu00.html"><i class="fa fa-home"></i> <span class="nav-label">메인</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu01.html">메인</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu10.html"><i class="fa fa-cubes"></i> <span class="nav-label">재고업무</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu11.html">종합재고관리</a></li>
+                    <li><a href="sub_menu12.html">보유재고</a></li>
+                    <li><a href="sub_menu13.html">회수단말기</a></li>
+                    <li><a href="sub_menu14.html">공기기판매</a></li>
+                    <li><a href="sub_menu15.html">재고변동이력</a></li>
+                </ul>
+            </li>
+            <li class="active">
+                <a href="menu20.html"><i class="fa fa-handshake-o"></i> <span class="nav-label">개통업무</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu21.html" class="active">전체개통관리</a></li>
+                    <li><a href="sub_menu22.html">신규개통</a></li>
+                    <li><a href="sub_menu23.html">개통처리이력</a></li>
+                    <li><a href="sub_menu24.html">홈상품 판매목록</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu30.html"><i class="fa fa-calendar"></i> <span class="nav-label">미결업무</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu31.html">미결업무목록</a></li>
+                    <li><a href="sub_menu32.html">미결캘린더</a></li>
+                    <li><a href="sub_menu33.html">미결처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu40.html"><i class="fa fa-edit"></i> <span class="nav-label">예약업무</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu41.html">예약업무목록</a></li>
+                    <li><a href="sub_menu42.html">예약처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu50.html"><i class="fa fa-group"></i> <span class="nav-label">고객관리</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu51.html">고객목록</a></li>
+                    <li><a href="sub_menu52.html">정기문자</a></li>
+                    <li><a href="sub_menu53.html">문자발송내역</a></li>
+                    <li><a href="sub_menu54.html">고객처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu60.html"><i class="fa fa-book"></i> <span class="nav-label">수납/장부</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu61.html">월별간편장부</a></li>
+                    <li><a href="sub_menu62.html">장부검색</a></li>
+                    <li><a href="sub_menu63.html">수납전용장부</a></li>
+                    <li><a href="sub_menu64.html">영수증출력</a></li>
+                    <li><a href="sub_menu65.html">처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu70.html"><i class="fa fa-area-chart"></i> <span class="nav-label">통계리포트</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu71.html">일일리포트</a></li>
+                    <li><a href="sub_menu72.html">월간리포트</a></li>
+                    <li><a href="sub_menu73.html">거래처통계</a></li>
+                    <li><a href="sub_menu74.html">직원별통계</a></li>
+                    <li><a href="sub_menu74.html">단말기개통</a></li>
+                    <li><a href="sub_menu74.html">개통이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="menu80.html"><i class="fa fa-gears"></i> <span class="nav-label">환경설정</span></span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="sub_menu81.html">거래처관리</a></li>
+                    <li><a href="sub_menu82.html">직원관리</a></li>
+                    <li><a href="sub_menu83.html">매장관리</a></li>
+                    <li><a href="sub_menu84.html">기본설정</a></li>
+                    <li><a href="sub_menu84.html">결제내역</a></li>
+                </ul>
+            </li>
+            <!-- Left Navi :: Left Menu End -->
+        </ul>
+    </div>
+</nav>
+<!-- Left Navi End -->
+
+<!-- Right Contents Start -->
+<div id="page-wrapper" class="gray-bg">
+    <!-- Right Contents :: Top Navi Start -->
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                <!--
+                <a class="navbar-minimalize minimalize-style-ntel btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                <form role="search" class="navbar-form-custom" action="search_results.html">
+                    <div class="form-group">
+                        <input type="text" placeholder="Search for something..." class="form_control form-box" name="top-search" id="top-search">
+                    </div>
+                </form>
+                -->
+            </div>
+        </nav>
+    </div>
+    <!-- Right Contents :: Top Navi End -->
+    <!-- Right Contents :: Top Page Header Start -->
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-4">
+                <h2>전체개통관리</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="index.html">엔텔</a>
+                    </li>
+                    <li>
+                        <a href="index.html">개통업무</a>
+                    </li>
+                    <li class="active">
+                        <strong>전체개통관리</strong>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <!-- Right Contents :: Top Page Header End -->        
+    <!-- Right Contents :: Main Contents Start -->
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                       <!-- tools Start -->
+                    <div class="ibox-title">
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">Config option 1</a>
+                                </li>
+                                <li><a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- tools End -->
+                    <!-- 검색조건 Start -->
+                    <div class="ibox-content search">
+                        <form method="get" class="form-horizontal search">
+                            <div class="form-group search">
+                                <label class="col-sm control-label" style="width:150px">기간</label>
+                                <div class="col-sm"><input type="text" id="fromDate" class="form-control form-box"></div>
+                                <label class="col-sm control-label" style="width:10px">~</label>
+                                <div class="col-sm"><input type="text" id="toDate" class="form-control form-box"></div>
+                                <label class="col-sm control-label" style="width:150px">단말기검색</label>
+                                <div class="col-sm">
+                                    <select class="form-control form-box" id="mobileType" name="mobileType">
+                                        <option>종류</option>
+                                        <option>휴대폰</option>
+                                        <option>태블릿</option>
+                                        <option>유심</option>
+                                        <option>유선</option>
+                                    </select>
+                                </div>                                
+                                <div class="col-sm">
+                                    <select class="form-control form-box" id="openType" name="openType">
+                                        <option>상태</option>
+                                        <option>정상</option>
+                                        <option>이력</option>
+                                        <option>교품</option>
+                                        <option>중고</option>
+                                    </select>
+                                </div>                                
+                                <div class="col-sm">
+                                    <select class="form-control form-box" id="telecomType" name="telecomType">
+                                        <option>통신사</option>
+                                        <option>SKT</option>
+                                        <option>KT</option>
+                                        <option>LGT</option>
+                                        <option>mSKT</option>
+                                        <option>mKT</option>
+                                        <option>mLGT</option>
+                                    </select>
+                                </div>                                
+                                  <label class="col-sm control-label" style="width:150px">모델명</label>
+                                <div class="col-sm"><input type="text" id="modelNm" class="form-control form-box"></div>
+                            </div>
+                            <div class="hr-line-dashed search"></div>
+                            <div class="form-group search">
+                                  <label class="col-sm control-label" style="width:150px">검색조건</label>
+                                <div class="col-sm">
+                                    <select class="form-control form-box" id="employeeNm" name="telecomType">
+                                        <option>직원</option>
+                                        <option>노형우</option>
+                                        <option>김관태</option>
+                                        <option>정혜진</option>
+                                        <option>김알바</option>
+                                    </select>
+                                </div>                                  
+                                <div class="col-sm">
+                                    <select class="form-control form-box" id="employeeNm" name="telecomType">
+                                        <option>거래처</option>
+                                        <option>SK-동행</option>
+                                        <option>SK-상상</option>
+                                        <option>KT-대경</option>
+                                        <option>KT-씨엘</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm">
+                                    <select class="form-control form-box" id="openType" name="openType">
+                                        <option>상태</option>
+                                        <option>정상</option>
+                                        <option>이력</option>
+                                        <option>교품</option>
+                                        <option>중고</option>
+                                    </select>
+                                </div>                                
+                            </div>                            
+                        </form>                        
+                    </div>
+                    <!-- 검색조건 End -->
+                </div>
+            </div>
+        </div>                
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1">전체</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-2">신규</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-3">MNP</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-4">보상</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-5">가변</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-6">에이징</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-7">가개통</a></li>
+                        <li class=""><a data-toggle="tab" href="#tab-8">선불개통</a></li>
+                    </ul>                    
+                    <!-- 데이터 리스트 Start -->
+                    <div class="ibox-content tab">
+                        <div class="jqGrid_wrapper">
+                            <table id="dataGrid"></table>
+                            <div id="pager_list_2"></div>
+                        </div>
+
+                        <div class="jqGrid_wrapper">
+                            <table id="dataGrid"></table>
+                            <div id="pager_list_2"></div>
+                        </div>                    
+                        <!--
+                        <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover dataTables-example" >
+                                    <thead>
+                                    <tr>
+                                        <th>선택</th>
+                                        <th>개통일</th>
+                                        <th>매장</th>
+                                        <th>직원</th>
+                                        <th>거래처</th>
+                                    </tr>
+                                    </thead>
+                                    
+                                    
+                                    
+                                    <tbody>
+                                    <tr class="gradeX">
+                                        <td>Trident</td>
+                                        <td>Internet
+                                            Explorer 4.0
+                                        </td>
+                                        <td>Win 95+</td>
+                                        <td class="center">4</td>
+                                        <td class="center">X</td>
+                                    </tr>
+                                    <tr class="gradeC">
+                                        <td>Trident</td>
+                                        <td>Internet
+                                            Explorer 5.0
+                                        </td>
+                                        <td>Win 95+</td>
+                                        <td class="center">5</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Trident</td>
+                                        <td>Internet
+                                            Explorer 5.5
+                                        </td>
+                                        <td>Win 95+</td>
+                                        <td class="center">5.5</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Trident</td>
+                                        <td>Internet
+                                            Explorer 6
+                                        </td>
+                                        <td>Win 98+</td>
+                                        <td class="center">6</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Trident</td>
+                                        <td>Internet Explorer 7</td>
+                                        <td>Win XP SP2+</td>
+                                        <td class="center">7</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Trident</td>
+                                        <td>AOL browser (AOL desktop)</td>
+                                        <td>Win XP</td>
+                                        <td class="center">6</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Firefox 1.0</td>
+                                        <td>Win 98+ / OSX.2+</td>
+                                        <td class="center">1.7</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Firefox 1.5</td>
+                                        <td>Win 98+ / OSX.2+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Firefox 2.0</td>
+                                        <td>Win 98+ / OSX.2+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Firefox 3.0</td>
+                                        <td>Win 2k+ / OSX.3+</td>
+                                        <td class="center">1.9</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Camino 1.0</td>
+                                        <td>OSX.2+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Camino 1.5</td>
+                                        <td>OSX.3+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Netscape 7.2</td>
+                                        <td>Win 95+ / Mac OS 8.6-9.2</td>
+                                        <td class="center">1.7</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Netscape Browser 8</td>
+                                        <td>Win 98SE+</td>
+                                        <td class="center">1.7</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Netscape Navigator 9</td>
+                                        <td>Win 98+ / OSX.2+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.0</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.1</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1.1</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.2</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1.2</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.3</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1.3</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.4</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1.4</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.5</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1.5</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.6</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">1.6</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.7</td>
+                                        <td>Win 98+ / OSX.1+</td>
+                                        <td class="center">1.7</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Mozilla 1.8</td>
+                                        <td>Win 98+ / OSX.1+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Seamonkey 1.1</td>
+                                        <td>Win 98+ / OSX.2+</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Gecko</td>
+                                        <td>Epiphany 2.20</td>
+                                        <td>Gnome</td>
+                                        <td class="center">1.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>Safari 1.2</td>
+                                        <td>OSX.3</td>
+                                        <td class="center">125.5</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>Safari 1.3</td>
+                                        <td>OSX.3</td>
+                                        <td class="center">312.8</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>Safari 2.0</td>
+                                        <td>OSX.4+</td>
+                                        <td class="center">419.3</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>Safari 3.0</td>
+                                        <td>OSX.4+</td>
+                                        <td class="center">522.1</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>OmniWeb 5.5</td>
+                                        <td>OSX.4+</td>
+                                        <td class="center">420</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>iPod Touch / iPhone</td>
+                                        <td>iPod</td>
+                                        <td class="center">420.1</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Webkit</td>
+                                        <td>S60</td>
+                                        <td>S60</td>
+                                        <td class="center">413</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 7.0</td>
+                                        <td>Win 95+ / OSX.1+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 7.5</td>
+                                        <td>Win 95+ / OSX.2+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 8.0</td>
+                                        <td>Win 95+ / OSX.2+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 8.5</td>
+                                        <td>Win 95+ / OSX.2+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 9.0</td>
+                                        <td>Win 95+ / OSX.3+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 9.2</td>
+                                        <td>Win 88+ / OSX.3+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera 9.5</td>
+                                        <td>Win 88+ / OSX.3+</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Opera for Wii</td>
+                                        <td>Wii</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Nokia N800</td>
+                                        <td>N800</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Presto</td>
+                                        <td>Nintendo DS browser</td>
+                                        <td>Nintendo DS</td>
+                                        <td class="center">8.5</td>
+                                        <td class="center">C/A<sup>1</sup></td>
+                                    </tr>
+                                    <tr class="gradeC">
+                                        <td>KHTML</td>
+                                        <td>Konqureror 3.1</td>
+                                        <td>KDE 3.1</td>
+                                        <td class="center">3.1</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>KHTML</td>
+                                        <td>Konqureror 3.3</td>
+                                        <td>KDE 3.3</td>
+                                        <td class="center">3.3</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>KHTML</td>
+                                        <td>Konqureror 3.5</td>
+                                        <td>KDE 3.5</td>
+                                        <td class="center">3.5</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Tasman</td>
+                                        <td>Internet Explorer 4.5</td>
+                                        <td>Mac OS 8-9</td>
+                                        <td class="center">-</td>
+                                        <td class="center">X</td>
+                                    </tr>
+                                    <tr class="gradeC">
+                                        <td>Tasman</td>
+                                        <td>Internet Explorer 5.1</td>
+                                        <td>Mac OS 7.6-9</td>
+                                        <td class="center">1</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeC">
+                                        <td>Tasman</td>
+                                        <td>Internet Explorer 5.2</td>
+                                        <td>Mac OS 8-X</td>
+                                        <td class="center">1</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Misc</td>
+                                        <td>NetFront 3.1</td>
+                                        <td>Embedded devices</td>
+                                        <td class="center">-</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeA">
+                                        <td>Misc</td>
+                                        <td>NetFront 3.4</td>
+                                        <td>Embedded devices</td>
+                                        <td class="center">-</td>
+                                        <td class="center">A</td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Misc</td>
+                                        <td>Dillo 0.8</td>
+                                        <td>Embedded devices</td>
+                                        <td class="center">-</td>
+                                        <td class="center">X</td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Misc</td>
+                                        <td>Links</td>
+                                        <td>Text only</td>
+                                        <td class="center">-</td>
+                                        <td class="center">X</td>
+                                    </tr>
+                                    <tr class="gradeX">
+                                        <td>Misc</td>
+                                        <td>Lynx</td>
+                                        <td>Text only</td>
+                                        <td class="center">-</td>
+                                        <td class="center">X</td>
+                                    </tr>
+                                    <tr class="gradeC">
+                                        <td>Misc</td>
+                                        <td>IE Mobile</td>
+                                        <td>Windows Mobile 6</td>
+                                        <td class="center">-</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeC">
+                                        <td>Misc</td>
+                                        <td>PSP browser</td>
+                                        <td>PSP</td>
+                                        <td class="center">-</td>
+                                        <td class="center">C</td>
+                                    </tr>
+                                    <tr class="gradeU">
+                                        <td>Other browsers</td>
+                                        <td>All others</td>
+                                        <td>-</td>
+                                        <td class="center">-</td>
+                                        <td class="center">U</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Rendering engine</th>
+                                        <th>Browser</th>
+                                        <th>Platform(s)</th>
+                                        <th>Engine version</th>
+                                        <th>CSS grade</th>
+                                    </tr>
+                            </tfoot>
+                            </table>
+                        </div>
+                        -->
+                        
+                    </div>
+                    <!-- 데이터 리스트 End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Right Contents :: Main Contents End -->
+    <!-- Right Contents :: Bottom Footer Start -->
+    <div class="footer">
+        <div>
+            <strong>Copyright</strong> 엔텔 &copy; 2018-2019
+        </div>
+    </div>
+    <!-- Right Contents :: Bottom Footer End -->
+</div>
+<!-- Right Contents End -->
+
+<!-- Mainly scripts -->
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="js/inspinia.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- jQuery UI  -->
+<script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+<!-- iCheck -->
+<script src="js/plugins/iCheck/icheck.min.js"></script>
+
+<!-- Full Calendar -->
+<script src="js/plugins/fullcalendar/moment.min.js"></script>
+<script src="js/plugins/fullcalendar/fullcalendar.min.js"></script>
+
+<!-- Sparkline -->
+<script src="js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- DataTables -->
+<script src="js/plugins/dataTables/datatables.min.js"></script>
+
+
+<!-- jqGrid -->
+<script src="js/plugins/jqGrid/i18n/grid.locale-en.js"></script>
+<script src="js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+
+
+<script>
+
+    $(document).ready(function() {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+
+        /* initialize the external events
+         -----------------------------------------------------------------*/
+
+
+        $('#external-events div.external-event').each(function() {
+
+            // store data so the calendar knows to render an event upon drop
+            $(this).data('event', {
+                title: $.trim($(this).text()), // use the element's text as the event title
+                stick: true // maintain when user navigates (see docs on the renderEvent method)
+            });
+
+            // make the event draggable using jQuery UI
+            $(this).draggable({
+                zIndex: 1111999,
+                revert: true,      // will cause the event to go back to its
+                revertDuration: 0  //  original position after the drag
+            });
+
+        });
+        
+        
+        // Examle data for jqGrid
+        var mydata = [
+            {id: "1",  openDt: "2010-05-24", shopNm: "이노텔", employeeNm: "노대표", agentNm: "KT-대경", openStatus: "정상", custNm: "김고객", payType: "할부", openType: "신규", openTelNo: "010-6754-9876", telecomNm: "SKT", modelNm: "LG-T390T 실버", balAccounts: "-289200", margin: "269000"},
+            {id: "2",  openDt: "2010-05-25", shopNm: "이노텔", employeeNm: "정팀장", agentNm: "SK-동행", openStatus: "정상", custNm: "정고객", payType: "현금", openType: "기변", openTelNo: "010-6754-9876", telecomNm: "SKT", modelNm: "SM-G930T 와인", balAccounts: "-140000", margin: "128000"},
+            {id: "3",  openDt: "2007-09-01", shopNm: "엔텔",   employeeNm: "정팀장", agentNm: "LG-유안", openStatus: "교품",custNm: "홍삼정", payType: "할부", openType: "신규", openTelNo: "010-3657-6383", telecomNm: "KT", modelNm: "SM-A520K 블랙", balAccounts: "-120000", margin: "43800"},
+            {id: "4",  openDt: "2007-10-04", shopNm: "이노텔", employeeNm: "김사원", agentNm: "KT-대경", openStatus: "정상", custNm: "공장용", payType: "할부", openType: "신규", openTelNo: "010-7654-2303", telecomNm: "SKT", modelNm: "SM-N920S 골드", balAccounts: "540000", margin: "328000"},
+            {id: "5",  openDt: "2007-10-05", shopNm: "엔텔",   employeeNm: "노대표", agentNm: "SK-동행", openStatus: "정상",custNm: "사실분", payType: "할부", openType: "MNP", openTelNo: "010-0987-2876", telecomNm: "SKT", modelNm: "SM-G930S 실버", balAccounts: "142900", margin: "13000"},
+            {id: "6",  openDt: "2007-09-06", shopNm: "이노텔", employeeNm: "노대표", agentNm: "LG-유안", openStatus: "정상", custNm: "정대박", payType: "현금", openType: "신규", openTelNo: "010-2384-3489", telecomNm: "SKT", modelNm: "SM-G930S 와인", balAccounts: "-70000", margin: "20770"},
+            {id: "7",  openDt: "2007-10-04", shopNm: "이노텔", employeeNm: "김사원", agentNm: "KT-대경", openStatus: "정상", custNm: "민엔텔", payType: "할부", openType: "기변", openTelNo: "010-2314-3147", telecomNm: "KT", modelNm: "SM-A520K 블랙", balAccounts: "370970", margin: "23440"},
+            {id: "8",  openDt: "2007-10-03", shopNm: "이노텔", employeeNm: "노대표", agentNm: "SK-동행", openStatus: "정상", custNm: "공도리", payType: "현금", openType: "기변", openTelNo: "010-9847-2367", telecomNm: "SKT", modelNm: "LG-T390S 실버", balAccounts: "-340200", margin: "376500"},
+            {id: "9",  openDt: "2007-09-01", shopNm: "이노텔", employeeNm: "노대표", agentNm: "LG-유안", openStatus: "중고", custNm: "한상민", payType: "유심", openType: "MNP", openTelNo: "010-2834-8472", telecomNm: "mSK", modelNm: "LG-T390K 핑크", balAccounts: "-120000", margin: "57000"},
+            {id: "11", openDt: "2007-10-01", shopNm: "이노텔", employeeNm: "노대표", agentNm: "KT-대경", openStatus: "정상", custNm: "오영택", payType: "할부", openType: "신규", openTelNo: "010-4586-4867", telecomNm: "SKT", modelNm: "SM-A520K 블랙", balAccounts: "-98000", margin: "13000"},
+            {id: "12", openDt: "2007-10-02", shopNm: "이노텔", employeeNm: "김사원", agentNm: "SK-동행", openStatus: "교품", custNm: "김장수", payType: "현금", openType: "MNP", openTelNo: "010-3862-3874", telecomNm: "LGT", modelNm: "SM-N920K 화이트", balAccounts: "-56440", margin: "3600"},
+            {id: "13", openDt: "2007-09-01", shopNm: "엔텔",   employeeNm: "노대표", agentNm: "LG-유안", openStatus: "정상",custNm: "노영원", payType: "할부", openType: "신규", openTelNo: "010-3662-9837", telecomNm: "mSK", modelNm: "LG-T390T 실버", balAccounts: "30000", margin: "23000"}
+        ];
+        
+        // Configuration for jqGrid Example 2
+        $("#dataGrid").jqGrid({
+            data: mydata,
+            datatype: "local",
+            height: 600,
+            autowidth: true,
+            shrinkToFit: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            colNames:['개통일', '매장', '직원', '거래처', '상태', '고객명', '구분', '개통', '통신사', '개통번호', '모델명', '정산', '마진'],
+            colModel:[
+                // 개통일-openDt
+                {
+                    name: 'openDt'
+                   ,index: 'openDt'
+                   ,editable: true
+                   ,width: 40
+                   ,align: "center"
+                   ,sorttype: "date" 
+                   ,formatter: "YYYY-MM-DD"
+                }
+               ,{name: 'shopNm',      index:'shopNm',    editable: true, width:30,  align: "center"},
+                {name: 'employeeNm',  index:'employeeNm',  editable: true, width:30,  align: "center"},
+                {name: 'agentNm',     index:'agentNm',     editable: true, width:40,  align: "center"},
+                {name: 'openStatus',  index:'openStatus',   editable: true, width:30,  align: "center"},
+                {name: 'custNm',      index:'custNm',    editable: true, width:40,  align: "center", cellattr: function(rowId, val, rowObject, cm, rdata) {
+                                                                                                                       return "style='background-color: #FFFEE7; font-weight: bold;'";
+                                                                                                               }
+                },
+                {name: 'payType',     index:'payType', editable: true, width:30,  align: "center"},
+                {name: 'openType',    index:'openType', editable: true, width:30,  align: "center"},
+                {name: 'telecomNm',   index:'telecomNm', editable: true, width:50,  align: "center"},
+                {name: 'openTelNo',   index:'openTelNo', editable: true, width:60,  align: "center"},
+                {name: 'modelNm',     index:'modelNm', editable: true, width:80,  align: "center"},
+                {name: 'balAccounts', index:'balAccounts', editable: true, width:30,  align: "right", formatter: "currency", 
+                 formatoptions: {thousandsSeparator:",", decimalPlaces: 0}, 
+                 cellattr: function(rowId, val, rowObject, cm, rdata) {
+                               return Number(val.replace(",", "")) < 0 ? "style='color: darkred;'" : "";
+                           }   
+                
+                },
+                {name: 'margin',      index:'margin', editable: true, width:30,  align: "right", formatter: "currency", formatoptions: {thousandsSeparator:",", decimalPlaces: 0}, cellattr: function(rowId, val, rowObject, cm, rdata) {
+                                                                                                                                 } 
+                    
+                }
+            ],
+            formatter: {
+                 currency : {thousandsSeparator: ",", defaultValue: '0', decimalPlaces: 0}
+            },
+            multiselect: true,
+            multiselectWidth: 30,
+            pager: "#pager_list_2",
+            viewrecords: true,
+            caption: "",
+            add: true,
+            edit: true,
+            addtext: 'Add',
+            edittext: 'Edit',
+            hidegrid: false,
+        });
+
+        // Add selection
+        //$("#dataGrid").setSelection(4, true);
+
+        // Frozen Column
+        //$("#dataGrid").jqGrid("setFrozenColumns");
+                                                                            
+        // Setup buttons
+        $("#dataGrid").jqGrid('navGrid', '#pager_list_2',
+            {edit: true, add: true, del: true, search: true},
+            {height: 200, reloadAfterSubmit: true}
+        );
+
+        // Add responsive to jqGrid
+        $(window).bind('resize', function () {
+            var width = $('.jqGrid_wrapper').width();
+            $('#dataGrid').setGridWidth(width);
+        });
+
+        setTimeout(function(){
+            $('.wrapper-content').removeClass('animated fadeInRight');
+        },700);
+        
+    });
+    
+    function aaa(rowId, val, rowObject, cm, rdata) {
+        alert("hahaha");
+    }
+    
+</script>
+</body>
+
+</html>
