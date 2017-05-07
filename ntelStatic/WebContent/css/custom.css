@@ -258,6 +258,7 @@ td .fc-sat {
  */
 .t-table {
   display: table;
+  width: 784px;
 /*
   table-layout:fixed; 
   word-break:break-all;   
@@ -282,6 +283,7 @@ td .fc-sat {
  */ 
 .i-table {
   display: table;
+  width: 784px;
 /*
   table-layout:fixed; 
   word-break:break-all;  
