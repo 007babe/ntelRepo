@@ -1,16 +1,6 @@
 <!-- 탭 본문 : 홈/인터넷 Start -->
 <div id="divContents03">
-    <table class="t-table">
-        <colgroup>
-            <col width="86">
-            <col width="114">
-            <col width="86">
-            <col width="114">
-            <col width="86">
-            <col width="114">
-            <col width="86">
-            <col width="114">
-        </colgroup>
+    <table class="t-table" style="width: 784px">
         <tbody>
             <tr>
                 <td class="t-label t-l-w">판매자</td>
@@ -550,7 +540,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <td class="t-white-line"></td>
+                <td class="t-white-line" colpan="8"></td>
             </tr>
             <tr id="trExeButtonGrp">
                 <td>
@@ -702,7 +692,7 @@ $(document).ready(function() {
         }
     });
 
-    // 호출한 부모의 데이터 세팅하기
+    // 호출한 부모의 데이터 세팅하기    
     $.setParentData();
 
     // 일반 form 객체 초기화
@@ -832,27 +822,27 @@ $.fn.addProdItpInfoGrp = function(opts) {
 };
 
 /*
- * 호출한 부모의 데이터 세팅하기
+ * 호출한 부모의 데이터 세팅하기    
  */
 $.setParentData = function() {
     var _parent = $("#divContents03").parent();
 
     var parentId  = $.n2s(_parent.attr("id"));
-    var telecomCd = $.n2s(_parent.attr("telecomCd"));
-    var agentCd   = $.n2s(_parent.attr("agentCd"));
-    var staffCd   = $.n2s(_parent.attr("staffCd"));
-
+    var telecomCd = $.n2s(_parent.attr("telecomCd"));    
+    var agentCd   = $.n2s(_parent.attr("agentCd"));    
+    var staffCd   = $.n2s(_parent.attr("staffCd"));    
+    
     // 세팅 대상
     var _sellerNmHi         = $("#sellerNmHi"); // 홈/인터넷 판매자
     var _openTelecomHi      = $("#openTelecomHi"); // 홈/인터넷 개통통신사
     var _openAgentHi        = $("#openAgentHi"); // 홈/인터넷 개통거래처
     var _trExeButtonGrp     = $("#trExeButtonGrp"); // 처리버튼 그룹
-
+    
     // 단말기에 동시판매일 경우
     if(parentId == "divHiJoinNew") {
         // 등록 버튼 숨기기
         _trExeButtonGrp.addClass("disp-n");
-
+        
         // 통신사 세팅
         _openTelecomHi.gfSetComCd2ComboBox({
             grpCd : "G0002",
@@ -861,13 +851,13 @@ $.setParentData = function() {
             triggerEvent : "change"
         });
         _openTelecomHi.removeAttr("formType"); // 초기화 동작을 회피하기 위함(중요)
-
+        
         // 홈상품 개통 거래처
-        _openAgentHi.attr("setValue", agentCd);
+        _openAgentHi.attr("setValue", agentCd); 
         _openAgentHi.attr("isDisabled", "true");
 
         // 홈상품 개통 판매자
-        _sellerNmHi.attr("setValue", staffCd);
+        _sellerNmHi.attr("setValue", staffCd); 
     }
 }
 

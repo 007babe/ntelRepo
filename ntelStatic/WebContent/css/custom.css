@@ -258,10 +258,9 @@ td .fc-sat {
  */
 .t-table {
   display: table;
+/*
   table-layout:fixed; 
   word-break:break-all;   
-/*
-  width: 832px;
 */
 }
 
@@ -272,13 +271,10 @@ td .fc-sat {
 .t-table > tbody > tr > td,
 .t-table > tfoot > tr > td {
   line-height: 1.42857;
-/*  padding: 2px 2px 2px 2px; */
-  padding: 0;
+  padding: 2px 2px 2px 2px;
   vertical-align: middle;
   text-align: center;
-  /*
   height: 28px;
-  */
 }
 
 /*
@@ -286,10 +282,9 @@ td .fc-sat {
  */ 
 .i-table {
   display: table;
+/*
   table-layout:fixed; 
   word-break:break-all;  
-/*
-  width: 416px;
 */
 }
 
@@ -300,15 +295,10 @@ td .fc-sat {
 .i-table > tbody > tr > td,
 .i-table > tfoot > tr > td {
   line-height: 1.42857;
-  /*
   padding: 2px 2px 2px 2px;
-   */
-  padding: 0;
   vertical-align: middle;
   text-align: center;
-  /*
   height: 28px;
-  */
 }
 
 
@@ -430,6 +420,7 @@ td .fc-sat {
 /* form */
 .form-box {
   display: inherit;
+
   height: 23px;
   padding : 0px 1px;
   font-size : 12px;
@@ -443,9 +434,8 @@ td .fc-sat {
   height: 23px;
   border-radius: 3px;
   font-size: 12px;
-  padding: 0px 2px 1px 0px;
+  padding: 2px 2px;
 }
-
 
 .form-btn-n {
   background-color: #afafaf;
@@ -688,16 +678,7 @@ td .fc-sat {
   color: red;
 }
 
-/* td span */
-.td-span {
-    padding: 2px 2px 2px 2px;
-    display: inline-block;
-    width: 100%;
-    line-height: 23px;
-}   
-    
-    
-
+/* Span None */
 .padd-n {
   padding : 0 !important;    
 }
@@ -705,8 +686,6 @@ td .fc-sat {
 .border-n {
   border: 0 !important;
 }
-
-
 
 
 /*
@@ -737,8 +716,8 @@ label.ckbox, label.radio {
   width: 300px;
   display: inline-block;
   border: 1px solid #e5e6e7;
-  height: 23px;  
-  margin-top: -2px;
+  min-height: 23px;
+  margin-top: -1px;
   vertical-align: middle;
   padding: 1px 2px 1px 2px;
 }
