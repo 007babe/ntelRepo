@@ -2,92 +2,129 @@
 <div id="divContents01">
     <table class="t-table">
         <colgroup>
-            <col width="86">
-            <col width="114">
-            <col width="86">
-            <col width="114">
-            <col width="86">
-            <col width="114">
-            <col width="86">
-            <col width="114">
+            <col width="90">
+            <col width="115">
+            <col width="90">
+            <col width="115">
+            <col width="90">
+            <col width="115">
+            <col width="90">
+            <col width="115">
         </colgroup>
         <tbody>
             <tr>
-                <td class="t-label t-l-w">판매자</td>
-                <td class="t-content t-c-w">
-                    <span>
+                <td class="t-label">
+                    <span class="td-span">판매자</span>
+                </td>
+                <td class="t-content">
+                    <span class="td-span">
                         <select formType="staffSel" class="form-control form-box" id="sellerNm" name="sellerNm" triggerEvent="change">
                         </select>
                     </span>
                 </td>
-                <td class="t-label t-l-w">정책</td>
-                <td class="t-content t-c-w al">
-                    <span>
-                        <input type="text" id="policyNm" class="form-control form-box" style="width: 90px; text-align: right;"> 호
+                <td class="t-label">
+                    <span class="td-span">정책</span>
+                </td>
+                <td class="t-content al">
+                    <span class="td-span">
+                        <span><input type="text" id="policyNm" class="form-control form-box" style="width: 90px; text-align: right;"></span>
+                        <span>호</span>
                     </span>
                 </td>
                 <td class="t-white" colspan="4"></td>
             </tr>
             <tr>
-                <td class="t-label t-l-w">단말기</td>
-                <td class="t-content t-c-w al" colspan="3">
-                    <span style="display: inline-block; width:200px;">
-                        <select id="modelInfo" name="modelInfo" formType="chosen" sWidth="300" tabPrev="policyNm" data-placeholder="단말기를 선택하세요." dataKey="GD_PROD_PHONE" optGroup="telecomCd" loadData="Y" class="chosen-select form-control form-box">
-                            <option prodCd="" telecomCd="" netType="" phoneType="" serialNo="" color="" agentCd="" agentNm="" prodInDt="" prodInPrice="" modelCd="" dvalue="" value=""></option>
-                        </select>
-                    </span>
-                    <span>
-                        <button id="quickInStockPhone" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1"><strong>간편입고</strong></button>
+                <td class="t-label">
+                    <span class="td-span">단말기</span>
+                </td>
+                <td class="t-content al" colspan="3">
+                    <span class="td-span">
+                        <span style="display: inline-flex; width: 200px;">
+                            <select id="modelInfo" name="modelInfo" formType="chosen" sWidth="300" tabPrev="policyNm" data-placeholder="단말기를 선택하세요." dataKey="GD_PROD_PHONE" optGroup="telecomCd" loadData="Y" class="chosen-select form-control form-box">
+                                <option prodCd="" telecomCd="" netType="" phoneType="" serialNo="" color="" agentCd="" agentNm="" prodInDt="" prodInPrice="" modelCd="" dvalue="" value=""></option>
+                            </select>
+                        </span>
+                        <span>
+                            <button id="quickInStockPhone" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1"><strong>간편입고</strong></button>
+                        </span>
                     </span>
                 </td>
-                <td class="t-label t-l-w">유심</td>
-                <td class="t-content t-c-w al" colspan="3">
-                    <span style="display: inline-block; width:200px;">
-                        <select id="usimInfo" name="usimInfo" formType="chosen" sWidth="300" tabPrev="modelInfo_chosen" dispAttr="value" data-placeholder="유심을 선택하세요." class="chosen-select form-control form-box" disabled>
-                            <option prodCd="" telecomCd="" usimType="" usimModelCd="" serialNo="" agentCd="" agentNm="" prodInDt="" prodInPrice="" payType="" dValue="" value=""></option>
-                        </select>
-                    </span>
-                    <span>
-                        <button id="quickInStockUsim" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1"><strong>간편입고</strong></button>
-                    </span>
+                <td class="t-label">
+                    <span class="td-span">유심</span>
                 </td>
-            </tr>
-            <tr>
-                <td class="t-label t-l-w">일련번호</td>
-                <td class="t-content t-c-w ac"><span id="spanSerialNo"></span></td>
-                <td class="t-label t-l-w">색상</td>
-                <td class="t-content t-c-w"><span id="spanColor"></span></td>
-                <td class="t-label t-l-w">일련번호</td>
-                <td class="t-content t-c-w ar" colspan="3">
-                    <span style="width: 160px; text-align: center;display: inline-block;" id="spanUsimSerialNo"></span>
-                    <span style="text-align: right;">
-                        <select class="form-control form-box" style="width: 140px;" id="usimInPayType" name="usimInPayType" disabled>
-                        </select>
+                <td class="t-content al" colspan="3">
+                    <span class="td-span">
+                        <span style="display: inline-flex; width:200px;">
+                            <select id="usimInfo" name="usimInfo" formType="chosen" sWidth="300" tabPrev="modelInfo_chosen" dispAttr="value" data-placeholder="유심을 선택하세요." class="chosen-select form-control form-box" disabled>
+                                <option prodCd="" telecomCd="" usimType="" usimModelCd="" serialNo="" agentCd="" agentNm="" prodInDt="" prodInPrice="" payType="" dValue="" value=""></option>
+                            </select>
+                        </span>
+                        <span>
+                            <button id="quickInStockUsim" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1"><strong>간편입고</strong></button>
+                        </span>
                     </span>
                 </td>
             </tr>
             <tr>
-                <td class="t-label t-l-w">단말기입고</td>
-                <td class="t-content t-c-w">
-                    <span id="spanAgentNm"></span>
-                    <span style="font-size: 10px; color: red;" id="spanProdInDt"></span>
+                <td class="t-label">
+                    <span class="td-span">일련번호</span>
                 </td>
-                <td class="t-label t-l-w">입고가</td>
-                <td class="t-content t-c-w ar">
-                    <span id="spanDispProdInPrice" class="disp-n">
+                <td class="t-content ac">
+                    <span id="spanSerialNo" class="td-span"></span>
+                </td>
+                <td class="t-label">
+                    <span class="td-span">색상</span>
+                </td>
+                <td class="t-content">
+                    <span id="spanColor" class="td-span"></span>
+                </td>
+                <td class="t-label">
+                    <span class="td-span">일련번호</span>
+                </td>
+                <td class="t-content al" colspan="3">
+                    <span class="td-span">
+                        <span style="width: 160px; text-align: center;display: inline-block;" id="spanUsimSerialNo"></span>
+                        <span style="text-align: right;">
+                            <select class="form-control form-box" style="width: 140px;" id="usimInPayType" name="usimInPayType" disabled>
+                            </select>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label">
+                    <span class="td-span">단말기입고</span>
+                </td>
+                <td class="t-content">
+                    <span class="td-span">
+                        <span id="spanAgentNm"></span>
+                        <span style="font-size: 10px; color: red;" id="spanProdInDt"></span>
+                    </span>
+                </td>
+                <td class="t-label">
+                    <span class="td-span">입고가</span>
+                </td>
+                <td class="t-content ar">
+                    <span id="spanDispProdInPrice" class="td-span disp-n">
                         <span class="span-money">
                             <span id="spanProdInPrice">0</span><span class="span-won">원</span>
                         </span>
                     </span>
                 </td>
-                <td class="t-label t-l-w">유심입고</td>
-                <td class="t-content t-c-w">
-                    <span id="spanUsimAgentNm"></span>
-                    <span style="font-size: 10px; color: red;" id="spanUsimInDt"></span>
+                <td class="t-label">
+                    <span class="td-span">유심입고</span>
                 </td>
-                <td class="t-label t-l-w">입고가</td>
-                <td class="t-content t-c-w ar">
-                    <span id="spanDispUsimInPrice" class="disp-n">
+                <td class="t-content">
+                    <span class="td-span">
+                        <span id="spanUsimAgentNm"></span>
+                        <span style="font-size: 10px; color: red;" id="spanUsimInDt"></span>
+                    </span>
+                </td>
+                <td class="t-label">
+                    <span class="td-span">입고가</span>
+                </td>
+                <td class="t-content ar">
+                    <span id="spanDispUsimInPrice" class="td-span disp-n">
                         <span class="span-money">
                             <span id="spanUsimInPrice">0</span><span class="span-won">원</span>
                         </span>
@@ -96,56 +133,70 @@
             </tr>
             <tr>
                 <td class="t-white al" colspan="4"></td>
-                <td class="t-white al" colspan="4"><span style="font-size: 11px; color: #717071;">-유심입고시 선결제/후결제 구분 부탁드립니다.</span></td>
+                <td class="t-white al" colspan="4"><span class="td-span" style="font-size: 11px; color: #717071;">-유심입고시 선결제/후결제 구분 부탁드립니다.</span></td>
             </tr>
             <tr>
-                <td class="t-label t-l-w">개통일</td>
-                <td class="t-content t-c-w al">
-                    <span style="display: inline-block; vertical-align:middle;">
-                        <span class="form-group">
-                            <div formType="datePicker" class="input-group date">
-                                <span>
-                                    <input id="openDt" type="text" nowDate="YYYY-MM-DD" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                </span>
-                                <span class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </span>
-                            </div>
+                <td class="t-label">
+                    <span class="td-span">개통일</span>
+                </td>
+                <td class="t-content al">
+                    <span class="td-span">
+                        <span style="display: inline-block; vertical-align:middle;">
+                            <span class="form-group">
+                                <div formType="datePicker" class="input-group date">
+                                    <span>
+                                        <input id="openDt" type="text" nowDate="YYYY-MM-DD" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </span>
                         </span>
                     </span>
                 </td>
-                <td class="t-label t-l-w">고객명</td>
-                <td class="t-content t-c-w">
-                    <span>
+                <td class="t-label">
+                    <span class="td-span">고객명</span>
+                </td>
+                <td class="t-content">
+                    <span class="td-span">
                         <input type="text" id="custNm" name="custNm" class="form-control form-box ac" value="">
                     </span>
                 </td>
-                <td class="t-label t-l-w">개통번호</td>
-                <td class="t-content t-c-w al" colspan="4">
-                    <span>
-                        <select class="form-control form-box" style="width: 50px;" id="mobileNo1" name="mobileNo1" formType="comSel" grpCd="G0019">
-                        </select>
-                    </span>
-                    <span>
-                        <input type="text" id="mobileNo2" name="mobileNo2" formType="tel2" tabNext="mobileNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
-                    </span>
-                    <span>
-                        <input type="text" id="mobileNo3" name="mobileNo3" formType="tel3" tabNext="telNo1" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                <td class="t-label">
+                    <span class="td-span">개통번호</span>
+                </td>
+                <td class="t-content al" colspan="4">
+                    <span class="td-span">
+                        <span>
+                            <select class="form-control form-box" style="width: 50px;" id="mobileNo1" name="mobileNo1" formType="comSel" grpCd="G0019">
+                            </select>
+                        </span>
+                        <span>
+                            <input type="text" id="mobileNo2" name="mobileNo2" formType="tel2" tabNext="mobileNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                        </span>
+                        <span>
+                            <input type="text" id="mobileNo3" name="mobileNo3" formType="tel3" tabNext="telNo1" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                        </span>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="t-white" colspan="4"></td>
-                <td class="t-label t-l-w">연락처</td>
-                <td class="t-content t-c-w al" colspan="4">
-                    <span>
-                        <input type="text" id="telNo1" name="telNo1" formType="tel1" tabNext="telNo2" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="">
-                    </span>
-                    <span>
-                        <input type="text" id="telNo2" name="telNo2" formType="tel2" tabNext="telNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
-                    </span>
-                    <span>
-                        <input type="text" id="telNo3" name="telNo3" formType="tel3" tabNext="telecomCallPlan_chosen" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                <td class="t-label">
+                    <span class="td-span">연락처</span>
+                </td>
+                <td class="t-content al" colspan="4">
+                    <span class="td-span">
+                        <span>
+                            <input type="text" id="telNo1" name="telNo1" formType="tel1" tabNext="telNo2" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="">
+                        </span>
+                        <span>
+                            <input type="text" id="telNo2" name="telNo2" formType="tel2" tabNext="telNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                        </span>
+                        <span>
+                            <input type="text" id="telNo3" name="telNo3" formType="tel3" tabNext="telecomCallPlan_chosen" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                        </span>
                     </span>
                 </td>
             </tr>
@@ -154,105 +205,133 @@
 
     <div class="tabs-container">
         <ul id="ulTabPayType" tabCode="10" class="nav nav-tabs">
-            <li code="10" class="active"><a class="p-tab" data-toggle="tab" href="#tab-1-1">할부</a></li>
-            <li code="20" class=""><a class="p-tab" data-toggle="tab" href="#tab-1-2">현금</a></li>
+            <li code="10" class="active">
+                <a class="p-tab" data-toggle="tab" href="#tab-1-1">할부</a>
+            </li>
+            <li code="20" class="">
+                <a class="p-tab" data-toggle="tab" href="#tab-1-2">현금</a>
+            </li>
         </ul>
         <div class="tab-content ibox-content tab">
             <table class="t-table">
                 <colgroup>
-                    <col width="86">
-                    <col width="114">
-                    <col width="86">
-                    <col width="114">
-                    <col width="86">
-                    <col width="114">
-                    <col width="86">
-                    <col width="114">
+                    <col width="90">
+                    <col width="115">
+                    <col width="90">
+                    <col width="115">
+                    <col width="90">
+                    <col width="115">
+                    <col width="90">
+                    <col width="115">
                 </colgroup>
                 <tbody>
                     <tr>
-                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;" colspan="8"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                        <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">요금제</td>
-                        <td class="t-content t-c-w al" colspan="3">
-                            <span style="display: inline-block; width: 180px;">
-                                <select id="telecomCallPlan" name="telecomCallPlan" formType="chosen" sWidth="300" tabPrev="telNo3" data-placeholder="요금제를 선택하세요." class="chosen-select form-control form-box" disabled>
-                                    <option value="" telecomCd="" netType="" phoneType="" planGrp="" telecomPlanType="" telecomPlanGrp="" planNm=""></option>
-                                </select>
-                            </span>
-                            <span style="font-size: 11px; color: #717071;">유지</span>
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div id="divKeepDt" formType="datePicker" class="input-group date" disabled>
-                                        <span>
-                                            <input id="keepDt" type="text" class="form-control form-box" style="width: 70px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <td class="t-label">
+                            <span class="td-span">요금제</span>
+                        </td>
+                        <td class="t-content al" colspan="3">
+                            <span class="td-span">
+                                <span style="display: inline-flex; width: 180px;">
+                                    <select id="telecomCallPlan" name="telecomCallPlan" formType="chosen" sWidth="300" tabPrev="telNo3" data-placeholder="요금제를 선택하세요." class="chosen-select form-control form-box" disabled>
+                                        <option value="" telecomCd="" netType="" phoneType="" planGrp="" telecomPlanType="" telecomPlanGrp="" planNm=""></option>
+                                    </select>
+                                </span>
+                                <span style="font-size: 11px; color: #717071;">유지</span>
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="divKeepDt" formType="datePicker" class="input-group date" disabled>
+                                            <span>
+                                                <input id="keepDt" type="text" class="form-control form-box" style="width: 70px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">변경예정</td>
-                        <td class="t-content t-c-w al" colspan="3">
-                            <span style="display: inline-block; width:180px;">
-                                <select id="telecomCallPlanChg" name="telecomCallPlanChg" formType="chosen" sWidth="300" tabPrev="keepDt" data-placeholder="요금제를 선택하세요." class="chosen-select form-control form-box" disabled>
-                                    <option value="" telecomCd="" netType="" phoneType="" planGrp="" telecomPlanType="" telecomPlanGrp="" planNm=""></option>
-                                </select>
-                            </span>
-                            <span>
-                                <input type="text" id="chgComment" class="form-control form-box" style="width: 115px; text-align: left;" value="" disabled>
+                        <td class="t-label">
+                            <span class="td-span">변경예정</span>
+                        </td>
+                        <td class="t-content al" colspan="3">
+                            <span class="td-span">
+                                <span style="display: inline-flex; width:180px;">
+                                    <select id="telecomCallPlanChg" name="telecomCallPlanChg" formType="chosen" sWidth="300" tabPrev="keepDt" data-placeholder="요금제를 선택하세요." class="chosen-select form-control form-box" disabled>
+                                        <option value="" telecomCd="" netType="" phoneType="" planGrp="" telecomPlanType="" telecomPlanGrp="" planNm=""></option>
+                                    </select>
+                                </span>
+                                <span>
+                                    <input type="text" id="chgComment" class="form-control form-box" style="width: 115px; text-align: left;" value="" disabled>
+                                </span>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="border-n padd-n" colspan="4">
-                            <div>
-                                <table class="i-table">
-                                    <colgroup>
-                                        <col width="86">
-                                        <col width="114">
-                                        <col width="86">
-                                        <col width="114">
-                                    </colgroup>
-                                    <tbody>
-                                        <tr>
-                                            <td class="t-label t-l-w padd-n"><span class="l3" value="N" id="spanSptAmtType" style="display:inline-block; width: 100%; line-height: 28px;">공시</span></td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="sptAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                            <td class="t-label t-l-w">추가지원금</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="addSptAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="t-label t-l-w">포인트</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="pointAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> P
-                                                </span>
-                                            </td>
-                                            <td class="t-label t-l-w">세이브카드</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="saveCardAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-
-                                            <td class="t-label t-l-w">
+                        <td class="border-n" colspan="4">
+                            <table class="i-table">
+                                <colgroup>
+                                    <col width="90">
+                                    <col width="115">
+                                    <col width="90">
+                                    <col width="115">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td class="t-label">
+                                            <span class="l3" value="N" id="spanSptAmtType" style="display:inline-block; width: 100%; line-height: 27px;">공시</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="sptAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                        <td class="t-label">
+                                            <span class="td-span">추가지원금</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="addSptAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="t-label">
+                                            <span class="td-span">포인트</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="pointAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> P
+                                            </span>
+                                        </td>
+                                        <td class="t-label">
+                                            <span class="td-span">세이브카드</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="saveCardAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="t-label">
+                                            <span class="td-span">
                                                 <span toggleId="payTypePhone">선납금</span>
                                                 <span toggleId="payTypePhone" class="disp-n">할인금액</span>
-                                            </td>
-                                            <td class="t-content t-c-w al">
+                                            </span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
                                                 <span toggleId="payTypePhone">
                                                     <input type="text" id="prePayAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                                                 </span>
@@ -262,12 +341,16 @@
                                                         <span class="span-won">원</span>
                                                     </span>
                                                 </span>
-                                            </td>
-                                            <td class="t-label t-l-w">
+                                            </span>
+                                        </td>
+                                        <td class="t-label">
+                                            <span class="td-span">
                                                 <span toggleId="payTypePhone">할부원금</span>
                                                 <span toggleId="payTypePhone" class="disp-n">현금가</span>
-                                            </td>
-                                            <td class="t-content t-c-w al">
+                                            </span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
                                                 <span toggleId="payTypePhone">
                                                     <span class="span-money">
                                                         <span id="spanMipOrgAmt">0</span><span class="span-won">원</span>
@@ -276,67 +359,77 @@
                                                 <span toggleId="payTypePhone" class="disp-n">
                                                     <input type="text" id="mipPrcpAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                                                 </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
-                        <td class="border-n padd-n" colspan="4">
-                            <div>
-                                <table class="i-table">
-                                    <colgroup>
-                                        <col width="86">
-                                        <col width="114">
-                                        <col width="86">
-                                        <col width="114">
-                                    </colgroup>
-                                    <tbody>
-                                        <tr>
-                                            <td class="t-label t-l-w">기본정책</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="rbPcyBasAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                            <td class="t-label t-l-w">구두정책</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="rbPcyVebAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="t-label t-l-w">추가정책</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="rbPcyAddAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                            <td class="t-label t-l-w">딜러정책</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="rbPcyDlrAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="t-label t-l-w">그룹정책</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="rbPcyGrpAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                            <td class="t-label t-l-w">그레이드</td>
-                                            <td class="t-content t-c-w al">
-                                                <span>
-                                                    <input type="text" id="rbPcyGrdAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <td class="border-n" colspan="4">
+                            <table class="i-table">
+                                <colgroup>
+                                    <col width="90">
+                                    <col width="115">
+                                    <col width="90">
+                                    <col width="115">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td class="t-label">
+                                            <span class="td-span">기본정책</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="rbPcyBasAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                        <td class="t-label">
+                                            <span class="td-span">구두정책</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="rbPcyVebAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="t-label">
+                                            <span class="td-span">추가정책</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="rbPcyAddAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                        <td class="t-label">
+                                            <span class="td-span">딜러정책</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="rbPcyDlrAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="t-label">
+                                            <span class="td-span">그룹정책</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="rbPcyGrpAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                        <td class="t-label">
+                                            <span class="td-span">그레이드</span>
+                                        </td>
+                                        <td class="t-content al">
+                                            <span class="td-span">
+                                                <input type="text" id="rbPcyGrdAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
                     <tr>
@@ -351,101 +444,123 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">개통종류</td>
-                        <td class="t-content t-c-w ar">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">개통종류</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span">
                                 <select id="openType" name="openType" class="form-control form-box" formType="comSel" grpCd="G0006">
                                 </select>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">해지일</td>
-                        <td class="t-content t-c-w al">
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div id="divCloseDt" formType="datePicker" class="input-group date" disabled>
-                                        <span>
-                                            <input id="closeDt" name="closeDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <td class="t-label">
+                            <span class="td-span">해지일</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="divCloseDt" formType="datePicker" class="input-group date" disabled>
+                                            <span>
+                                                <input id="closeDt" name="closeDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">가번호</td>
-                        <td class="t-content t-c-w al" colspan="3">
-                            <span style="width:50px" id="spanTempPhoneNo1">
-                                <input type="text" id="tempPhoneNo1" name="tempPhoneNo1" formType="tel1" tabNext="tempPhoneNo2" class="form-control form-box" style="width: 50px; text-align: center;" value="" disabled>
-                            </span>
-                            <span>
-                                <input type="text" id="tempPhoneNo2" name="tempPhoneNo2" formType="tel2" tabNext="tempPhoneNo3" class="form-control form-box" style="width: 70px; text-align: center;" value="" disabled>
-                            </span>
-                            <span>
-                                <input type="text" id="tempPhoneNo3" name="tempPhoneNo3" formType="tel3" tabNext="tcType" class="form-control form-box" style="width: 70px; text-align: center;" value="" disabled>
+                        <td class="t-label">
+                            <span class="td-span">가번호</span>
+                        </td>
+                        <td class="t-content al" colspan="3">
+                            <span class="td-span">
+                                <span style="width:50px" id="spanTempPhoneNo1">
+                                    <input type="text" id="tempPhoneNo1" name="tempPhoneNo1" formType="tel1" tabNext="tempPhoneNo2" class="form-control form-box" style="width: 50px; text-align: center;" value="" disabled>
+                                </span>
+                                <span>
+                                    <input type="text" id="tempPhoneNo2" name="tempPhoneNo2" formType="tel2" tabNext="tempPhoneNo3" class="form-control form-box" style="width: 70px; text-align: center;" value="" disabled>
+                                </span>
+                                <span>
+                                    <input type="text" id="tempPhoneNo3" name="tempPhoneNo3" formType="tel3" tabNext="tcType" class="form-control form-box" style="width: 70px; text-align: center;" value="" disabled>
+                                </span>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">통신사약정</td>
-                        <td class="t-content t-c-w">
-                            <span style="text-align: right;">
+                        <td class="t-label">
+                            <span class="td-span">통신사약정</span>
+                        </td>
+                        <td class="t-content">
+                            <span class="td-span">
                                 <select class="form-control form-box" id="tcType" name="tcType" formType="comSel" grpCd="G0008">
                                 </select>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">
-                            <span>할부</span>
+                        <td class="t-label">
+                            <span class="td-span">할부</span>
                         </td>
-                        <td class="t-content t-c-w">
-                            <span>
-                                <span style="text-align: right;">
-                                    <select class="form-control form-box" id="dcType" name="dcType" formType="comSel" grpCd="G0009" grpOpt="B">
-                                    </select>
-                                </span>
+                        <td class="t-content">
+                            <span class="td-span">
+                                <select class="form-control form-box" id="dcType" name="dcType" formType="comSel" grpCd="G0009" grpOpt="B">
+                                </select>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">유심</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">유심</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <select id="usimCustPayType" name="usimCustPayType" class="form-control form-box" style="width: 100%;" formType="comSel" grpCd="G0005" isSetNF="true" isDisabled="true" grpOpt="null">
                                 </select>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">대납금액</td>
-                        <td class="t-content t-c-w al">
-                            <span class="span-money" class="disp-n">
+                        <td class="t-label">
+                            <span class="td-span">대납금액</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="span-money" class="td-span disp-n">
                                 <span id="spanUsimPbpAmt" value="0">0</span><span class="span-won">원</span>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td id="tdAddTelecomCallPlan" value="+" class="t-label t-l-w">요금제<span>추가</span></td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td id="tdAddTelecomCallPlan" value="+" class="t-label">
+                            <span class="td-span">
+                                <span>요금제<span fieldType="label">추가</span></span>
+                            </span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="addTelecomCallPlanAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-white t-c-w al" colspan="6">
-                            <div style="font-size: 11px; color: #1ab394;">-요금제추가/요금제차감=클릭 시 변경</div>
+                        <td class="t-white al" colspan="6">
+                            <span class="td-span">
+                                <div style="font-size: 11px; color: #1ab394;">-요금제추가/요금제차감=클릭 시 변경</div>
+                            </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">
-                            <span style="display:block;">
-                                <span style="display: inline-block;">필수부가</span>
-                                <span id="spanEasBtns" eas-area="multi-button" groupId="spanEasGrps" style="display: inline-block; vertical-align: middle;">
-                                    <span eas-item="button-plus" style="padding-top: 1px; padding-bottom:1px;" class="disp-b">
-                                        <i id="btnEasPlus" class="fa fa-plus-circle cur-p" style="color: #1ab394;"></i>
-                                    </span>
-                                    <span eas-item="button-minus" style="padding-top:1px; padding-bottom: 1px;" class="disp-n">
-                                        <i id="btnEasMinus" class="fa fa-minus-circle cur-p" style="color: #b34d1a;"></i>
+                        <td class="t-label">
+                            <span class="td-span">
+                                <span style="display:block;">
+                                    <span style="display: inline-block;">필수부가</span>
+                                    <span id="spanEasBtns" eas-area="multi-button" groupId="spanEasGrps" style="display: inline-block; vertical-align: middle;">
+                                        <span eas-item="button-plus" style="padding-top: 1px; padding-bottom:1px;" class="disp-b">
+                                            <i id="btnEasPlus" class="fa fa-plus-circle cur-p" style="color: #1ab394;"></i>
+                                        </span>
+                                        <span eas-item="button-minus" style="padding-top:1px; padding-bottom: 1px;" class="disp-n">
+                                            <i id="btnEasMinus" class="fa fa-minus-circle cur-p" style="color: #b34d1a;"></i>
+                                        </span>
                                     </span>
                                 </span>
                             </span>
                         </td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span id="spanEasGrps" eas-area="multi-group" agentCd="" agentNm="">
+                        <td class="t-content al" colspan="7">
+                            <span id="spanEasGrps" eas-area="multi-group" agentCd="" agentNm="" class="td-span">
                                 <span eas-area="group" seqNo="1">
                                     <span eas-area="button">
                                         <button eas-item="button" class="form-btn form-btn-n" style="width: 70px;" type="button"><strong>서비스선택</strong></button>
@@ -482,9 +597,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">환수서비스</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span id="spanDesGrp" des-area="group" agentCd="" agentNm="">
+                        <td class="t-label">
+                            <span class="td-span">환수서비스</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span id="spanDesGrp" des-area="group" agentCd="" agentNm="" class="td-span">
                                 <span des-area="button">
                                     <button des-item="button" class="form-btn form-btn-n" style="width: 70px;" type="button"><strong>서비스선택</strong></button>
                                 </span>
@@ -508,33 +625,41 @@
                     </tr>
                     <!-- 할부의 경우 Start -->
                     <tr toggleId="payTypePhone">
-                        <td class="t-label t-l-w"><span>할인금액</span></td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">할인금액</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="dcAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">할인예정일</td>
-                        <td class="t-content t-c-w al">
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div id="divDcDt" formType="datePicker" class="input-group date" disabled>
-                                        <span>
-                                            <input id="dcDt" name="dcDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <td class="t-label">
+                            <span class="td-span">할인예정일</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="divDcDt" formType="datePicker" class="input-group date" disabled>
+                                            <span>
+                                                <input id="dcDt" name="dcDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
                         <td class="t-white" colspan="4"></td>
                     </tr>
                     <tr toggleId="payTypePhone">
-                        <td class="t-label t-l-w">할인정보</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">할인정보</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span">
                                 <input type="text" id="dcInfoMip" name="dcInfoMip" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
@@ -542,122 +667,162 @@
                     <!-- 할부의 경우 End -->
                     <!-- 현금의 경우 Start -->
                     <tr toggleId="payTypePhone" class="disp-n">
-                        <td class="t-label t-l-w"><span>할인금액</span></td>
-                        <td class="t-content t-c-w al">
-                            <span class="span-money">
+                        <td class="t-label">
+                            <span class="td-span">할인금액</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="span-money" class="td-span">
                                 <span id="dcByCashAmt">0</span><span class="span-won">원</span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">할인정보</td>
-                        <td class="t-content t-c-w" colspan="5">
-                            <span style="width: 100%; display: inline-block; vertical-align:middle;">
-                                <span>
-                                    <input type="text" id="dcInfoCash" name="dcInfoCash" class="form-control form-box" style="width: 100%; text-align: left;" value="">
-                                </span>
+                        <td class="t-label">
+                            <span class="td-span">할인정보</span>
+                        </td>
+                        <td class="t-content" colspan="7">
+                            <span class="td-span">
+                                <input type="text" id="dcInfoCash" name="dcInfoCash" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
                     </tr>
                     <!-- 현금의 경우 End -->
                     <tr>
-                        <td class="t-label t-l-w">기타할인</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">기타할인</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="etcDcAmt" name="etcDcAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">기타정보</td>
-                        <td class="t-content t-c-w al" colspan="5">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">기타정보</span>
+                        </td>
+                        <td class="t-content al" colspan="5">
+                            <span class="td-span">
                                 <input type="text" id="etcInfo" name="etcInfo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">현금/카드</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">현금/카드</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="custPayAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">입금금액</td>
-                        <td class="t-content t-c-w ar">
-                            <span class="span-money">
+                        <td class="t-label">
+                            <span class="td-span">입금금액</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span span-money">
                                 <span id="spanDepositAmt">150,000</span><span class="span-won">원</span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">미수금</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">미수금</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="custUnpayAmt" name="custUnpayAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">예정기일</td>
-                        <td class="t-content t-c-w al">
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div id="divPlanDueDt" formType="datePicker" class="input-group date" disabled>
-                                        <span>
-                                            <input id="custUnpayDueDt" name="custUnpayDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <td class="t-label">
+                            <span class="td-span">예정기일</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="divPlanDueDt" formType="datePicker" class="input-group date" disabled>
+                                            <span>
+                                                <input id="custUnpayDueDt" name="custUnpayDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w l2">판매마진</td>
-                        <td class="t-content t-c-w ar">
-                            <span class="span-money">
-                                <span id="spanSaleMarginAmt">219,000</span><span class="span-won">원</span>
+                        <td class="t-label l2">
+                            <span class="td-span">판매마진</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span">
+                                <span class="span-money">
+                                    <span id="spanSaleMarginAmt">219,000</span><span class="span-won">원</span>
+                                </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w l2">세후마진</td>
-                        <td class="t-content t-c-w ar">
-                            <span class="span-money">
-                                <span id="spanAftTaxMarginAmt">174,000</span><span class="span-won">원</span>
+                        <td class="t-label l2">
+                            <span class="td-span">세후마진</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span">
+                                <span class="span-money">
+                                    <span id="spanAftTaxMarginAmt">174,000</span><span class="span-won">원</span>
+                                </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w l2">세금</td>
-                        <td class="t-content t-c-w ar">
-                            <span class="span-money">
-                                <span id="spanTaxAmt">12,000</span><span class="span-won">원</span>
+                        <td class="t-label l2">
+                            <span class="td-span">세금</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span">
+                                <span class="span-money">
+                                    <span id="spanTaxAmt">12,000</span><span class="span-won">원</span>
+                                </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w l2">정산금액</td>
-                        <td class="t-content t-c-w ar">
-                            <span class="span-money">
-                                <span id="spanBaAmt">237,000</span><span class="span-won">원</span>
+                        <td class="t-label l2">
+                            <span class="td-span">정산금액</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span">
+                                <span class="span-money">
+                                    <span id="spanBaAmt">237,000</span><span class="span-won">원</span>
+                                </span>
                             </span>
                         </td>
                     </tr>
                     <!-- 개통 지불 방식 현금일 경우 노출 Start -->
                     <tr toggleId="payTypePhone" class="disp-n">
-                        <td class="t-label t-l-w">대리점입금</td>
-                        <td class="t-content t-c-w ar">
-                            <span class="span-money">
-                                <span id="spanAgentInAmt">259,500</span><span class="span-won">원</span>
+                        <td class="t-label">
+                            <span class="td-span">대리점입금</span>
+                        </td>
+                        <td class="t-content ar">
+                            <span class="td-span">
+                                <span class="span-money">
+                                    <span id="spanAgentInAmt">259,500</span><span class="span-won">원</span>
+                                </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">입금예정일</td>
-                        <td class="t-content t-c-w al">
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div id="divAgentInDueDt" formType="datePicker" class="input-group date">
-                                        <span>
-                                            <input id="agentInDueDt" name="agentInDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <td class="t-label">
+                            <span class="td-span">입금예정일</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="divAgentInDueDt" formType="datePicker" class="input-group date">
+                                            <span>
+                                                <input id="agentInDueDt" name="agentInDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
                         <td class="t-white al" colspan="4">
-                            <span>
+                            <span class="td-span">
                                 <div formType="iChecks" class="i-checks">
                                     <label class="ckbox">
                                         <input type="checkbox" id="chkBaAmtByPay" name="chkBaAmtByPay">
@@ -684,51 +849,65 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">고객납현금</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">고객납현금</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="custPayCashAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">카드</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">카드</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="custPayCardAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">미수금</td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">미수금</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="custPayUnpayAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">미수기일</td>
-                        <td class="t-content t-c-w al">
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div id="divOutstndAmtDueDt" formType="datePicker" class="input-group date" disabled>
-                                        <span>
-                                            <input id="outstndAmtDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
+                        <td class="t-label">
+                            <span class="td-span">미수기일</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="divOutstndAmtDueDt" formType="datePicker" class="input-group date" disabled>
+                                            <span>
+                                                <input id="outstndAmtDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </span>
                                 </span>
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">처리대리점</td>
-                        <td class="t-content t-c-w">
-                            <span style="text-align: right;">
+                        <td class="t-label">
+                            <span class="td-span">처리대리점</span>
+                        </td>
+                        <td class="t-content">
+                            <span class="td-span">
                                 <select formType="agentSel" class="form-control form-box" id="custPayCashAgent" name="custPayCashAgent">
                                 </select>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">처리정보</td>
-                        <td class="t-content t-c-w al" colspan="6">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">처리정보</span>
+                        </td>
+                        <td class="t-content al" colspan="5">
+                            <span class="td-span">
                                 <input type="text" id="custPayCashInfo" name="custPayCashInfo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
@@ -739,23 +918,46 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">미비서류</td>
-                        <td class="t-content t-c-w al" colspan="5">
-                            <span id="spanLodGrp" lod-area="group">
-                                <span lod-area="button">
-                                    <button lod-item="button" class="form-btn form-btn-n" style="width: 70px;" type="button"><strong>미비선택</strong></button>
+                        <td class="t-label">
+                            <span class="td-span">미비서류</span>
+                        </td>
+                        <td class="t-content al" colspan="5">
+                            <span class="td-span">
+                                <span id="spanLodGrp" lod-area="group">
+                                    <span lod-area="button">
+                                        <button lod-item="button" class="form-btn form-btn-n" style="width: 70px;" type="button"><strong>미비선택</strong></button>
+                                    </span>
+                                    <span lod-area="content">
+                                        <span lod-item="content" id="lodNm" name="lodNm" formType="text-r" style="width: 260px" class="text-r" placeholder="미비서류를 선택하세요." value=""></span>
+                                    </span>
+                                    <span lod-area="due-date-cap">
+                                        <span lod-item="due-date-cap" style="width: 50px; display: inline-block; font-size: 11px; color: #717071; text-align: right;">예정기일</span>
+                                    </span>
+                                    <span lod-area="due-date" style="display: inline-block; vertical-align:middle;">
+                                        <span class="form-group">
+                                            <div formType="datePicker" lod-item="due-date-picker" class="input-group date" disabled>
+                                                <span>
+                                                    <input lod-item="due-date-field" id="lodDueDt" name="lodDueDt" type="text" class="form-control form-box" placeholder="" style="width: 90px; text-align:center;" value="">
+                                                </span>
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </span>
                                 </span>
-                                <span lod-area="content">
-                                    <span lod-item="content" id="lodNm" name="lodNm" formType="text-r" style="width: 260px" class="text-r" placeholder="미비서류를 선택하세요." value=""></span>
-                                </span>
-                                <span lod-area="due-date-cap">
-                                    <span lod-item="due-date-cap" style="width: 50px; display: inline-block; font-size: 11px; color: #717071; text-align: right;">예정기일</span>
-                                </span>
-                                <span lod-area="due-date" style="display: inline-block; vertical-align:middle;">
+                            </span>
+                        </td>
+                        <td class="t-label">
+                            <span class="td-span">현금증빙</span>
+                        </td>
+                        <td class="t-content al">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
                                     <span class="form-group">
-                                        <div formType="datePicker" lod-item="due-date-picker" class="input-group date" disabled>
+                                        <div formType="datePicker" class="input-group date">
                                             <span>
-                                                <input lod-item="due-date-field" id="lodDueDt" name="lodDueDt" type="text" class="form-control form-box" placeholder="" style="width: 90px; text-align:center;" value="">
+                                                <input id="cashEvidDt" name="cashEvidDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
                                             </span>
                                             <span class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
@@ -765,65 +967,64 @@
                                 </span>
                             </span>
                         </td>
-                        <td class="t-label t-l-w">현금증빙</td>
-                        <td class="t-content t-c-w al">
-                            <span style="display: inline-block; vertical-align:middle;">
-                                <span class="form-group">
-                                    <div formType="datePicker" class="input-group date">
-                                        <span>
-                                            <input id="cashEvidDt" name="cashEvidDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </span>
-                            </span>
-                        </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">메모1</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">메모1</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span">
                                 <input type="text" id="lodMemo1" name="lodMemo1" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">메모2</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">메모2</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span">
                                 <input type="text" id="lodMemo2" name="lodMemo2" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">Secret 메모</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">Secret 메모</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span">
                                 <input type="text" id="lodMemoSec" name="lodMemoSec" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">요금설계</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">요금설계</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span">
                                 <input type="text" id="callPlanMemo" name="callPlanMemo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">첨부</td>
-                        <td class="t-content t-c-w al" colspan="7"></td>
+                        <td class="t-label">
+                            <span class="td-span">첨부</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span"></span>    
+                        </td>
                     </tr>
                     <tr>
                         <td class="t-white-line" colpan="8"></td>
                     </tr>
                     <tr>
-                        <td class="t-label t-l-w">회수단말기</td>
-                        <td class="t-content t-c-w al" colspan="7">
-                            <span>
+                        <td class="t-label">
+                            <span class="td-span">회수단말기</span>
+                        </td>
+                        <td class="t-content al" colspan="7">
+                            <span class="td-span">
                                 <div formType="iChecks" class="i-checks disp-ib">
                                     <label class="radio">
                                         <input type="radio" id="collectPhoneType10" name="collectPhoneType" value="10" style="position: absolute; opacity: 0;" checked>
@@ -852,43 +1053,47 @@
                         </td>
                     </tr>
                     <tr id="trCollectPhoneInfo" class="disp-n">
-                        <td class="t-label t-l-w">
-                            <span>중고단말기</span>
+                        <td class="t-label">
+                            <span class="td-span">중고단말기</span>
                         </td>
-                        <td class="t-content t-c-w">
-                            <span>
+                        <td class="t-content">
+                            <span class="td-span">
                                 <input type="text" id="usedPhoneNm" name="usedPhoneNm" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
-                        <td class="t-label t-l-w">
-                            <span>일련번호</span>
+                        <td class="t-label">
+                            <span class="td-span">일련번호</span>
                         </td>
-                        <td class="t-content t-c-w">
-                            <span>
+                        <td class="t-content">
+                            <span class="td-span">
                                 <input type="text" id="usedPhoneSerialNo" name="usedPhoneSerialNo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
                         </td>
-                        <td class="t-label t-l-w">
-                            <span>환수금</span>
+                        <td class="t-label">
+                            <span class="td-span">환수금</span>
                         </td>
-                        <td class="t-content t-c-w al">
-                            <span>
+                        <td class="t-content al">
+                            <span class="td-span">
                                 <input type="text" id="usedPhoneBuyPrice" name="usedPhoneBuyPrice" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
                             </span>
                         </td>
-                        <td class="t-label t-l-w">
-                            <span>예정기일</span>
+                        <td class="t-label">
+                            <span class="td-span">예정기일</span>
                         </td>
-                        <td class="t-content t-c-w">
-                            <span class="form-group">
-                                <div id="usedPhonePlanDt" formType="datePicker" class="input-group date">
-                                    <span>
-                                        <input name="usedPhonePlanDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                        <td class="t-content">
+                            <span class="td-span">
+                                <span style="display: inline-block; vertical-align:middle;">
+                                    <span class="form-group">
+                                        <div id="usedPhonePlanDt" formType="datePicker" class="input-group date">
+                                            <span>
+                                                <input name="usedPhonePlanDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                            </span>
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
                                     </span>
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                </div>
+                                </span>
                             </span>
                         </td>
                     </tr>
@@ -908,40 +1113,45 @@
         </ul>
         <table id="tableHiJoinUse" class="t-table">
             <colgroup>
-                <col width="86">
-                <col width="514">
-                <col width="86">
-                <col width="114">
+                <col width="90">
+                <col width="525">
+                <col width="90">
+                <col width="115">
             </colgroup>
             <tbody>
                 <tr>
-                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;" colspan="4"></td>
-                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;" colspan="4"></td>
-                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;" colspan="4"></td>
-                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;" colspan="4"></td>
+                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
+                    <td class="t-green-line" style="min-height: 1px; background-color: #1ab394;"></td>
                 </tr>
                 <tr id="trHiJoinUse">
-                    <td class="t-label t-l-w">결합상품</td>
-                    <td class="t-content t-c-w al">
-                        <span>
+                    <td class="t-label">
+                        <span class="td-span">결합상품</span>
+                    </td>
+                    <td class="t-content al">
+                        <span class="td-span">
                             <input type="text" id="hiJoinUseCcInfo" name="hiJoinUseCcInfo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                         </span>
                     </td>
-                    <td class="t-label t-l-w">예정기일</td>
-                    <td class="t-content t-c-w al">
-                        <span style="display: inline-block; vertical-align:middle;">
-                            <span class="form-group">
-                                <div id="divHiJoinUseCcPlanDt" formType="datePicker" class="input-group date">
-                                    <span>
-                                        <input id="hiJoinUseCcPlanDt" name="hiJoinUseCcPlanDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
-                                    </span>
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                </div>
-                            </span>
-                        </span>
+                    <td class="t-label">
+                        <span class="td-span">예정기일</span>
                     </td>
+                    <td class="t-content al">
+                        <span class="td-span">
+                            <span style="display: inline-block; vertical-align:middle;">
+                                <span class="form-group">
+                                    <div id="divHiJoinUseCcPlanDt" formType="datePicker" class="input-group date">
+                                        <span>
+                                            <input id="hiJoinUseCcPlanDt" name="hiJoinUseCcPlanDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                        </span>
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </span>
+                            </span>
+                         </span>
                     </td>
                 </tr>
             </tbody>
@@ -953,7 +1163,7 @@
     <!-- 처리 버튼 -->
     <table id="tableExeButtonGrp" class="t-table">
         <colgroup>
-            <col width="784">
+            <col width="820">
         </colgroup>
         <tbody>
             <tr>
@@ -974,6 +1184,7 @@
 
 <!-- Javascript Local Code Start -->
 <script>
+// document ready ---------> start
 $(document).ready(function() {
     // 판매자 선택 변경 시
     $("#sellerNm").on("change", function() {
@@ -1541,14 +1752,15 @@ $(document).ready(function() {
         // -일경우
         if(addTelecomCallPlanAmt.indexOf("-") > -1) {
             _tdAddTelecomCallPlan.addClass("l2");
-            _tdAddTelecomCallPlan.children("span").html("차감");
+            _tdAddTelecomCallPlan.find("span[fieldType='label']").html("차감");
         } else {
             _tdAddTelecomCallPlan.removeClass("l2");
-            _tdAddTelecomCallPlan.children("span").html("추가");
+            _tdAddTelecomCallPlan.find("span[fieldType='label']").html("추가");
         }
         return true;
     });
 });
+// document ready ---------< end
 
 /*
  * 필수부가 서비스 리셋
