@@ -1,6 +1,6 @@
 <!-- 탭 본문 : 단말기 Start -->
 <div id="divContents01">
-    <table class="t-table" style="width: 784px">
+    <table class="t-table">
         <colgroup>
             <col width="86">
             <col width="114">
@@ -36,7 +36,7 @@
                             <option prodCd="" telecomCd="" netType="" phoneType="" serialNo="" color="" agentCd="" agentNm="" prodInDt="" prodInPrice="" modelCd="" dvalue="" value=""></option>
                         </select>
                     </span>
-                    <span>
+                    <span style="display: inline-block;">
                         <button id="quickInStockPhone" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1"><strong>간편입고</strong></button>
                     </span>
                 </td>
@@ -219,7 +219,9 @@
                                     </colgroup>
                                     <tbody>
                                         <tr>
-                                            <td class="t-label t-l-w padd-n"><span class="l3" value="N" id="spanSptAmtType" style="display:inline-block; width: 100%; line-height: 28px;">공시</span></td>
+                                            <td class="t-label t-l-w padd-n">
+                                                <span class="l3" value="N" id="spanSptAmtType" style="display:inline-block; width: 100%;line-height: 27px; text-align:center;">공시</span>
+                                            </td>
                                             <td class="t-content t-c-w al">
                                                 <span>
                                                     <input type="text" id="sptAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
@@ -432,7 +434,7 @@
                     </tr>
                     <tr>
                         <td class="t-label t-l-w">
-                            <span style="display:block;">
+                            <span style="display:inline-block;">
                                 <span style="display: inline-block;">필수부가</span>
                                 <span id="spanEasBtns" eas-area="multi-button" groupId="spanEasGrps" style="display: inline-block; vertical-align: middle;">
                                     <span eas-item="button-plus" style="padding-top: 1px; padding-bottom:1px;" class="disp-b">
@@ -444,7 +446,7 @@
                                 </span>
                             </span>
                         </td>
-                        <td class="t-content t-c-w al" colspan="7">
+                        <td class="t-content t-c-w al" colspan="7" width="714">
                             <span id="spanEasGrps" eas-area="multi-group" agentCd="" agentNm="">
                                 <span eas-area="group" seqNo="1">
                                     <span eas-area="button">
@@ -727,7 +729,7 @@
                             </span>
                         </td>
                         <td class="t-label t-l-w">처리정보</td>
-                        <td class="t-content t-c-w al" colspan="6">
+                        <td class="t-content t-c-w al" colspan="5">
                             <span>
                                 <input type="text" id="custPayCashInfo" name="custPayCashInfo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
                             </span>
@@ -953,7 +955,7 @@
     <!-- 처리 버튼 -->
     <table id="tableExeButtonGrp" class="t-table">
         <colgroup>
-            <col width="784">
+            <col width="800">
         </colgroup>
         <tbody>
             <tr>

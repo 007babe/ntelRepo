@@ -282,6 +282,8 @@ td .fc-sat {
  */ 
 .i-table {
   display: table;
+  margin-top: -1px;
+  margin-right: -1px;
 /*
   table-layout:fixed; 
   word-break:break-all;  
@@ -319,7 +321,7 @@ td .fc-sat {
 }
 
 .t-l-w {
-  width: 82px;
+  width: 86px;
 }
 
 .t-c-w {
@@ -533,6 +535,7 @@ td .fc-sat {
  */
 .chosen-container {
   font-size: 12px;
+  margin-top: -2px;
 }
 
 .chosen-container .chosen-drop {
