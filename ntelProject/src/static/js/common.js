@@ -79,7 +79,6 @@ $.gfGetGlobalData = function(opts) {
         type: "POST",
         url: url,
         dataType: "json",
-//        contentType: "application/json; charset=utf-8",
         contentType: "application/json; charset=utf-8",
         cache: false,
         async: true,
@@ -88,7 +87,7 @@ $.gfGetGlobalData = function(opts) {
         },
         success: function(data) {
             try {
-                console.log(data);
+//                console.log(data);
 //                eval(key + " = $.parseJSON(JSON.stringify(data." + key + "));");
                 eval(key + " = $.parseJSON(JSON.stringify(data));");
 //                eval(key + " = $.parseJSON(data." + key + ");");
@@ -108,7 +107,7 @@ $.gfGetGlobalData = function(opts) {
             404: function() {
 /*
                 $.gfCommonPopUp({
-                    popUrl: "popup404.html",
+                    popUrl: "/static/popup404.html",
                     width = "300"
                 });
 */
@@ -205,7 +204,7 @@ $.gfLoadContentsData = function(opts) {
             },
             404: function() {
                 $.gfCommonPopUp({
-                    popUrl: "popup404.html",
+                    popUrl: "/static/popup404.html",
                     width: "300"
                 });
             }
@@ -297,7 +296,7 @@ $.gfCommonPopUp = function(opts) {
 $.gfErrorPopUp = function(modalId, errCd, errMsg, w, h) {
     $.ajax({
         type: "POST",
-        url: "popupError.html",
+        url: "/static/popupError.html",
         success: function(html) {
 //            alert(html);
             $("#modalPopup").empty().append(html);
@@ -1501,7 +1500,7 @@ $.fn.gfInitEasGrp = function(opts) {
 
         // 모달 팝업 호출
         $.gfCommonPopUp({
-            popUrl: "popup_32_03.html",
+            popUrl: "/static/popup_32_03.html",
             width: "520",
             attrs: {
                 target: target,
@@ -1565,7 +1564,7 @@ $.fn.gfInitDesGrp = function(opts) {
 
         // 모달 팝업 호출
         $.gfCommonPopUp({
-            popUrl: "popup_32_04.html",
+            popUrl: "/static/popup_32_04.html",
             width: "520",
             attrs: {
                 target: target,
@@ -1617,7 +1616,7 @@ $.fn.gfInitLodGrp = function(opts) {
 
         // 모달 팝업 호출
         $.gfCommonPopUp({
-            popUrl: "popup_32_05.html",
+            popUrl: "/static/popup_32_05.html",
             width: "520",
             attrs: {
                 target: _target.attr("id"),
@@ -1969,7 +1968,7 @@ $.gfLoadContents = function(opts) {
             },
             404: function() {
                 $.gfCommonPopUp({
-                    popUrl: "popup404.html",
+                    popUrl: "/static/popup404.html",
                     width: "300"
                 });
             }

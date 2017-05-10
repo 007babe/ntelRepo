@@ -147,8 +147,8 @@ def comCd(request):
     
     
 #    jsonString = json.dumps(comCdData, indent=4, ensure_ascii=False)
-    jsonString = json.dumps(comCdData, indent=4, ensure_ascii=False)
-    print(jsonString)
+#    jsonString = json.dumps(comCdData, indent=4, ensure_ascii=False)
+#    print(jsonString)
     
     return HttpResponse(json.dumps(comCdData, indent=4, ensure_ascii=False), content_type="application/json")    
 #    return HttpResponse("앗싸... comCd")
