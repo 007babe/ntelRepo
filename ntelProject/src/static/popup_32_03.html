@@ -1,0 +1,234 @@
+<div id="divModalDialog" class="modal-dialog">
+    <div class="modal-content">
+        <!-- header Start -->
+        <div class="modal-header p-header">
+            <!-- 닫기(x) 버튼 Start -->
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <!-- 닫기(x) 버튼 End -->
+            <!-- header title Start -->
+            <h4 id="hModalDialogTitle" class="modal-title p-title">필수부가서비스선택</h4>
+            <!-- header title End -->
+        </div>
+        <!-- header End -->
+        <!-- body Start -->
+        <div class="modal-body p-body">
+            <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+                <form name="frmPopupEas">
+                <table id="tableList" class="t-table" style="width: 100%;">
+                    <caption><span id="spanCaptionList" class="span-cap"></span></caption>
+					<colgroup>
+					    <col width="5%">
+					    <col width="77%">
+					    <col width="18%">
+					</colgroup>
+                    <thead>
+                        <tr>
+                            <th class="t-label"><input type="checkbox" name="chkAll"></td>
+                            <th class="t-label">서비스명</td>
+                            <th class="t-label">금액</td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyListData">
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </div>
+        <!-- body End -->
+        <!-- Footer Start -->
+        <div class="modal-footer p-footer">
+            <span>
+                <button id="btnPopupReg" type="button" class="form-btn form-btn-n" style="width: 120px;">선택완료</button>
+            </span>
+            <span>
+                <button id="btnPopupClose" type="button" class="form-btn form-btn-n" style="width: 60px;" data-dismiss="modal">닫기</button>
+            </span>
+        </div>
+        <!-- Footer End -->
+    </div>
+</div>
+<script>
+$(function(){
+
+    // 서비스 리스트 데이터를 초기화 한다.
+    $.initListData();
+
+    // 선택완료 버튼 클릭 시
+    $("#btnPopupReg").click(function(){
+        var _modalDialog = $("#divModalDialog"); // Contents
+        var _modalDialogParent = $("#divModalDialog").parent(); // Popup Container
+
+        var target = _modalDialogParent.attr("target");
+        var seqNo = _modalDialogParent.attr("seqNo");
+
+        var _target = $("#" + target).children(":nth-child(" + seqNo + ")");
+
+        var _areaButton            = _target.children("[eas-area='button']") // 서비스선택 버튼 영역
+        var _areaContent           = _target.children("[eas-area='content']") // 환수서비스 내용 영역
+        var _areaEasAmtCap         = _target.children("[eas-area='eas-amt-cap']") // 금액 Caption영역
+        var _areaEasAmt            = _target.children("[eas-area='eas-amt']") // 금액 영역
+        var _areaEasCurrency       = _target.children("[eas-area='eas-currency']") // 금액 단위 영역
+        var _areaEasKeepDateCap    = _target.children("[eas-area='eas-keep-date-cap']") // 유지일 Caption영역
+        var _areaEasKeepDate       = _target.children("[eas-area='eas-keep-date']") // 유지일 영역
+
+        var _itemButton            = _areaButton.find("[eas-item='button']"); // 서비스선택 버튼
+        var _itemContent           = _areaContent.children("[eas-item='content']") // 서비스 내용
+        var _itemEasAmt            = _areaEasAmt.children("[eas-item='eas-amt']") // 서비스 금액
+        var _itemEasKeepDatePicker = _areaEasKeepDate.find("[eas-item='eas-keep-date-picker']") // 미비서류 내용 영역
+        var _itemEasKeepDateField  = _itemEasKeepDatePicker.find("[eas-item='eas-keep-date-field']") // 날짜 입력 영역
+
+        // 선택된(체크) 서비스를 ","로 구분하여 데이터 생성
+        var arrSrvcCds = new Array(); // 서비스 코드
+        var arrSrvcNms = new Array(); // 서비스 명
+        var sumSrvcAmt = 0; // 서비스 금액
+
+        $.each($("input:checkbox[name='chkSrvc']:checked"), function(inx, item) {
+            var _item = $(item);
+            arrSrvcCds.push(_item.attr("srvcCd"));
+            arrSrvcNms.push(_item.attr("srvcNm"));
+            sumSrvcAmt += parseInt($.cur2num(_item.attr("srvcAmt")));
+        });
+        var srvcCds = arrSrvcCds.join(",");
+        var srvcNms = arrSrvcNms.join(",");
+
+        // 서비스코드 및 서비스명 세팅
+        _itemContent.gfSetTextReadonly(srvcCds, srvcNms);
+
+        // 금액 세팅
+        _itemEasAmt.val($.num2cur(sumSrvcAmt == 0 ? "" : sumSrvcAmt));
+        _itemEasAmt.trigger("change");
+
+        // 서비스를 선택하지 않을 경우 금액 및 유지일 입력란 초기화 및 disabled 처리
+        if($.isEmpty(srvcCds)) { // 서비스를 선택하지 않았을 경우
+            _itemEasAmt.prop("disabled", true);
+            _itemEasKeepDatePicker.gfDisabledDatePicker(true);
+            _itemButton.removeClass("on");
+        } else { // 서비스를 선택이 있을 경우
+            _itemEasAmt.prop("disabled", false);
+            _itemEasKeepDatePicker.gfDisabledDatePicker(false);
+//            _itemEasKeepDateField.trigger("focus");
+            _itemButton.addClass("on");
+        }
+        // 처리후 닫기
+        _modalDialogParent.modal('hide');
+
+    });
+
+    // 전체선택 클릭시 처리
+    $("input[type='checkbox'][name='chkAll']").on("click", function(e, params) {
+        var _this = $(this);
+        var _chkSrvcs = $("input[type='checkbox'][name='chkSrvc']");
+        _chkSrvcs.prop("checked", _this.prop("checked"));
+    });
+});
+
+/*
+ * 서비스 리스트 데이터 출력
+ */
+$.initListData = function() {
+    var _modalDialog = $("#divModalDialog"); // Contents
+    var _modalDialogParent = $("#divModalDialog").parent(); // Popup Container
+
+    var target = _modalDialogParent.attr("target"); // 서비스선택 입력란
+    var seqNo = _modalDialogParent.attr("seqNo"); // 서비스선택 순서
+    var agentCd = _modalDialogParent.attr("agentCd"); // 대리점코드
+    var agentNm = _modalDialogParent.attr("agentNm"); // 대리점명
+    var srvcGb = _modalDialogParent.attr("srvcGb"); // A:필수부가, B:환수
+    var srvcCds = $.n2s(_modalDialogParent.attr("srvcCds")).split(",") ; // 다수의 서비스 가능 : "," 로 구분 => Array
+
+    // caption에 대리점 명 세팅
+    $("#spanCaptionList").text(agentNm);
+
+    // 대리점코드(agentCd) 및 서비스구분(srvcGb) 값에 의한 Filtering
+    var gdSrvcF = $.grep(GD_SRVC, function(el, inx){
+        return el.agentCd == agentCd && el.srvcGb == srvcGb;
+    });
+
+    // 테이블 리스트 본문 출력(tbody)
+    var _targetTbody = $("#tbodyListData");
+    _targetTbody.empty();
+
+    // Filtering 데이터 출력하기
+    if(gdSrvcF.length > 0) { // 데이터가 있을 경우
+
+        var isCheckedAll = true; // 전체 선택 체크 여부
+
+        $.each(gdSrvcF, function(inx, item) {
+            var _item = item;
+            var isChecked = $.inArray(_item.srvcCd, srvcCds) > -1 ? true : false;
+
+            // 전체 선택 체크 세팅
+            if(!isChecked) isCheckedAll = isChecked;
+
+            var _targetTr = $("<tr/>");
+
+            // 체크박스
+            var _targetTdChk = $("<td/>")
+                               .addClass("t-content");
+            var _targetTdChkContent = $("<span/>");
+            var _targetTdChkInput = $("<input/>")
+                                    .attr("type", "checkbox")
+                                    .attr("name", "chkSrvc")
+                                    .attr("srvcCd", _item.srvcCd)
+                                    .attr("srvcNm", _item.srvcNm)
+                                    .attr("srvcAmt", _item.srvcAmt)
+                                    .prop("checked", $.inArray(_item.srvcCd, srvcCds) > -1);
+            // 체크 클릭 시 이벤트 처리
+            _targetTdChkInput.on("click", function(e, params) {
+                var _this = $(this);
+                if(_this.prop("checked")) { //  체크 시
+                    if($("input[name='chkSrvc']:checked").length == gdSrvcF.length) $("input[name='chkAll']").prop("checked", true);
+                } else { // 체크 해제시
+                    $("input[name='chkAll']").prop("checked", false);
+                }
+            });
+
+            _targetTdChkContent.append(_targetTdChkInput);
+
+            // 서비스명
+            var _targetTdSrvcNm = $("<td/>")
+                                  .addClass("t-content t-c-w al");
+            var _targetTdSrvcNmContent = $("<span/>", {
+                text: _item.srvcNm
+            });
+
+            // 서비스금액
+            var _targetTdSrvcAmt = $("<td/>")
+                                   .addClass("t-content t-c-w ar");
+            var _targetTdSrvcAmtContent = $("<span/>", {
+                text: _item.srvcAmt + " 원"
+            });
+
+            _targetTr.append(_targetTdChk.append(_targetTdChkContent))
+                     .append(_targetTdSrvcNm.append(_targetTdSrvcNmContent))
+                     .append(_targetTdSrvcAmt.append(_targetTdSrvcAmtContent))
+                     ;
+
+            _targetTbody.append(_targetTr);
+        });
+
+        // 전체 체크 세팅
+        $("input[name='chkAll']").prop("checked", isCheckedAll);
+    } else {
+        // 데이터가 없을 경우 전체선택 버튼 숨기기
+        $("input[name='chkAll']").hide();
+        $("#btnPopupReg").hide();
+
+        var _targetTr = $("<tr/>");
+        // 체크박스
+        var _targetTd = $("<td/>")
+                        .addClass("t-content")
+                        .attr("colspan", "3")
+                        .css("height", "200px")
+                        .html("데이터가 존재하지 않습니다.")
+                        ;
+        _targetTbody.append(_targetTr.append(_targetTd));
+    }
+
+    // 데이터 출력 후 Scroll table 세팅
+    $("#tableList").table_scroll({
+        rowsInScrollableArea: 10
+    });
+};
+
+</script>

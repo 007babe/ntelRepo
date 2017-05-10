@@ -1,0 +1,775 @@
+<!-- 탭 본문 : 유심/중고 Start -->
+<div id="divContents02">
+    <table class="t-table">
+        <colgroup>
+            <col width="86">
+            <col width="114">
+            <col width="86">
+            <col width="114">
+            <col width="86">
+            <col width="114">
+            <col width="86">
+            <col width="114">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="t-label t-l-w">판매자</td>
+                <td class="t-content t-c-w">
+                    <span>
+                        <select formType="staffSel" class="form-control form-box" id="sellerNm" name="sellerNm">
+                        </select>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">정책</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="policyNm" class="form-control form-box" style="width: 90px; text-align: right;"> 호
+                    </span>
+                </td>
+                <td class="t-content al" colspan="4">
+                    <span>
+                        <div formType="iChecks" class="i-checks disp-ib">
+                            <label class="radio">
+                                <input type="radio" id="usimOpenType10" name="usimOpenType" value="10" style="position: absolute; opacity: 0;" checked>
+                                <span>유심개통</span>
+                            </label>
+                        </div>
+                        <div formType="iChecks" class="i-checks disp-ib">
+                            <label class="radio">
+                                <input type="radio" id="usimOpenType20" name="usimOpenType" value="20" style="position: absolute; opacity: 0;">
+                                <span>유심+중고단말기</span>
+                            </label>
+                        </div>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">단말기</td>
+                <td class="t-content t-c-w al" colspan="3">
+                    <span style="display: inline-block; width:200px;">
+    
+                        <select id="modelInfo" name="modelInfo" formType="chosen" sWidth="300" tabPrev="policyNm" data-placeholder="단말기를 선택하세요." class="chosen-select form-control form-box" disabled>
+                            <option prodCd="" telecomCd="" netType="" phoneType="" serialNo="" color="" agentCd="" agentNm="" prodInDt="" prodInPrice="" modelCd="" dvalue="" value=""></option>
+                        </select>
+                    </span>
+                    <span>
+                        <button id="quickInStockPhoneUsed" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1" disabled><strong>간편입고</strong></button>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">유심</td>
+                <td class="t-content t-c-w al" colspan="3">
+                    <span style="display: inline-block; width:200px;">
+                        <select id="usimInfo" name="usimInfo" formType="chosen" sWidth="300" tabPrev="modelInfo_chosen" dispAttr="value"  data-placeholder="유심을 선택하세요." dataKey="GD_PROD_USIM" optGroup="usimType" loadData="Y" class="chosen-select form-control form-box">
+                            <option prodCd="" telecomCd="" usimType="" usimModelCd="" serialNo="" agentCd="" agentNm="" prodInDt="" prodInPrice="" payType="" dValue="" value=""></option>
+                        </select>
+                    </span>
+                    <span>
+                        <button id="quickInStockUsim" class="form-btn form-btn-n" style="width: 100px;" type="button" tabindex="-1"><strong>간편입고</strong></button>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">일련번호</td>
+                <td class="t-content t-c-w ac"><span id="spanSerialNo"></span></td>
+                <td class="t-label t-l-w">색상</td>
+                <td class="t-content t-c-w"><span id="spanColor"></span></td>
+                <td class="t-label t-l-w">일련번호</td>
+                <td class="t-content t-c-w ar" colspan="3">
+                    <span style="width: 160px; text-align: center;display: inline-block;" id="spanUsimSerialNo"></span>
+                    <span style="text-align: right;">
+                        <select class="form-control form-box" style="width: 140px;" id="usimInPayType" name="usimInPayType" disabled>
+                        </select>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">단말기입고</td>
+                <td class="t-content t-c-w">
+                    <span id="spanPrevPhoneOwner"></span>
+                    <span style="font-size: 10px; color: red;" id="spanProdInDt"></span>
+                </td>
+                <td class="t-label t-l-w">입고가</td>
+                <td class="t-content t-c-w ar">
+                    <span id="spanDispProdInPrice" class="disp-n">
+                        <span class="span-money">
+                            <span id="spanProdInPrice">0</span><span class="span-won">원</span>
+                        </span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">유심입고</td>
+                <td class="t-content t-c-w">
+                    <span id="spanUsimAgentNm"></span>
+                    <span style="font-size: 10px; color: red;" id="spanUsimInDt"></span>
+                </td>
+                <td class="t-label t-l-w">입고가</td>
+                <td class="t-content t-c-w ar">
+                    <span id="spanDispUsimInPrice" class="disp-n">
+                        <span class="span-money">
+                            <span id="spanUsimInPrice">0</span><span class="span-won">원</span>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white al" colspan="4"></td>
+                <td class="t-white al" colspan="4"><span style="font-size: 11px; color: #717071;">-유심입고시 선결제/후결제 구분 부탁드립니다.</span></td>
+            </tr>
+            <tr>
+                <td class="t-white-line-s" colpan="8"></td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">개통거래처</td>
+                <td class="t-content t-c-w">
+                    <span style="text-align: right;">
+                        <select formType="agentSel" class="form-control form-box" id="openAgent" name="openAgent">
+                        </select>
+                    </span>
+                </td>
+                <td class="t-white t-c-w al" colspan="6">
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">개통일</td>
+                <td class="t-content t-c-w al">
+                    <span style="display: inline-block; vertical-align:middle;">
+                        <span class="form-group">
+                            <div formType="datePicker" class="input-group date">
+                                <span>
+                                    <input id="openDt" type="text" nowDate="YYYY-MM-DD" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                </span>
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">고객명</td>
+                <td class="t-content t-c-w">
+                    <span>
+                        <input type="text" id="custNm" name="custNm" class="form-control form-box ac" value="">
+                    </span>
+                </td>
+                <td class="t-label t-l-w">개통번호</td>
+                <td class="t-content t-c-w al" colspan="4">
+                    <span>
+                        <span name="mobileNo1" formtype="text-r" style="width: 50px" class="text-r ac" placeholder="" value="010">010</span>
+                        <!--
+                        <select class="form-control form-box" style="width: 50px;" id="mobileNo1" name="mobileNo1" formType="comSel" grpCd="G0019" grpOpt="A">
+                        </select>
+                        -->
+                    </span>
+                    <span>
+                        <input type="text" id="mobileNo2" name="mobileNo2" formType="tel2" tabNext="mobileNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                    </span>
+                    <span>
+                        <input type="text" id="mobileNo3" name="mobileNo3" formType="tel3" tabNext="telNo1" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white" colspan="4"></td>
+                <td class="t-label t-l-w">연락처</td>
+                <td class="t-content t-c-w al" colspan="4">
+                    <span>
+                        <input type="text" id="telNo1" name="telNo1" formType="tel1" tabNext="telNo2" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="">
+                    </span>
+                    <span>
+                        <input type="text" id="telNo2" name="telNo2" formType="tel2" tabNext="telNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                    </span>
+                    <span>
+                        <input type="text" id="telNo3" name="telNo3" formType="tel3" tabNext="telecomCallPlan_chosen" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white-line-s" colpan="8"></td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">유심</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <select id="usimCustPayType" name="usimCustPayType" class="form-control form-box" style="width: 100%;" formType="comSel" grpCd="G0005" isSetNF="false" setValue="C" grpOpt="B">
+                        </select>
+                    </span>
+                </td>
+                <td class="t-white" colspan="6"></td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">요금제</td>
+                <td class="t-content t-c-w al" colspan="3">
+                    <span style="display: inline-block; width: 180px;">
+                        <input type="text" id="telecomCallPlan" name="telecomCallPlan" class="form-control form-box">
+                    </span>
+                    <span style="font-size: 11px; color: #717071;">유지</span>
+                    <span style="display: inline-block; vertical-align:middle;">
+                        <span class="form-group">
+                            <div id="divKeepDt" formType="datePicker" class="input-group date">
+                                <span>
+                                    <input id="keepDt" type="text" class="form-control form-box" style="width: 70px; text-align:center;" value="">
+                                </span>
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">변경예정</td>
+                <td class="t-content t-c-w al" colspan="3">
+                    <span>
+                        <input type="text" id="telecomCallPlanChg" name="telecomCallPlanChg" class="form-control form-box" style="text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white" colspan="4"></td>
+                <td class="t-label t-l-w">기본정책</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="rbPcyBasAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">구두정책</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="rbPcyVebAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white" colspan="4"></td>
+                <td class="t-label t-l-w">추가정책</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="rbPcyAddAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">그레이드</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="rbPcyGrdAmt" formType="currency" tabNext="" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white-line-s" colpan="8"></td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w"><span>판매가</span></td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="salePrice" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-white" colpan="6"></td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">개통종류</td>
+                <td class="t-content t-c-w ar">
+                    <span>
+                        <select id="openType" name="openType" class="form-control form-box" formType="comSel" grpCd="G0006" grpOpt="B">
+                        </select>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">해지가능일</td>
+                <td class="t-content t-c-w al">
+                    <span class="form-group">
+                        <div id="divCloseDt" formType="datePicker" class="input-group date" disabled>
+                            <span>
+                                <input id="closeDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                            </span>
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">통신사약정</td>
+                <td class="t-content t-c-w al">
+                    <select id="tcType" name="tcType" class="form-control form-box" formType="comSel" grpCd="G0008" setValue="00">
+                    </select>
+                </td>
+                <td class="t-white al" colspan="2">
+                    <span style="font-size: 11px; color: #717071;">-선택약정20% 적용시 선택</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">기타할인</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="etcDcAmt" name="etcDcAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">기타정보</td>
+                <td class="t-content t-c-w al" colspan="5">
+                    <span>
+                        <input type="text" id="etcInfo" name="etcInfo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">현금/카드</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="custPayAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">입금금액</td>
+                <td class="t-content t-c-w ar">
+                    <span class="span-money">
+                        <span id="spanDepositAmt">150,000</span><span class="span-won">원</span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">미수금</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="custUnpayAmt" name="custUnpayAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">예정기일</td>
+                <td class="t-content t-c-w al">
+                    <span style="display: inline-block; vertical-align:middle;">
+                        <span class="form-group">
+                            <div id="divPlanDueDt" formType="datePicker" class="input-group date" disabled>
+                                <span>
+                                    <input id="custUnpayDueDt" name="custUnpayDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                </span>
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w l2">판매마진</td>
+                <td class="t-content t-c-w ar">
+                    <span class="span-money">
+                        <span id="spanSaleMarginAmt">219,000</span><span class="span-won">원</span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w l2">세후마진</td>
+                <td class="t-content t-c-w ar">
+                    <span class="span-money">
+                        <span id="spanAftTaxMarginAmt">174,000</span><span class="span-won">원</span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w l2">세금</td>
+                <td class="t-content t-c-w ar">
+                    <span class="span-money">
+                        <span id="spanTaxAmt">12,000</span><span class="span-won">원</span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w l2">정산금액</td>
+                <td class="t-content t-c-w ar">
+                    <span class="span-money">
+                        <span id="spanBaAmt">237,000</span><span class="span-won">원</span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white al" colspan="8">
+                    <div class="div-desc">-판매마진 = [판매가 - 입고가] + [기본,구두,추가,그레이드]</div>
+                    <div class="div-desc">-세후마진 = 중고단말기는 세금 포함 안됨[기본,구두,추가,그레이드] - 세금 %</div>
+                    <div class="div-desc">-세금 = [기본,구두,추가,그레이드] / 세금 %</div>
+                    <div class="div-desc">-정산금액 = [기본,구두,추가,그레이드] + 유심</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">고객납현금</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="custPayCashAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">카드</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="custPayCardAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">미수금</td>
+                <td class="t-content t-c-w al">
+                    <span>
+                        <input type="text" id="custPayUnpayAmt" formType="currency" class="form-control form-box" style="width: 90px; text-align: right;" placeholder="0" value=""> 원
+                    </span>
+                </td>
+                <td class="t-label t-l-w">미수기일</td>
+                <td class="t-content t-c-w al">
+                    <span style="display: inline-block; vertical-align:middle;">
+                        <span class="form-group">
+                            <div id="divOutstndAmtDueDt" formType="datePicker" class="input-group date" disabled>
+                                <span>
+                                    <input id="outstndAmtDueDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                </span>
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">처리대리점</td>
+                <td class="t-content t-c-w">
+                    <span style="text-align: right;">
+                        <select formType="agentSel" class="form-control form-box" id="custPayCashAgent" name="custPayCashAgent">
+                        </select>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">처리정보</td>
+                <td class="t-content t-c-w al" colspan="5">
+                    <span>
+                        <input type="text" id="custPayCashInfo" name="custPayCashInfo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-white al" colspan="8">
+                    <div style="font-size: 11px; color: #717071;">-고객납입금/카드/미수금 = 판매마진에 영향을 주지 않습니다.(개통시 요금/기존할부금 정리시 작성하는란 입니다.)</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">미비서류</td>
+                <td  class="t-content t-c-w al" colspan="5">
+                    <span id="spanLodGrp" lod-area="group">
+                        <span lod-area="button">
+                            <button lod-item="button" class="form-btn form-btn-n" style="width: 70px;" type="button"><strong>미비선택</strong></button>
+                        </span>
+                        <span lod-area="content">
+                            <span lod-item="content" id="lodNm" name="lodNm" formType="text-r" style="width: 260px" class="text-r" placeholder="미비서류를 선택하세요." value=""></span>
+                        </span>
+                        <span lod-area="due-date-cap">
+                            <span lod-item="due-date-cap" style="width: 50px; display: inline-block; font-size: 11px; color: #717071; text-align: right;">예정기일</span>
+                        </span>
+                        <span lod-area="due-date" style="display: inline-block; vertical-align:middle;">
+                            <span class="form-group">
+                                <div formType="datePicker" lod-item="due-date-picker" class="input-group date" disabled>
+                                    <span>
+                                        <input lod-item="due-date-field" id="lodDueDt" name="lodDueDt" type="text" class="form-control form-box" placeholder="" style="width: 90px; text-align:center;" value="">
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </span>
+                        </span>
+                    </span>
+                </td>
+                <td class="t-label t-l-w">현금증빙</td>
+                <td class="t-content t-c-w al">
+                    <span style="display: inline-block; vertical-align:middle;">
+                        <span class="form-group">
+                            <div formType="datePicker" class="input-group date">
+                                <span>
+                                    <input id="cashEvidDt" name="cashEvidDt" type="text" class="form-control form-box" style="width: 90px; text-align:center;" value="">
+                                </span>
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </div>
+                        </span>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">메모1</td>
+                <td class="t-content t-c-w al" colspan="7">
+                    <span>
+                        <input type="text" id="lodMemo1" name="lodMemo1" class="form-control form-box" style="width: 100%; text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">메모2</td>
+                <td class="t-content t-c-w al" colspan="7">
+                    <span>
+                        <input type="text" id="lodMemo2" name="lodMemo2" class="form-control form-box" style="width: 100%; text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">Secret 메모</td>
+                <td class="t-content t-c-w al" colspan="7">
+                    <span>
+                        <input type="text" id="lodMemoSec" name="lodMemoSec" class="form-control form-box" style="width: 100%; text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">요금설계</td>
+                <td class="t-content t-c-w al" colspan="7">
+                    <span>
+                        <input type="text" id="callPlanMemo" name="callPlanMemo" class="form-control form-box" style="width: 100%; text-align: left;" value="">
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="t-label t-l-w">첨부</td>
+                <td class="t-content t-c-w al" colspan="7"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- 처리 버튼 -->
+    <table id="tableExeButtonGrp" class="t-table">
+        <colgroup>
+            <col width="800">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="t-white-line" colpan="8"></td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="btnRegData" type="button" class="btn btn-primary" style="width: 120px;">등록</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- 탭 본문 : 유심/중고 End -->
+
+<!-- Javascript Include Start -->
+
+<!-- Javascript Include End -->
+
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+
+    // 유심/중고 개통방식 선택 변경시 처리
+    $("input[type='radio'][name='usimOpenType']").on("ifClicked", function(e, params) {
+        var _this = $(this);
+        var usimOpenType = _this.val();
+        var _modelInfo = $("#modelInfo");
+
+        if(usimOpenType == "10") { // 유심개통(10)일 경우
+            _modelInfo.gfSetChosenData({
+                dataKey: "GD_PROD_PHONE_USED",
+                disabled: true
+            });
+        } else if(usimOpenType == "20") { // 유심 + 중고단말기(20)일 경우
+            // 중고 단말기 전체 데이터 출력
+            _modelInfo.gfSetChosenData({
+                dataKey: "GD_PROD_PHONE_USED"
+            });
+        }
+    });
+
+    // 단말기 간편입고 클릭시
+    $("#quickInStockPhoneUsed").on("click", function(){
+        $.gfCommonPopUp({
+            popUrl: "popup_32_01.html",
+            width: "520"
+        });
+    });
+
+    // 유심 간편입고 클릭시
+    $("#quickInStockUsim").on("click", function(){
+        $.gfCommonPopUp({
+            popUrl: "popup_32_01.html",
+            width: "520"
+        });
+    });
+
+    // 단말기 선택이 바뀌었을 경우
+    $("#modelInfo").on("change", function(e, params) {
+
+        var _modelInfoSelected = $("option:selected", "#modelInfo"); // 선택된 제품정보
+
+        var prodCd          = $.n2s(_modelInfoSelected.attr("prodCd")); // 제품코드
+        var telecomCd       = $.n2s(_modelInfoSelected.attr("telecomCd")); // 통신사코드
+        var netType         = $.n2s(_modelInfoSelected.attr("netType")); // 망구분
+        var phoneType       = $.n2s(_modelInfoSelected.attr("phoneType")); // 기기구분
+        var serialNo        = $.n2s(_modelInfoSelected.attr("serialNo")); // 일련번호
+        var color           = $.n2s(_modelInfoSelected.attr("color")); // Color
+        var prodInType      = $.n2s(_modelInfoSelected.attr("prodInType")); // 매입방법
+        var prevPhoneOwner  = $.n2s(_modelInfoSelected.attr("prevPhoneOwner")); // 이전 단말기 소유자
+        var prodInDt        = $.n2s(_modelInfoSelected.attr("prodInDt")); // 단말기 입고일
+        var prodInPrice     = $.n2s(_modelInfoSelected.attr("prodInPrice")); // 입고가
+
+        // 값 세팅
+        $("#spanSerialNo").html(serialNo);
+        $("#spanColor").html(color);
+        $("#spanPrevPhoneOwner").html(prevPhoneOwner);
+        $("#spanProdInDt").html(prodInDt);
+
+        // 입고가가 없을 경우
+        if($.isEmpty(prodInPrice)){
+            $("#spanProdInPrice").html("0");
+            $("#spanDispProdInPrice").hide();
+            $("#salePrice").val("");
+        } else {
+            $("#spanProdInPrice").html(prodInPrice);
+            $("#spanDispProdInPrice").show();
+            $("#salePrice").val(prodInPrice);
+        }
+    });
+
+    // 유심 선택이 바뀌었을 경우
+    $("#usimInfo").on("change", function(e, params) {
+
+        var _usimInfoSelected = $("option:selected", "#usimInfo"); // 선택된 유심정보
+
+        var prodCd       = $.n2s(_usimInfoSelected.attr("prodCd")); // 유심제품코드
+        var telecomCd    = $.n2s(_usimInfoSelected.attr("telecomCd")); // 통신사코드
+        var usimType     = $.n2s(_usimInfoSelected.attr("usimType")); // 유심종류(나노, 일반)
+        var usimModelCd  = $.n2s(_usimInfoSelected.attr("usimModelCd")); // 유심모델코드
+        var serialNo     = $.n2s(_usimInfoSelected.attr("serialNo")); // 일련번호
+        var agentCd      = $.n2s(_usimInfoSelected.attr("agentCd")); // 대리점/딜러점명
+        var agentNm      = $.n2s(_usimInfoSelected.attr("agentNm")); // 대리점/딜러점명
+        var prodInDt     = $.n2s(_usimInfoSelected.attr("prodInDt")); // 유심 입고일
+        var prodInPrice  = $.n2s(_usimInfoSelected.attr("prodInPrice")); // 입고가
+        var payType      = $.n2s(_usimInfoSelected.attr("payType")); // 입고가
+
+        // 값 세팅
+        $("#spanUsimSerialNo").html(serialNo);
+        $("#spanUsimAgentNm").html(agentNm);
+        $("#spanUsimInDt").html(prodInDt);
+
+        // 입고가가 없을 경우
+        if($.isEmpty(prodInPrice)){
+            $("#spanUsimInPrice").html("0");
+            $("#spanUsimPbpAmt").html("0"); // 유심대납금액
+            $("#spanUsimPbpAmt").attr("value", "0"); // 유심대납금액
+            $("#spanDispUsimInPrice").hide();
+        } else {
+            $("#spanUsimInPrice").html(prodInPrice);
+            // 유심고객지불방법이 대납(B)일 경우만 세팅
+            $("#spanUsimPbpAmt").html($("#usimCustPayType").val() == "B" ? prodInPrice : "0"); // 유심대납금액
+            $("#spanUsimPbpAmt").attr("value", prodInPrice); // 유심대납금액
+            $("#spanDispUsimInPrice").show();
+        }
+
+        // 유심 입고 지불 방식 세팅
+        var isUsimNull = $.isEmpty(prodCd) ? true : false;
+        $("#usimInPayType").gfSetComCd2ComboBox({
+            grpCd : "G0004",
+            isSetNF : isUsimNull,
+            useYn : "Y",
+            setValue : isUsimNull ? "" : payType,
+            isDisabled : isUsimNull
+        });
+
+        // 개통 거래처 세팅
+        $("#openAgent").val(agentCd);
+
+        // 처리 대리점 세팅
+        $("#custPayCashAgent").val(agentCd);
+
+        // 미비서류란 초기화
+        $("#spanLodGrp").gfInitLodGrp({
+            beforeClickBtn: function() {
+                // 유심을 선택하지 않았을 경우
+                if($.isEmpty($("#usimInfo").val())) {
+                    $.gfNotiMsg("W00003");
+                    return false;
+                }
+                return true;
+            }
+        });
+
+    });
+
+    // 일반 form 객체 초기화
+    $.gfInitFormField();
+
+    // 등록 버튼을 클릭했을 경우
+    $("#btnRegData").on("click", function(e, params) {
+        // http://t4t5.github.io/sweetalert/
+        swal({
+            title: "등록하시겠습니까?",
+            text: "",
+//            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#1ab394",
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            closeOnConfirm: false
+        }, function () {
+            swal("등록되었습니다!", "", "success");
+        });
+    });
+
+    // 개통종류에 따른 처리(신규, MNP, 기변보상)
+    $("#openType").on("change", function(e, params) {
+        var _this = $(this);
+        var _closeDt = $("#closeDt"); // 해지일
+        var _tempPhoneNo1 = $("#tempPhoneNo1"); // 가번호(지역번호)
+        var _tempPhoneNo2 = $("#tempPhoneNo2"); // 가번호(국번호)
+        var _tempPhoneNo3 = $("#tempPhoneNo3"); // 가번호(전화번호)
+
+        var openType = _this.val();
+        if($.inArray(openType, ["1", "2", "3"]) > -1) { // 신규(1), MNP(2), 보상기변(3)
+            $("#divCloseDt").gfDisabledDatePicker(true);
+            $("#closeDt").val("");
+            $("#tempPhoneNo1").val("");
+            $("#tempPhoneNo2, #tempPhoneNo3").val("");
+            $("#tempPhoneNo2, #tempPhoneNo3").prop("disabled", true);
+        } else if($.inArray(openType, ["4"]) > -1) { // 에이징(4)
+            $("#divCloseDt").gfDisabledDatePicker(false);
+            $("#tempPhoneNo1").val("010");
+            $("#tempPhoneNo2, #tempPhoneNo3").prop("disabled", false);
+        } else if(($.inArray(openType, ["5", "6"]) > -1)) { // 가개통(5), 선불(6)
+            $("#tempPhoneNo1").val("");
+            $("#closeDt").val("");
+            $("#divCloseDt").gfDisabledDatePicker(false);
+            $("#tempPhoneNo2, #tempPhoneNo3").val("");
+            $("#tempPhoneNo2, #tempPhoneNo3").prop("disabled", true);
+        }
+    });
+
+    // 할인금액 keyup이벤트
+    $("#dcAmt").on("keyup", function(e, params) {
+        var _this = $(this);
+        var _divDcDt = $("#divDcDt");
+        var _dcDt = $("#dcDt");
+        var dcAmt = _this.val();
+
+        if(!$.isEmpty(dcAmt) && dcAmt != 0) { // 할인금액이 있을 경우
+            _divDcDt.gfDisabledDatePicker(false);
+        } else { // 할인금액이 없을 경우
+            _divDcDt.gfDisabledDatePicker(true);
+            _dcDt.val("");
+        }
+    });
+
+    // 할인정보 미수금 keyup 이벤트
+    $("#custUnpayAmt").on("keyup", function(e, params) {
+        var _this = $(this);
+        var _divPlanDueDt = $("#divPlanDueDt");
+        var _custUnpayDueDt = $("#custUnpayDueDt");
+        var custUnpayAmt = _this.val();
+
+        if(!$.isEmpty(custUnpayAmt) && custUnpayAmt != 0) { // 미수금이 있을 경우
+            _divPlanDueDt.gfDisabledDatePicker(false);
+        } else { // 미수금이 없을 경우
+            _divPlanDueDt.gfDisabledDatePicker(true);
+            _custUnpayDueDt.val("");
+        }
+    });
+
+    // 고객납입 미수금 keyup 이벤트
+    $("#custPayUnpayAmt").on("keyup", function(e, params) {
+        var _this = $(this);
+        var _divOutstndAmtDueDt = $("#divOutstndAmtDueDt");
+        var _outstndAmtDueDt = $("#outstndAmtDueDt");
+        var custPayUnpayAmt = _this.val();
+
+        if(!$.isEmpty(custPayUnpayAmt) && custPayUnpayAmt != 0) { // 미수금이 있을 경우
+            _divOutstndAmtDueDt.gfDisabledDatePicker(false);
+        } else { // 미수금이 없을 경우
+            _divOutstndAmtDueDt.gfDisabledDatePicker(true);
+            _outstndAmtDueDt.val("");
+        }
+    });
+});
+
+</script>
+<!-- Javascript Local Code End -->
+
+
+

@@ -1,0 +1,13 @@
+{
+  "GD_SPT_AMT":[
+    { "prodCd" : "P00000000001", "planCd" : "P000001", "sptAmt" : "148,000" },
+    { "prodCd" : "P00000000001", "planCd" : "P000002", "sptAmt" : "138,000" },
+    { "prodCd" : "P00000000001", "planCd" : "P000003", "sptAmt" : "128,000" },
+    { "prodCd" : "P00000000002", "planCd" : "P000001", "sptAmt" : "137,000" },
+    { "prodCd" : "P00000000002", "planCd" : "P000002", "sptAmt" : "127,000" },
+    { "prodCd" : "P00000000002", "planCd" : "P000003", "sptAmt" : "117,000" },
+    { "prodCd" : "P00000000003", "planCd" : "P000001", "sptAmt" : "136,900" },
+    { "prodCd" : "P00000000003", "planCd" : "P000002", "sptAmt" : "126,900" },
+    { "prodCd" : "P00000000003", "planCd" : "P000003", "sptAmt" : "116,900" }
+  ]
+}

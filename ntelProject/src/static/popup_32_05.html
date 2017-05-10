@@ -1,0 +1,203 @@
+<div id="divModalDialog" class="modal-dialog">
+    <div class="modal-content">
+        <!-- header Start -->
+        <div class="modal-header p-header">
+            <!-- 닫기(x) 버튼 Start -->
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <!-- 닫기(x) 버튼 End -->
+            <!-- header title Start -->
+            <h4 id="hModalDialogTitle" class="modal-title p-title">미비서류선택</h4>
+            <!-- header title End -->
+        </div>
+        <!-- header End -->
+        <!-- body Start -->
+        <div class="modal-body p-body">
+            <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+                <form name="frmPopupLod">
+                <table id="tableList" class="t-table" style="width: 100%;">
+					<colgroup>
+					    <col width="5%">
+					    <col width="45%">
+					    <col width="5%">
+					    <col width="45%">
+					</colgroup>
+                    <tbody id="tbodyLodList">
+                    </tbody>
+                </table>
+                </form>
+            </div>
+        </div>
+        <!-- body End -->
+        <!-- Footer Start -->
+        <div class="modal-footer p-footer">
+            <span>
+                <button id="btnPopupReg" type="button" class="form-btn form-btn-n" style="width: 120px;">선택완료</button>
+            </span>
+            <span>
+                <button id="btnPopupClose" type="button" class="form-btn form-btn-n" style="width: 60px;" data-dismiss="modal">닫기</button>
+            </span>
+        </div>
+        <!-- Footer End -->
+    </div>
+</div>
+<script>
+$(function(){
+
+    // 미비서류 리스트 데이터를 초기화 한다.
+    $.initListData();
+
+    // 선택완료 버튼 클릭 시
+    $("#btnPopupReg").click(function(){
+        var _modalDialog = $("#divModalDialog"); // Contents
+        var _modalDialogParent = $("#divModalDialog").parent(); // Popup Container
+
+        var _target = $("#" + _modalDialogParent.attr("target"));
+
+        var _areaButton           = _target.children("[lod-area='button']") // 미비선택 버튼 영역
+        var _areaContent          = _target.children("[lod-area='content']") // 미비서류 내용 영역
+        var _areaDueDateCap       = _target.children("[lod-area='due-date-cap']") // 기일 Caption영역
+        var _areaDueDate          = _target.children("[lod-area='due-date']") // 기일 영역
+
+        var _itemButton           = _areaButton.find("[lod-item='button']");
+        var _itemContent          = _areaContent.children("[lod-item='content']") // 미비서류 내용
+        var _itemDueDatePicker    = _areaDueDate.find("[lod-item='due-date-picker']") // 예정기일 Date Picker
+        var _itemDueDateField     = _itemDueDatePicker.find("[lod-item='due-date-field']") // 예정기일
+
+        // 선택된(체크) 미비서류를 ","로 구분하여 데이터 생성
+        var arrLodCds = new Array(); // 미비서류 코드
+        var arrLodNms = new Array(); // 미비서류 명
+
+        $.each($("input:checkbox[name='chkLod']:checked"), function(inx, item) {
+            var _item = $(item);
+            arrLodCds.push(_item.attr("lodCd"));
+            arrLodNms.push(_item.attr("lodNm"));
+        });
+        var lodCds = arrLodCds.join(",");
+        var lodNms = arrLodNms.join(",");
+
+
+        // 미비서류코드 및 미비서류명 세팅
+        _itemContent.gfSetTextReadonly(lodCds, lodNms);
+
+        // 미비서류를 선택하지 않을 경우 금액 및 유지일 입력란 초기화 및 disabled 처리
+        if($.isEmpty(lodCds)) { // 미비서류를 선택하지 않았을 경우
+            _itemDueDatePicker.gfDisabledDatePicker(true);
+            _areaButton.children("button").removeClass("on");
+        } else { // 미비서류를 선택이 있을 경우
+            _itemDueDatePicker.gfDisabledDatePicker(false);
+            _itemDueDateField.trigger("focus");
+            _areaButton.children("button").addClass("on");
+        }
+        // 처리후 닫기
+        _modalDialogParent.modal('hide');
+
+    });
+
+    // 전체선택 클릭시 처리
+    $("input[type='checkbox'][name='chkAll']").on("click", function(e, params) {
+        var _this = $(this);
+        var _chkLods = $("input[type='checkbox'][name='chkLod']");
+        _chkLods.prop("checked", _this.prop("checked"));
+    });
+});
+
+/*
+ * 미비서류 리스트 데이터 출력
+ */
+$.initListData = function() {
+    var _modalDialog = $("#divModalDialog"); // Contents
+    var _modalDialogParent = $("#divModalDialog").parent(); // Popup Container
+
+    var target = _modalDialogParent.attr("target"); // 미비서류선택 입력란
+    var lodCds = $.n2s(_modalDialogParent.attr("lodCds")).split(",") ; // 다수의 미비서류 가능 : "," 로 구분 => Array
+
+    // 미비서류(G0012)의 공통코드에서 데이터 가져오기
+    var gdLodF = $.fgGetComCdData({
+        grpCd: "G0012",
+        useYn: "Y"
+    });
+
+    // 테이블 리스트 본문 출력(tbody)
+    var _targetTbody = $("#tbodyLodList");
+    _targetTbody.empty();
+
+    // Filtering 데이터 출력하기
+    if(gdLodF.length > 0) { // 데이터가 있을 경우
+
+        var _targetTr = null;
+
+        $.each(gdLodF, function(inx, item) {
+            var _item = item;
+            var isChecked = $.inArray(_item.comCd, lodCds) > -1 ? true : false; // 선택되었을 경우
+
+            if(inx % 2 == 0) {
+                _targetTr = $("<tr/>");
+            }
+
+            // 체크박스
+            var _targetTdChk = $("<td/>")
+                               .addClass("t-content");
+            var _targetTdChkContent = $("<span/>");
+            var _targetTdChkInput = $("<input/>")
+                                    .attr("type", "checkbox")
+                                    .attr("name", "chkLod")
+                                    .attr("lodCd", _item.comCd)
+                                    .attr("lodNm", _item.comNm)
+                                    .prop("checked", isChecked);
+            _targetTdChkContent.append(_targetTdChkInput);
+
+            // 미비서류명
+            var _targetTdLodNm = $("<td/>")
+                                  .addClass("t-content t-c-w al");
+
+            var _targetTdLodNmContent = $("<span/>", {
+                text: _item.comNm
+            });
+
+
+            if(inx == gdLodF.length - 1) { // 마지막 일 경우
+
+                _targetTr.append(_targetTdChk.append(_targetTdChkContent))
+                         .append(_targetTdLodNm.append(_targetTdLodNmContent))
+                         ;
+
+                if(inx % 2 == 0) {
+                    var _targetTdEmpty = $("<td/>")
+                                         .addClass("t-content t-c-w al")
+                                         .prop("colspan", "2")
+                                         ;
+                    _targetTr.append(_targetTdEmpty);
+                }
+                _targetTbody.append(_targetTr);
+            } else {
+                _targetTr.append(_targetTdChk.append(_targetTdChkContent))
+                         .append(_targetTdLodNm.append(_targetTdLodNmContent))
+                         ;
+                if(inx % 2 == 1) {
+                    _targetTbody.append(_targetTr);
+                }
+            }
+        });
+
+    } else {
+        // 데이터가 없을 경우 전체선택 버튼 숨기기
+        $("#btnPopupReg").hide();
+
+        var _targetTr = $("<tr/>");
+        // 체크박스
+        var _targetTd = $("<td/>")
+                        .addClass("t-content")
+                        .attr("colspan", "4")
+                        .css("height", "100px")
+                        .html("데이터가 존재하지 않습니다.")
+                        ;
+        _targetTbody.append(_targetTr.append(_targetTd));
+    }
+
+    // 데이터 출력 후 Scroll table 세팅
+    $("#tableList").table_scroll({
+        rowsInScrollableArea: 10
+    });
+};
+
+</script>
