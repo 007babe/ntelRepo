@@ -12,7 +12,7 @@ def index(request):
     return render(request, 'main/main.html', {})
 
 '''
-공통코드 획득 함수
+공통코드 데이터 획득
 '''
 @csrf_exempt
 def comCd(request):
