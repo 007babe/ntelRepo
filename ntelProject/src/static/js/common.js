@@ -89,8 +89,8 @@ $.gfGetGlobalData = function(opts) {
         success: function(data) {
             try {
                 console.log(data);
-                eval(key + " = $.parseJSON(JSON.stringify(data." + key + "));");
-//                eval(key + " = $.parseJSON(JSON.stringify(data));");
+//                eval(key + " = $.parseJSON(JSON.stringify(data." + key + "));");
+                eval(key + " = $.parseJSON(JSON.stringify(data));");
 //                eval(key + " = $.parseJSON(data." + key + ");");
             } catch(err) {
                 console.log("gfGetGlobalData Error!!! : Key[" + key + "], Url[" + url + "]");

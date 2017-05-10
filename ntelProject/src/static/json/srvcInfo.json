@@ -1,5 +1,4 @@
-{
-  "GD_SRVC":[
+[
     { "agentCd" : "SA000001", "agentNm" : "SK-동행", "srvcCd" : "SVCA0001", "srvcNm" : "안심옵션", "srvcGb" : "A", "srvcAmt" : "0", "useYn" : "Y" },
     { "agentCd" : "SA000001", "agentNm" : "SK-동행", "srvcCd" : "SVCA0002", "srvcNm" : "폰세이프", "srvcGb" : "A", "srvcAmt" : "0", "useYn" : "Y" },
     { "agentCd" : "SA000001", "agentNm" : "SK-동행", "srvcCd" : "SVCA0003", "srvcNm" : "btv", "srvcGb" : "A", "srvcAmt" : "0", "useYn" : "Y" },
@@ -106,5 +105,4 @@
     { "agentCd" : "SA000013", "agentNm" : "LG-대구", "srvcCd" : "SVCB0019", "srvcNm" : "안심옵션미유치", "srvcGb" : "B", "srvcAmt" : "-33,000", "useYn" : "Y" },
     { "agentCd" : "SA000013", "agentNm" : "LG-대구", "srvcCd" : "SVCB0020", "srvcNm" : "폰케이 미가입차감-2.2", "srvcGb" : "B", "srvcAmt" : "-22,000", "useYn" : "Y" },
     { "agentCd" : "SA000013", "agentNm" : "LG-대구", "srvcCd" : "SVCB0021", "srvcNm" : "꿀팁마음껏팩 미유치 -3.3", "srvcGb" : "B", "srvcAmt" : "-33,000", "useYn" : "Y" }
-  ]
-}
+]

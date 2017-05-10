@@ -1,9 +1,7 @@
-{
-  "GD_STAFF":[
-{ "value" : "S0000001", "text" : "노형우[대표]", "dValue" : "노형우", "staffCd" : "S0000001", "staffNm" : "노형우", "gradeCd" : "C", "useYn" : "Y", "telNo" : "010-7777-8888" },
-{ "value" : "S0000002", "text" : "정혜진[총괄]", "dValue" : "정혜진", "staffCd" : "S0000002", "staffNm" : "정혜진", "gradeCd" : "A", "useYn" : "Y", "telNo" : "010-1111-2022" },
-{ "value" : "S0000003", "text" : "김관태[팀장]", "dValue" : "김관태", "staffCd" : "S0000003", "staffNm" : "김관태", "gradeCd" : "T", "useYn" : "Y", "telNo" : "010-7727-7878" },
-{ "value" : "S0000004", "text" : "문죄인[사원]", "dValue" : "문죄인", "staffCd" : "S0000004", "staffNm" : "문죄인", "gradeCd" : "S", "useYn" : "Y", "telNo" : "010-1010-8575" },
-{ "value" : "S0000005", "text" : "깝철수[인턴]", "dValue" : "깝철수", "staffCd" : "S0000005", "staffNm" : "깝철수", "gradeCd" : "I", "useYn" : "Y", "telNo" : "010-7942-0808" }
-  ]
-}
+[
+	{ "value" : "S0000001", "text" : "노형우[대표]", "dValue" : "노형우", "staffCd" : "S0000001", "staffNm" : "노형우", "gradeCd" : "C", "useYn" : "Y", "telNo" : "010-7777-8888" },
+	{ "value" : "S0000002", "text" : "정혜진[총괄]", "dValue" : "정혜진", "staffCd" : "S0000002", "staffNm" : "정혜진", "gradeCd" : "A", "useYn" : "Y", "telNo" : "010-1111-2022" },
+	{ "value" : "S0000003", "text" : "김관태[팀장]", "dValue" : "김관태", "staffCd" : "S0000003", "staffNm" : "김관태", "gradeCd" : "T", "useYn" : "Y", "telNo" : "010-7727-7878" },
+	{ "value" : "S0000004", "text" : "문죄인[사원]", "dValue" : "문죄인", "staffCd" : "S0000004", "staffNm" : "문죄인", "gradeCd" : "S", "useYn" : "Y", "telNo" : "010-1010-8575" },
+	{ "value" : "S0000005", "text" : "깝철수[인턴]", "dValue" : "깝철수", "staffCd" : "S0000005", "staffNm" : "깝철수", "gradeCd" : "I", "useYn" : "Y", "telNo" : "010-7942-0808" }
+]

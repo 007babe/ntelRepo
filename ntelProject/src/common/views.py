@@ -17,9 +17,8 @@ def index(request):
 @csrf_exempt
 def comCd(request):
     # DB에서 데이터 가져오기
-    comCdData = {
-        'GD_COMCD' : [
-            { 'grpCd' : 'G0001', 'comCd' : 'P', 'comNm' : '휴대폰', 'useYn' : 'Y', 'ordSeq' : '1', 'value' : 'P', 'text' : '휴대폰', 'grpOpt' : '' },
+    comCdData = [
+            { 'grpCd' : 'G0001', 'comCd' : 'P', 'comNm' : '휴대폰', 'useYn' : 'Y', 'ordSeq' : '1', 'value' : 'P', 'text' : '휴대폰', 'grpOpt' : 'asdafsdasf' },
             { 'grpCd' : 'G0001', 'comCd' : 'T', 'comNm' : '태블릿', 'useYn' : 'Y', 'ordSeq' : '2', 'value' : 'T', 'text' : '태블릿', 'grpOpt' : '' },
             { 'grpCd' : 'G0001', 'comCd' : 'W', 'comNm' : '웨어러블', 'useYn' : 'Y', 'ordSeq' : '3', 'value' : 'W', 'text' : '웨어러블', 'grpOpt' : '' },
             { 'grpCd' : 'G0001', 'comCd' : 'U', 'comNm' : '유심', 'useYn' : 'Y', 'ordSeq' : '4', 'value' : 'U', 'text' : '유심', 'grpOpt' : '' },
@@ -144,12 +143,12 @@ def comCd(request):
             { 'grpCd' : 'S0005', 'comCd' : 'PC', 'comNm' : 'PC', 'useYn' : 'Y', 'ordSeq' : '1', 'value' : 'PC', 'text' : 'PC', 'grpOpt' : '' },
             { 'grpCd' : 'S0005', 'comCd' : 'MO', 'comNm' : '모바일', 'useYn' : 'Y', 'ordSeq' : '2', 'value' : 'MO', 'text' : '모바일', 'grpOpt' : '' },
             { 'grpCd' : 'S0005', 'comCd' : 'ETC', 'comNm' : '기타', 'useYn' : 'Y', 'ordSeq' : '3', 'value' : 'ETC', 'text' : '기타', 'grpOpt' : '' }
-        ]
-    }
+    ]
+    
     
 #    jsonString = json.dumps(comCdData, indent=4, ensure_ascii=False)
     jsonString = json.dumps(comCdData, indent=4, ensure_ascii=False)
-#    print(jsonString)
+    print(jsonString)
     
     return HttpResponse(json.dumps(comCdData, indent=4, ensure_ascii=False), content_type="application/json")    
 #    return HttpResponse("앗싸... comCd")
