@@ -17,7 +17,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.common/en/1.10/howto/deployment/checklist/
 
@@ -40,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'common',
+    'main',
+    'poll',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,21 @@ TEMPLATES = [
     },
 ]
 
+DATETIME_INPUT_FORMATS = [
+    '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
+    '%Y-%m-%d %H:%M:%S.%f',  # '2006-10-25 14:30:59.000200'
+    '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
+    '%Y-%m-%d',              # '2006-10-25'
+    '%Y/%m/%d %H:%M:%S',     # '2006/10/25 14:30:59'
+    '%Y/%m/%d %H:%M:%S.%f',  # '2006/10/25 14:30:59.000200'
+    '%Y/%m/%d %H:%M',        # '2006/10/25 14:30'
+    '%Y/%m/%d',              # '2006/10/25'
+    '%y/%m/%d %H:%M:%S',     # '06/10/25 14:30:59'
+    '%y/%m/%d %H:%M:%S.%f',  # '06/10/25 14:30:59.000200'
+    '%y/%m/%d %H:%M',        # '06/10/25 14:30'
+    '%y/%m/%d',              # '06/10/25'    
+]
+
 
 WSGI_APPLICATION = 'ntelProject.wsgi.application'
 
@@ -80,18 +97,18 @@ WSGI_APPLICATION = 'ntelProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',    
-        'NAME': 'test',
-        'USER': 'test',
+        'NAME': 'ntel',
+        'USER': 'ntel',
         'PASSWORD': '007kkt',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3307'
     },         
     'nteldb' :  {
         'ENGINE': 'django.db.backends.mysql',    
-        'NAME': 'ntel',
-        'USER': 'ntel',
+        'NAME': 'test',
+        'USER': 'test',
         'PASSWORD': '007kkt',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3307'
     }
 }

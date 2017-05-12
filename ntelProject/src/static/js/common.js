@@ -917,10 +917,13 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
     // 옵션값 생성
     $.each(gdComcdF, function(i, item) {
         var _option = $("<option/>");
-        $.each(item, function(k, v) {
+
+        $.each(item.fields, function(k, v) {
             _option.attr(k, v);
+            _option.attr("value", item.fields.comCd)
         });
-        _this.append(_option.text(item.text));
+        
+        _this.append(_option.text(item.fields.comNm));
     });
 
     // 선택되어질 값 설정
@@ -1393,10 +1396,16 @@ $.fgGetComCdData = function(opts) {
     var grpOpt = $.n2s(opts.grpOpt); // 그룹옵션
 
     return $.grep(GD_COMCD, function(el, inx){
+    	return el.fields.grpCd == grpCd
+	        && (useYn == "" ? true : el.fields.useYn == useYn)
+	        && (grpOpt == "" ? true : el.fields.grpOpt.indexOf(grpOpt) > -1)
+	        ;
+/*    	
         return el.grpCd == grpCd
             && (useYn == "" ? true : el.useYn == useYn)
             && (grpOpt == "" ? true : el.grpOpt.indexOf(grpOpt) > -1)
             ;
+*/            
     });
 };
 
