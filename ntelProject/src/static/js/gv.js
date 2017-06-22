@@ -7,8 +7,7 @@
  
 // System Global Data Info 
 var gSysGDs =  [
-//    { key : "GD_COMCD", url : "json/comCdInfo.json", useYn : true, desc : "공통코드용(TB_COM_CD)" },
-    { key : "GD_COMCD", url : "/common/comcd", useYn : true, desc : "공통코드용(TB_COM_CD)" },
+    { key : "GD_COM_CD", url : "/common/comcd", useYn : true, desc : "공통코드용(TB_COM_CD)" },
     { key : "GD_STAFF", url : "/static/json/staffInfo.json", useYn : true, desc : "직원 데이터" },
     { key : "GD_AGENT", url : "/static/json/agentInfo.json", useYn : true, desc : "대리/딜러점 데이터" },
     { key : "GD_PROD_PHONE", url : "/static/json/productPhoneInfo.json", useYn : true, desc : "입고 단말기" },

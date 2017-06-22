@@ -1395,7 +1395,7 @@ $.fgGetComCdData = function(opts) {
     var useYn = $.n2s(opts.useYn); // 사용여부값 적용(true 일경우 useYn = "Y"만 세팅, 기본값 false)
     var grpOpt = $.n2s(opts.grpOpt); // 그룹옵션
 
-    return $.grep(GD_COMCD, function(el, inx){
+    return $.grep(GD_COM_CD, function(el, inx){
     	return el.fields.grpCd == grpCd
 	        && (useYn == "" ? true : el.fields.useYn == useYn)
 	        && (grpOpt == "" ? true : el.fields.grpOpt.indexOf(grpOpt) > -1)
