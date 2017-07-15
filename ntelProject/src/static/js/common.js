@@ -12,12 +12,7 @@ $(document).ready(function() {
 
     // 현재시간 세팅
     $.gfSetCurrentDateTime();
-
-    // 메뉴 클릭 이벤트 초기화
-    $.gfInitEventMenu();
-
-    // 페이지 초기화
-    $.gfInitMainPage();
+    
 });
 
 /*
@@ -26,10 +21,13 @@ $(document).ready(function() {
 $.gfSetGlobalDataAll = function() {
 
     $.each(gSysGDs, function(i, item) {
-        var key   = item.key;
-        var url   = item.url;
-        var useYn = item.useYn;
-        var desc  = item.desc;
+        var key    = item.key;
+        var url    = item.url;
+        var cbFunc = item.cbFunc
+        var useYn  = item.useYn;
+        var desc   = item.desc;
+
+//    console.log(key + ":" + url)
 
         // Key와 동일한 전역 데이터용 Global 변수 생성
         $.globalEval("var " + key + " = new Object();");
@@ -37,7 +35,8 @@ $.gfSetGlobalDataAll = function() {
         // 시스템 사용 전역 데이터 가져오기
         $.gfGetGlobalData({
            key : key,
-           url : url
+           url : url,
+           cbFunc : cbFunc
         });
     });
 };
@@ -59,7 +58,8 @@ $.gfSetGlobalData = function(key) {
         // 시스템 사용 전역 데이터 가져오기
         $.gfGetGlobalData({
            key : gSysGDsF.key,
-           url : gSysGDsF.url
+           url : gSysGDsF.url,
+           cbFunc : gSysGDsF.cbFunc
         });
     }
 }
@@ -74,6 +74,7 @@ $.gfGetGlobalData = function(opts) {
     // 옵션
     var key = opts.key; // 데이터 Key(필수)
     var url = opts.url; // 데이터 URL(필수)
+    var cbFunc = opts.cbFunc // 정상 처리후 호출 콜백 함수명
 
     $.ajax({
         type: "POST",
@@ -85,9 +86,9 @@ $.gfGetGlobalData = function(opts) {
         beforeSend: function (jqXHR, settings) {
 //            $.gfToggleLoading("#boxContents", true);
         },
-        success: function(data) {
+        success: function(data, cbFunc) {
             try {
-//                console.log(data);
+//                    console.log(data);
 //                eval(key + " = $.parseJSON(JSON.stringify(data." + key + "));");
                 eval(key + " = $.parseJSON(JSON.stringify(data));");
 //                eval(key + " = $.parseJSON(data." + key + ");");
@@ -113,6 +114,16 @@ $.gfGetGlobalData = function(opts) {
 */
             }
         }
+    }).done(function() { // 성공할 경우
+//        console.log("gfGetGlobalData Ajax done key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+        // 콜백함수가 있을 경우 호출
+        if(!$.isEmpty(cbFunc)) {
+            eval(cbFunc) 
+        }
+    }).fail(function() { // 실패할 경우
+//        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+    }).always(function() {
+//        console.log("gfGetGlobalData Ajax allways key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
     });
 };
 
@@ -181,10 +192,14 @@ $.gfLoadContentsData = function(opts) {
 
     var menuUrl = opts.menuUrl;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
-
+//    params = {'id' : '12'}
+//    console.log(opts.params)
     $.ajax({
         type: "POST",
+//    	type: "GET",
         url: menuUrl,
+//        url: "/main/contents/?menuUrl=" + menuUrl,
+//        url: "/main/contents/",
         data: params,
         async: true,
         beforeSend: function (jqXHR, settings) {
@@ -202,9 +217,21 @@ $.gfLoadContentsData = function(opts) {
             200: function() {
 
             },
+            403: function() {
+                $.gfCommonPopUp({
+                    popUrl: "/static/error/popup403.html",
+                    width: "300"
+                });
+            },
             404: function() {
                 $.gfCommonPopUp({
-                    popUrl: "/static/popup404.html",
+                    popUrl: "/static/error/popup404.html",
+                    width: "300"
+                });
+            },
+            500: function() {
+                $.gfCommonPopUp({
+                    popUrl: "/static/error/popup500.html",
                     width: "300"
                 });
             }
@@ -213,11 +240,11 @@ $.gfLoadContentsData = function(opts) {
 };
 
 
-
 /*
- * Page Loading 후 초기화
+ * 최초 선택 화면 처리(쿠키 이용)
  */
-$.gfInitMainPage = function () {
+$.gfLoadInitPage___BAK = function () {
+    
     // 메뉴정보가 없을 경우
     if($.isEmpty($.cookie("menuInfo"))) {
         $.cookie("menuInfo", "1,1");
@@ -231,6 +258,29 @@ $.gfInitMainPage = function () {
     $('#menu' + menuNo).trigger('click');
 };
 
+/*
+ * 최초 선택 화면 처리(쿠키 이용)
+ */
+$.gfLoadInitPage = function () {
+    
+    // 메뉴정보가 없을 경우
+    if($.isEmpty($.cookie("menuInfo"))) {
+        // 메뉴리스트 중에서 제일 첫번째 세팅
+        var upMenuId = GD_SYS_MENU[0].upMenuId;
+        var menuId   = GD_SYS_MENU[0].menuId;
+        
+        $.cookie("menuInfo", upMenuId + "," + menuId);
+    } 
+    
+    var menuInfo = $.cookie("menuInfo").split(',');
+
+    var upMenuId = menuInfo[0];
+    var menuId = menuInfo[1];
+
+    // 초기 메뉴 선택 세팅(click event)
+    $('#upmenu_' + upMenuId).trigger('click');
+    $('#menu_' + menuId).trigger('click');
+};
 
 
 /*
@@ -918,12 +968,12 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
     $.each(gdComcdF, function(i, item) {
         var _option = $("<option/>");
 
-        $.each(item.fields, function(k, v) {
+        $.each(item, function(k, v) {
             _option.attr(k, v);
-            _option.attr("value", item.fields.comCd)
+            _option.attr("value", item.comCd)
         });
         
-        _this.append(_option.text(item.fields.comNm));
+        _this.append(_option.text(item.comNm));
     });
 
     // 선택되어질 값 설정
@@ -1382,7 +1432,7 @@ $.gfNotiMsg = function(opts) {
 
 
 /*
- * 공통코드 데이터 값 가져오기
+ * 그룹코드에 해당하는 공통코드 데이터 값 가져오기
  *  opts.grpCd  : 공통코드의 그룹코드(Default All)
  *  opts.useYn  : 사용여부(Default All, "Y" or "N" else Null)
  *  opts.grpOpt : 그룹옵션(Default All else 해당 옵션)
@@ -1396,16 +1446,10 @@ $.fgGetComCdData = function(opts) {
     var grpOpt = $.n2s(opts.grpOpt); // 그룹옵션
 
     return $.grep(GD_COM_CD, function(el, inx){
-    	return el.fields.grpCd == grpCd
-	        && (useYn == "" ? true : el.fields.useYn == useYn)
-	        && (grpOpt == "" ? true : el.fields.grpOpt.indexOf(grpOpt) > -1)
-	        ;
-/*    	
-        return el.grpCd == grpCd
+    	return el.grpCd == grpCd
             && (useYn == "" ? true : el.useYn == useYn)
             && (grpOpt == "" ? true : el.grpOpt.indexOf(grpOpt) > -1)
             ;
-*/            
     });
 };
 
@@ -1985,7 +2029,86 @@ $.gfLoadContents = function(opts) {
     });    
 };
 
+/*
+ * 메뉴 데이터를 이용한 메뉴 구성
+ */
+$.gfSetSysMenu = function() {
+    var _sideMenu = $("#side-menu"); // 메뉴가 들어갈 컨텐츠 자리
+   
+    var _liMenuGrp,
+        _aMenuGrp,
+        _iMenuGrp,
+        _spanMenuGrpNm,
+        _spanMenuGrpArrow,
+        _ulMenuGrp,
+        _liMenuSub,
+        _aMenuSub
+        ;
 
+    var tempUpMenuId = "";
+   
+    $.each(GD_SYS_MENU, function (i, item) {
+        
+        // 상위 메뉴가 다를 경우 세로운 메뉴그룹을 생성
+        if(tempUpMenuId != item.upMenuId) {
+            // 첫번째 메뉴가 아닐 경우 
+            if(i != 0) {
+                _liMenuGrp.append(_aMenuGrp)
+                          .append(_ulMenuGrp);
+                _sideMenu.append(_liMenuGrp); 
+            }
+            
+            _liMenuGrp        = $("<li/>");
+            _aMenuGrp         = $("<a/>").attr("id", "upmenu_" + item.upMenuId);
+            _iMenuGrp         = $("<i/>").addClass(item.upMenuCss);
+            _spanMenuGrpNm    = $("<span/>").addClass("nav-label")
+                                            .html(item.upMenuNm);
+            _spanMenuGrpArrow = $("<span/>").addClass("fa arrow");
+            
+            _aMenuGrp.append(_iMenuGrp)
+                     .append(_spanMenuGrpNm)
+                     .append(_spanMenuGrpArrow)
+                     ;
+            
+            _ulMenuGrp        = $("<ul/>").addClass("nav nav-second-level");
+
+            tempUpMenuId      = item.upMenuId;
+        }
+        
+        _liMenuSub = $("<li/>").attr("type", "menu")
+        _aMenuSub  = $("<a/>").attr("id", "menu_" + item.menuId)
+                              .attr("menuInfo", item.upMenuId + "," + item.menuId)
+                              .attr("menuId", item.menuId)
+                              .attr("upMenuId", item.upMenuId)
+                              .attr("type", "menu")
+                              .attr("menuUrl", item.menuUrl)
+                              .attr("param", "")
+                              .html(item.menuNm)
+                              ;
+                              
+        _liMenuSub.append(_aMenuSub);  
+        _ulMenuGrp.append(_liMenuSub);
+
+
+        // 마지막 메뉴일 경우 
+        if(i == GD_SYS_MENU.length -1) {
+            _liMenuGrp.append(_aMenuGrp)
+                      .append(_ulMenuGrp);
+                      
+            _sideMenu.append(_liMenuGrp);                      
+        }
+    });
+
+
+    // 메뉴 클릭 이벤트 초기화
+    $.gfInitEventMenu();
+    
+    // 메티스 메뉴 처리
+    $('#side-menu').metisMenu();
+    
+    // 최초 선택 화면 처리(쿠키 이용)
+    $.gfLoadInitPage();
+};
 
 /*
  * 현재 시간 및 시계 만들기
