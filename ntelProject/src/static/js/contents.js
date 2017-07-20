@@ -6,6 +6,7 @@
  *
  */
 $(document).ready(function() {
+    
     /*
      * ibox 숨기기 이벤트 Function 
      */ 

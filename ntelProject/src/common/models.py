@@ -17,9 +17,9 @@ class ComCd(models.Model):
     grpOpt = models.CharField(db_column='grp_opt', max_length=50, null=True, verbose_name='그룹옵션') #그룹옵션
     grpOptDesc = models.CharField(db_column='grp_opt_desc', max_length=200, null=True, blank=True, verbose_name='옵션설명') # 옵션설명
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
-    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, verbose_name='등록자ID', related_name='r_com_cd_reg_id')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
-    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=False, verbose_name='수정자ID', related_name='r_com_cd_mod_id')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
     
     # 속성

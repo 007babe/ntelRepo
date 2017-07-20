@@ -6,9 +6,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from common.models import ComCd
 
-# Create your views here.
-
-@csrf_exempt
 @login_required(login_url='/accounts/login/')
 def getJsonComCd(request):
     """
@@ -26,3 +23,8 @@ def getJsonComCd(request):
     )
     jsonData = json.dumps(list(comCds))
     return HttpResponse(jsonData, content_type="application/json")    
+
+
+
+
+

@@ -6,13 +6,7 @@
  */
 
 $(document).ready(function() {
-
-    // 시스템전역 데이터 전체 세팅(공통코드 및 각종 코드성데이터 gv.js > gSysGDs 참조)
-    $.gfSetGlobalDataAll();
-
-    // 현재시간 세팅
-    $.gfSetCurrentDateTime();
-    
+	// 가능한 추가 하지 마시요
 });
 
 /*
@@ -68,6 +62,16 @@ $.gfSetGlobalData = function(key) {
  * 시스템 사용 전역 데이터 가져오기(Ajax json)
  */
 $.gfGetGlobalData = function(opts) {
+	var _formBase = $("#formBase");
+	
+	var paramsPost = _formBase.serializeArray()
+	var paramsGet = _formBase.serialize()
+	var paramsCookies = $.cookie('csrftoken');
+	
+	// KKT Check
+	console.log("Post: " + _formBase.serializeArray());
+	console.log("Get: " + _formBase.serialize());
+	console.log("cookies: " + $.cookie('csrftoken'));
 
     if($.isEmpty(opts) || $.isEmpty(opts.key) || $.isEmpty(opts.url)) return; // option이 없을 경우 return
 
@@ -75,10 +79,11 @@ $.gfGetGlobalData = function(opts) {
     var key = opts.key; // 데이터 Key(필수)
     var url = opts.url; // 데이터 URL(필수)
     var cbFunc = opts.cbFunc // 정상 처리후 호출 콜백 함수명
-
+    
     $.ajax({
         type: "POST",
         url: url,
+        data: paramsGet,
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         cache: false,
@@ -157,7 +162,8 @@ $.gfHandlerClickMenu = function(opts) {
     // 메뉴에 해당하는 메인 Contents 호출
     $.gfLoadContentsData({
         menuUrl: _this.attr("menuUrl"),
-        params: _this.attr("params")
+        params: _this.attr("params"),
+        menuId: _this.attr("menuId")
     });
 
     // 쿠키에 현재 메뉴 세팅
@@ -191,15 +197,16 @@ $.gfLoadContentsData = function(opts) {
     if($.isEmpty(opts)) return false;
 
     var menuUrl = opts.menuUrl;
+    var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
+    
 //    params = {'id' : '12'}
 //    console.log(opts.params)
     $.ajax({
         type: "POST",
 //    	type: "GET",
-        url: menuUrl,
-//        url: "/main/contents/?menuUrl=" + menuUrl,
-//        url: "/main/contents/",
+        url: menuUrl + "?menuId=" + menuId,
+//        url: "/main/contents/?menuId=" + menuId,
         data: params,
         async: true,
         beforeSend: function (jqXHR, settings) {
@@ -952,7 +959,7 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
         useYn: opts.useYn,
         grpOpt: opts.grpOpt
     });
-
+    
     // 초기화
     _this.empty();
 
@@ -2111,8 +2118,17 @@ $.gfSetSysMenu = function() {
 };
 
 /*
+ * 메뉴 데이터를 이용한 메뉴 구성
+ */
+$.gfAjaxSetup = function() {
+	// CSRF 세팅
+	$.ajaxSetup({
+        headers: { "X-CSRFToken": $.cookie("csrftoken") }
+	});       
+};
+
+/*
  * 현재 시간 및 시계 만들기
  * http://momentjs.com/docs/#/parsing/
  */
-
 

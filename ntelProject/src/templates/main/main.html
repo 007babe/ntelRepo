@@ -323,6 +323,16 @@ h1 {
 <!-- Common Javascript Start -->
 <script>
 $(document).ready(function() {
+	
+    // Ajax Setup
+    $.gfAjaxSetup();
+
+    // 시스템전역 데이터 전체 세팅(공통코드 및 각종 코드성데이터 gv.js > gSysGDs 참조)
+    $.gfSetGlobalDataAll();
+
+    // 현재시간 세팅
+    $.gfSetCurrentDateTime();	
+	
     // 상단우측 Refresh 버튼 클릭시 처리
     $("#btnRefreshSysGDs").on("click", function(e, params) {
         var _this = $(this);
@@ -339,6 +349,8 @@ $(document).ready(function() {
 });
 </script>
 <!-- Common Javascript End -->
-
+<form name="formBase" id="formBase">
+    {% csrf_token %}
+</form>
 </body>
 </html>

@@ -1,11 +1,11 @@
 [
-	{ "value" : "CC0001", "text" : "New 온가족 플랜", "dValue" : "New 온가족 플랜", "prodCd" : "CC0001", "telecomCd" : "SKT", "prodNm" : "New 온가족 플랜", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
-	{ "value" : "CC0002", "text" : "한가족 할인", "dValue" : "한가족 할인", "prodCd" : "CC0002", "telecomCd" : "SKT", "prodNm" : "한가족 할인", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
-	{ "value" : "CC0003", "text" : "온가족 프리", "dValue" : "온가족 프리", "prodCd" : "CC0003", "telecomCd" : "SKT", "prodNm" : "온가족 프리", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
-	{ "value" : "CC0004", "text" : "온가족 무료(가입불가)", "dValue" : "온가족 무료(가입불가)", "prodCd" : "CC0004", "telecomCd" : "SKT", "prodNm" : "온가족 무료", "colseDt" : "2016-08-01", "limitDesc" : "가입불가", "useYn" : "Y" },
-	{ "value" : "CC0005", "text" : "총액 결합 할인", "dValue" : "총액 결합 할인", "prodCd" : "CC0005", "telecomCd" : "KT", "prodNm" : "총액 결합 할인", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
-	{ "value" : "CC0006", "text" : "인터넷 뭉치면 올레(가입불가)", "dValue" : "인터넷 뭉치면 올레(가입불가)", "prodCd" : "CC0006", "telecomCd" : "KT", "prodNm" : "인터넷 뭉치면 올레", "colseDt" : "2016-08-01", "limitDesc" : "가입불가", "useYn" : "Y" },
-	{ "value" : "CC0007", "text" : "한방에 Home2", "dValue" : "한방에 Home2", "prodCd" : "CC0007", "telecomCd" : "LGT", "prodNm" : "한방에 Home2", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
-	{ "value" : "CC0008", "text" : "한방에 Home(가입불가)", "dValue" : "한방에 Home(가입불가)", "prodCd" : "CC0008", "telecomCd" : "LGT", "prodNm" : "한방에 Home", "colseDt" : "2016-08-01", "limitDesc" : "가입불가", "useYn" : "Y" }
+	{ "value" : "CC0001", "text" : "New 온가족 플랜", "dValue" : "New 온가족 플랜", "prodCd" : "CC0001", "telecomCd" : "G0002SKT", "prodNm" : "New 온가족 플랜", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
+	{ "value" : "CC0002", "text" : "한가족 할인", "dValue" : "한가족 할인", "prodCd" : "CC0002", "telecomCd" : "G0002SKT", "prodNm" : "한가족 할인", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
+	{ "value" : "CC0003", "text" : "온가족 프리", "dValue" : "온가족 프리", "prodCd" : "CC0003", "telecomCd" : "G0002SKT", "prodNm" : "온가족 프리", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
+	{ "value" : "CC0004", "text" : "온가족 무료(가입불가)", "dValue" : "온가족 무료(가입불가)", "prodCd" : "CC0004", "telecomCd" : "G0002SKT", "prodNm" : "온가족 무료", "colseDt" : "2016-08-01", "limitDesc" : "가입불가", "useYn" : "Y" },
+	{ "value" : "CC0005", "text" : "총액 결합 할인", "dValue" : "총액 결합 할인", "prodCd" : "CC0005", "telecomCd" : "G0002KT", "prodNm" : "총액 결합 할인", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
+	{ "value" : "CC0006", "text" : "인터넷 뭉치면 올레(가입불가)", "dValue" : "인터넷 뭉치면 올레(가입불가)", "prodCd" : "CC0006", "telecomCd" : "G0002KT", "prodNm" : "인터넷 뭉치면 올레", "colseDt" : "2016-08-01", "limitDesc" : "가입불가", "useYn" : "Y" },
+	{ "value" : "CC0007", "text" : "한방에 Home2", "dValue" : "한방에 Home2", "prodCd" : "CC0007", "telecomCd" : "G0002LGT", "prodNm" : "한방에 Home2", "colseDt" : "", "limitDesc" : "", "useYn" : "Y" },
+	{ "value" : "CC0008", "text" : "한방에 Home(가입불가)", "dValue" : "한방에 Home(가입불가)", "prodCd" : "CC0008", "telecomCd" : "G0002LGT", "prodNm" : "한방에 Home", "colseDt" : "2016-08-01", "limitDesc" : "가입불가", "useYn" : "Y" }
 ]
 
