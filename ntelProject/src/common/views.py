@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from common.models import ComCd
+from src.common.utils.json import jsonDefault
+
 
 @login_required(login_url='/accounts/login/')
 def getJsonComCd(request):
@@ -18,10 +20,10 @@ def getJsonComCd(request):
         'grpCd', 
         'comCd', 
         'comNm', 
-        'useYn', 
         'grpOpt',
+        'useYn', 
     )
-    jsonData = json.dumps(list(comCds))
+    jsonData = json.dumps(list(comCds), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")    
 
 

@@ -24,4 +24,5 @@ encoding//src/main/urls.py=utf-8
 encoding//src/main/views.py=utf-8
 encoding//src/manage.py.dev=UTF-8
 encoding//src/manage2.py.svr=UTF-8
+encoding//src/sample/migrations/0001_initial.py=utf-8
 encoding//src/templates/registration/login.html=UTF-8

@@ -69,10 +69,12 @@ $.gfGetGlobalData = function(opts) {
 	var paramsCookies = $.cookie('csrftoken');
 	
 	// KKT Check
+	/*
 	console.log("Post: " + _formBase.serializeArray());
 	console.log("Get: " + _formBase.serialize());
 	console.log("cookies: " + $.cookie('csrftoken'));
-
+	*/
+	
     if($.isEmpty(opts) || $.isEmpty(opts.key) || $.isEmpty(opts.url)) return; // option이 없을 경우 return
 
     // 옵션
@@ -161,7 +163,6 @@ $.gfHandlerClickMenu = function(opts) {
 
     // 메뉴에 해당하는 메인 Contents 호출
     $.gfLoadContentsData({
-        menuUrl: _this.attr("menuUrl"),
         params: _this.attr("params"),
         menuId: _this.attr("menuId")
     });
@@ -180,7 +181,7 @@ $.gfReloadContentsData = function(opts) {
         _menu = $("li[type='menu'].active > a");
 
         opts = {
-            menuUrl: _menu.attr("menuUrl"),
+            menuId: _menu.attr("menuId"),
             params: _menu.attr("params")
         }
     }
@@ -196,17 +197,18 @@ $.gfLoadContentsData = function(opts) {
     // 옵션이 없을 경우
     if($.isEmpty(opts)) return false;
 
-    var menuUrl = opts.menuUrl;
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
     
-//    params = {'id' : '12'}
+    params = {
+        'menuIdP' : menuId
+    }
+    
 //    console.log(opts.params)
     $.ajax({
         type: "POST",
 //    	type: "GET",
-        url: menuUrl + "?menuId=" + menuId,
-//        url: "/main/contents/?menuId=" + menuId,
+        url: "/main/menu/?menuId=" + menuId,
         data: params,
         async: true,
         beforeSend: function (jqXHR, settings) {
@@ -2041,7 +2043,8 @@ $.gfLoadContents = function(opts) {
  */
 $.gfSetSysMenu = function() {
     var _sideMenu = $("#side-menu"); // 메뉴가 들어갈 컨텐츠 자리
-   
+    _sideMenu.empty();
+    
     var _liMenuGrp,
         _aMenuGrp,
         _iMenuGrp,
@@ -2088,7 +2091,6 @@ $.gfSetSysMenu = function() {
                               .attr("menuId", item.menuId)
                               .attr("upMenuId", item.upMenuId)
                               .attr("type", "menu")
-                              .attr("menuUrl", item.menuUrl)
                               .attr("param", "")
                               .html(item.menuNm)
                               ;
@@ -2106,19 +2108,19 @@ $.gfSetSysMenu = function() {
         }
     });
 
+    // 메티스 메뉴 처리
+//    $('#side-menu').metisMenu('dispose');
+    $('#side-menu').metisMenu();
 
     // 메뉴 클릭 이벤트 초기화
     $.gfInitEventMenu();
-    
-    // 메티스 메뉴 처리
-    $('#side-menu').metisMenu();
     
     // 최초 선택 화면 처리(쿠키 이용)
     $.gfLoadInitPage();
 };
 
 /*
- * 메뉴 데이터를 이용한 메뉴 구성
+ * Post 방식의 CSRF Token 쿠키 세팅
  */
 $.gfAjaxSetup = function() {
 	// CSRF 세팅

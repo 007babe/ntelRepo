@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.query import Prefetch
 from django.http.response import Http404
 from django.shortcuts import render
+from django.template.exceptions import TemplateDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
@@ -31,9 +32,9 @@ class MainView(TemplateView):
 
 
 @login_required(login_url='/accounts/login/')
-def mainView(request):
+def mainCV(request):
     '''
-    메인 화면 View(Function Based)
+    메인 화면 Contents View(Function Based)
     '''
     '''
     print("view.mainView############################>")
@@ -72,6 +73,47 @@ def mainView(request):
         'main/main.html', 
         {}
     )
+
+@login_required(login_url='/accounts/login/')
+def menuCV(request):
+    '''
+    메뉴별 초기화면 Contents View(Function Based)
+    '''
+    try :
+        '''
+        Parameter Check
+        '''
+        # POST
+        print("Params:POST===============>")
+        print("menuIdP : %s"  %request.POST.get('menuIdP'))
+        print("menuId : %s"  %request.POST.get('menuId'))
+        print("Params:POST===============<")
+        # GET
+        print("Params:GET===============>")
+        print("menuIdP : %s"  %request.GET.get('menuIdP'))
+        print("menuId : %s"  %request.GET.get('menuId'))
+        print("Params:GET===============<")
+        
+        # 메뉴ID(Key)로 메뉴 정보 획득
+        sysMenuInfo = SysMenu.objects.get(
+            menuId__exact = request.GET.get('menuId'),
+        )
+        
+        # 템플릿 렌더링 및 데이터 전달
+        return render(
+            request, 
+            sysMenuInfo.menuTmp, 
+            {
+                'naviMenu' : sysMenuInfo,
+            }
+        )
+    except TemplateDoesNotExist: # Template이 존재하지 않을 경우
+        raise Http404
+        
+        
+        
+            
+
 
 
 

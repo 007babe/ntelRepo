@@ -89,7 +89,7 @@ h1 {
 <!-- Left Navi Start -->
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
-        <ul class="nav metismenu" id="side-menu">
+        <ul class="nav" id="side-menu-head">
             <li class="nav-header">
                 <div class="dropdown profile-element">
                     <span>
@@ -125,8 +125,11 @@ h1 {
                     <img alt="image" class="img-circle" src="{% static "img/profile_small_roh.png" %}"/>
                 </div>
             </li>
-            <!-- Left Navi :: Left Menu -->
         </ul>
+        <!-- Left Navi :: Left Menu Start -->
+        <ul class="nav metismenu" id="side-menu">
+        </ul>
+        <!-- Left Navi :: Left Menu End -->
     </div>
 </nav>
 <!-- Left Navi End -->
@@ -336,15 +339,20 @@ $(document).ready(function() {
     // 상단우측 Refresh 버튼 클릭시 처리
     $("#btnRefreshSysGDs").on("click", function(e, params) {
         var _this = $(this);
-        
-        /* KKT 모듈화 필요 스핀 처리 >>>>>>>>>> */
-        _this.toggleClass("fa-spin");
-        // 시스템 전역 데이터 리로드
-        $.gfSetGlobalDataAll();
-        // 현재Page Reload
-        $.gfReloadContentsData();
-        _this.toggleClass("fa-spin");
-        /* KKT 모듈화 필요 스핀 처리 >>>>>>>>>> */
+		
+        // 현재 페이지 리로드로 대체
+        location.reload();
+
+//////////////////////////////////////////////////////////////////////////////        
+//        
+//        /* KKT 모듈화 필요 스핀 처리 >>>>>>>>>> */
+//        _this.toggleClass("fa-spin");
+//        // 시스템 전역 데이터 리로드
+//        $.gfSetGlobalDataAll();
+//        // 현재Page Reload
+//        $.gfReloadContentsData();
+//        _this.toggleClass("fa-spin");
+//        /* KKT 모듈화 필요 스핀 처리 >>>>>>>>>> */
     });
 });
 </script>
