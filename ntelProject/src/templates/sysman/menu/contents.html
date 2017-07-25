@@ -1,0 +1,59 @@
+{#################################}
+{% extends "base/contents.html" %}
+{% load staticfiles %}0
+{#################################}
+
+{% block mainContents %}
+<div id="divMainContentArea" class="wrapper wrapper-content animated fadeInRight pt5 pb50">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <ul id="ulTabOpenTarget" class="nav nav-tabs" tabCode="">
+                    <li code="10" class="active" url="{% static 'contents_32_1.html' %}"><a class="p-tab" data-toggle="tab">단말기</a></li>
+                    <li code="20" class="" url="{% static 'contents_32_2.html' %}"><a class="p-tab" data-toggle="tab">유심/중고</a></li>
+                    <li code="30" class="" url="{% static 'contents_32_3.html' %}"><a class="p-tab" data-toggle="tab">홈/인터넷</a></li>
+                </ul>
+                <!-- 탭 본문 Start -->
+                <div class="tab-content ibox-content tab">
+                    <div id="divTabContents" class="tab-pane active">
+                    </div>
+                </div>
+                <!-- 탭 본문 End -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock mainContents %}
+
+{% block javascriptLoc %}
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+    
+    // 개통 방식(단말기, 유심/중고, 홈/인터넷) 탭 클릭 이벤트
+    $("#ulTabOpenTarget li").on("click", function(e, params) {
+        var _tab = $(this);
+        var _tabGroup = _tab.parent();
+        var tabCode = _tabGroup.attr("tabCode");
+        var code = _tab.attr("code"); // 단말기:10, 유심/중고:20, 홈/인터넷:30
+        var url = _tab.attr("url"); // tab Contents 주소
+        var _divTabContents = $("#divTabContents"); // 컨텐츠 출력 대상
+
+        
+        if(tabCode != code) {
+            // 해당 컨텐츠 로딩
+            $.gfLoadContents({
+                url: url,
+                target: _divTabContents
+            });
+            _tabGroup.attr("tabCode", code);
+        }
+    });
+    
+    // 최초 로딩시 처리
+    $("#ulTabOpenTarget li.active").trigger("click");
+    
+});
+</script>
+<!-- Javascript Local Code End -->
+{% endblock javascriptLoc %}

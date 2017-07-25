@@ -1,0 +1,306 @@
+﻿<!-- Page Title Start -->
+<div class="row wrapper border-bottom white-bg page-heading pb5">
+    <div class="col-lg-4">
+        <h2 class="mt5">미결캘린더</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/static/index.html">엔텔</a>
+            </li>
+            <li>
+                <a href="/static/index.html">미결업무</a>
+            </li>
+            <li class="active">
+                <strong>미결캘린더</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<!-- Page Title End -->
+
+<!-- Contens Code Start -->
+<div class="wrapper wrapper-content animated fadeInRight pt5 pb50">
+    <div class="row animated fadeInDown">
+        <div class="col-lg-9">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a class="p-tab" data-toggle="tab" href="#tab-1">전체</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-2">미비서류</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-3">할인예정일</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-4">에이징해지</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-5">회수단말기</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-6">미수금</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-7">요금제유지</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-8">필수S지</a></li>
+                    <li class=""><a class="p-tab" data-toggle="tab" href="#tab-9">일반업무</a></li>
+                </ul>
+            </div>
+            <!--
+            <div class="ibox-title">
+                <h5>미결캘린더</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-wrench"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#">Config option 1</a>
+                        </li>
+                        <li><a href="#">Config option 2</a>
+                        </li>
+                    </ul>
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            -->
+            <div class="tab-content">
+	                <!-- Calendar Ojbect Start -->
+	                <div class="ibox-content tab">
+	                    <div id="calendar"></div>
+	                </div>
+                <!-- Calendar Ojbect End -->
+            </div>		                
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>금일 처리업무(6)</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id='external-events'>
+                        <div class='external-event blue-bg'>[미비서류]</div>
+                        <div class='external-event navy-bg'>[할인예정일]</div>
+                        <div class='external-event lazur-bg'>[에이징해지]</div>
+                        <div class='external-event yellow-bg'>[회수단말기]</div>
+                        <div class='external-event red-bg'>[미수금]</div>
+                        <div class='external-event black-bg'>[필수S유지]</div>
+                        <div class='external-event navy-bg'>[일반업무]</div>
+                        <!--p class="m-t">
+                            <input type='checkbox' id='drop-remove' class="i-checks" checked /> <label for='drop-remove'>remove after drop</label>
+                        </p-->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>미처리업무(2)</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#">Config option 1</a>
+                            </li>
+                            <li><a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id='external-events'>
+                        <div class='external-event blue-bg'>[3/2]에이징해지</div>
+                        <div class='external-event navy-bg'>[3/5]미비서류</div>
+                        <!--p class="m-t">
+                            <input type='checkbox' id='drop-remove' class="i-checks" checked /> <label for='drop-remove'>remove after drop</label>
+                        </p-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contens Code End -->
+
+<!-- Javascript Include Start -->
+<!-- Contents 공통 javascript -->
+<script src="js/contents.js"></script>
+<!-- Javascript Include End -->
+
+
+<!-- Javascript Local Code Start -->
+<script>
+    $(document).ready(function() {
+
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green'
+        });
+
+        /* initialize the external events
+         -----------------------------------------------------------------*/
+        $('#external-events div.external-event').each(function() {
+
+            // store data so the calendar knows to render an event upon drop
+            $(this).data('event', {
+                title: $.trim($(this).text()), // use the element's text as the event title
+                stick: true // maintain when user navigates (see docs on the renderEvent method)
+            });
+
+            // make the event draggable using jQuery UI
+            $(this).draggable({
+                zIndex: 1111999,
+                revert: true,      // will cause the event to go back to its
+                revertDuration: 0  //  original position after the drag
+            });
+
+        });
+
+
+        /* initialize the calendar
+         -----------------------------------------------------------------*/
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        $('#calendar').fullCalendar({
+            
+            lang: "ko",
+            locale: "kr",
+            weekends: true,
+            
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            // 한글로 변경 --> 
+            titleFormat: {
+                month: 'YYYY년 M월',  
+//                week: "YYYY년 M월 D일 ~ M월 D일",
+//                week: 'YYYY년 M월 D일{ "~" [M월] D일 }',  
+                day: "YYYY년 M월 D일"  
+            },
+            columnFormat: {
+                month: "ddd",  
+                week: "M/D ddd",  
+                day: "dddd"
+            },
+/*            
+            timeFormat: {
+                '': 'HH:mm', // 월간  
+                agenda: 'HH:mm{ - HH:mm}' // 주간, 일간
+            },
+*/            
+            views: {
+                agendaWeek: {
+                    titleFormat: '(YYYY년 M월 D일)'
+                }
+            },
+            allDayText: '시간', // 주간,월간
+            axixFormat: 'tt hh', // 주간,월간
+            monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+            dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+            buttonText: {
+                prev: '이전',   
+                next: '다음',   
+                prevYear: '이전년',   
+                nextYear: '다음년',
+                today: '오늘',
+                month: '월간',
+                week: '주간',
+                day: '일간'
+            }, 
+            // 한글로 변경 <-- 
+            editable: false,
+            droppable: true, // 칼렌다로 drop 이벤트 사용
+            drop: function() {
+                // is the "remove after drop" checkbox checked?
+                if ($('#drop-remove').is(':checked')) {
+                    // if so, remove the element from the "Draggable Events" list
+                    //$(this).remove();
+                }
+            },
+            /* 공휴일, 토요일 색깔 변경하기*/
+            eventAfterRender :function( event, element, view ) { 
+                if(event.className == "holiday") {
+                    if(view.name == 'month') {
+                        $("td[data-date=" + event.start.format('YYYY-MM-DD') + "]").addClass('fc-holiday');
+                    } else if(view.name == 'agendaWeek') {
+                        $("th:contains(' " + event.start.format('M.D') + "')").attr("class","fc-day-header fc-widget-header fc-holiday");
+                    } else if(view.name == 'agendaDay') {
+                        if(event.start.format('YYYY-MM-DD') == $('#calendar').fullCalendar('getDate').format('YYYY-MM-DD')) {
+                            $("th:contains('요일')").attr("class","fc-day-header fc-widget-header fc-holiday");
+                            //$("td.fc-col0").addClass('holiday');
+                        };
+                    }
+                }
+            },
+            events: [
+                // 하루종일 Event
+                {
+                    title: '(요금제유지/신엔텔)',
+                    start: new Date(y, m, 1)
+                },
+                {
+                    title: '(요금제유지/신엔텔)',
+                    start: new Date(y, m, 1)
+                },
+                {
+                    title: '(요금제유지/신엔텔)',
+                    start: new Date(y, m, 1)
+                },
+                {
+                    title: '(요금제유지/신엔텔)',
+                    start: new Date(y, m, 1)
+                },
+                {
+                    title: '(요금제유지/신엔텔)',
+                    start: new Date(y, m, 1)
+                },
+                {
+                    title: '(요금제유지/신엔텔)',
+                    start: new Date(y, m, 1)
+                },
+                // 기간 Event
+                {
+                    title: '(미비서류/김엔텔)',
+                    start: new Date(y, m, d-5),
+                },
+                // 반복 Event
+                {
+                    id: 999,
+                    title: '(정산업무/박엔텔)',
+                    start: new Date(y, m, d-3, 16, 0),
+                    allDay: false
+                },
+                {
+                    title: '[구글링크]',
+                    start: new Date(y, m, 28),
+                    end: new Date(y, m, 29),
+                    url: 'http://google.com/'
+                }
+            ]
+        });
+    });
+</script>
+<!-- Javascript Local Code End -->

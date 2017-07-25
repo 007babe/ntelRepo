@@ -1,0 +1,37 @@
+{#################################}
+{% load staticfiles %}
+{#################################}
+{% block naviTitle %}
+<!-- Navi Title Start -->
+<div id="naviTitle" class="row wrapper border-bottom white-bg page-heading pb5">
+    <div class="col-lg-4">
+        <h2 id="headTitle" class="mt5">{{ naviMenu.menuNm }}</h2>
+        <ol class="breadcrumb">
+            <li>{{ naviMenu.topMenuNm }}</li>
+            <li>{{ naviMenu.upMenuNm }}</li>
+            <li class="active"><strong>{{ naviMenu.menuNm }}</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<!-- Navi Title End -->
+{% endblock naviTitle %}
+
+{% block mainContents %}
+{% endblock mainContents %}
+
+{% block javascriptInc %}
+<!-- Javascript Include(for Contenst) Start -->
+<!-- Contents 공통 javascript -->
+<script src="{% static 'js/contents.js' %}"></script>
+<!-- Javascript Include(for Contenst) End -->
+{% endblock javascriptInc %}
+
+{% block javascriptLoc %}
+<!-- Javascript Local Code Start -->
+$(document).ready(function() {
+
+});
+<!-- Javascript Local Code End -->
+{% endblock javascriptLoc %}
+

@@ -1,0 +1,415 @@
+﻿{#################################}
+{% load staticfiles %}
+{#################################}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko"  lang="ko">
+<head>
+    <!-- Meta Start -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Meta End -->
+
+    <!-- Favicon Start -->
+    <link rel="shortcut icon" href="{% static "favicon.ico" %}" type="image/x-icon"/>
+    <link rel="icon" href="{% static "favicon.ico" %}" type="image/x-icon"/>    
+    <!-- Favicon End -->
+    
+
+    <!-- Title Start -->
+    <title>엔텔... 모바일의 패러다임을 개척하다.</title>
+    <!-- Title End -->
+
+    <!-- CSS Link Start -->
+    <link type="text/css" rel="stylesheet" href="{% static "font-awesome/css/font-awesome.css" %}"/>
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/animate.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"/>
+    
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/jqGrid/ui.jqgrid.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/fullcalendar/fullcalendar.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/fullcalendar/fullcalendar.print.css" %}" media="print"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/jasny/jasny-bootstrap.min.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/chosen/bootstrap-chosen.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/clockpicker/clockpicker.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/datapicker/datepicker3.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/daterangepicker/daterangepicker-bs3.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/sweetalert/sweetalert.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/iCheck/custom.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/toastr/toastr.min.css" %}"/>
+    <!--
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/table-scroll/table-scroll.css" %}"/>
+    -->
+    <link type="text/css" rel="stylesheet" href="{% static "css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" %}"/>
+    
+
+    <link type="text/css" rel="stylesheet" href="{% static "css/style.css" %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/custom.css" %}"/>
+    <!-- CSS Link End -->
+
+<!--
+@import url(http://fonts.googleapis.com/css?family=Roboto:100);
+
+body { margin-top: 100px; background-color: #137b85; color: #fff; text-align:center; }
+
+h1 {
+  font: 2em 'Roboto', sans-serif;
+  margin-bottom: 40px;
+}
+
+#loading {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+-->    
+
+</head>
+
+<body>
+<div id="wrapper">
+<!-- Left Navi Start -->
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <span>
+                        <img alt="image" class="img-circle" src="{% static "img/profile_small_roh.png" %}"/>
+                    </span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">{{ user.last_name }} {{ user.first_name }}</strong>
+                            </span>
+                            <span class="text-muted text-xs block">
+                                대표 <b class="caret"></b>
+                            </span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="#">권한 : 총괄</a></li>
+                        <li><a href="#">종류 : 정기</a></li>
+                        <li><a href="#">결제 : 매월5일</a></li>
+                        <li><a href="#">등급 : 기본형</a></li>
+                        <li><a href="#">매장 : 1개</a></li>
+                        <li><a href="#">직원 : 3명</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    <img alt="image" class="img-circle" src="{% static "img/profile_small_roh.png" %}"/>
+                </div>
+            </li>
+           <!-- Left Navi :: Left Menu Start -->
+            <li>
+                <a id="menuGrp1"><i class="fa fa-home"></i> <span class="nav-label">메인</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu11" menuInfo="1,1" type="menu" menuUrl="{% static "contents_11.html" %}" params="">메인</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp2"><i class="fa fa-cubes"></i> <span class="nav-label">재고업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu21" menuInfo="2,3" type="menu" menuUrl="{% static "contents_21.html" %}" params="">종합재고관리</a></li>
+                    <li type="menu"><a id="menu22" menuInfo="2,3" type="menu" menuUrl="{% static "contents_22.html" %}" params="">보유재고</a></li>
+                    <li type="menu"><a id="menu23" menuInfo="2,3" type="menu" menuUrl="{% static "contents_23.html" %}" params="">회수단말기</a></li>
+                    <li type="menu"><a id="menu24" menuInfo="2,3" type="menu" menuUrl="{% static "contents_24.html" %}" params="">공기기판매</a></li>
+                    <li type="menu"><a id="menu25" menuInfo="2,3" type="menu" menuUrl="{% static "contents_25.html" %}" params="">재고변동이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp3"><i class="fa fa-handshake-o"></i> <span class="nav-label">개통업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu31" menuInfo="3,1" type="menu" menuUrl="{% static "contents_31.html" %}" params="">전체개통관리</a></li>
+                    <!-- 
+                    <li type="menu"><a id="menu32" menuInfo="3,2" type="menu" menuUrl="{% static "contents_32.html" %}" params="">신규개통</a></li>
+                     -->
+                    <li type="menu"><a id="menu32" menuInfo="3,2" type="menu" menuUrl="/main/contents/?id=32" params="">신규개통</a></li>
+                    <li type="menu"><a id="menu33" menuInfo="3,3" type="menu" menuUrl="{% static "contents_33.html" %}" params="">개통처리이력</a></li>
+                    <li type="menu"><a id="menu34" menuInfo="3,4" type="menu" menuUrl="{% static "contents_34.html" %}" params="">홈상품 판매목록</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp4"><i class="fa fa-calendar"></i> <span class="nav-label">미결업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu41" menuInfo="4,1" type="menu" menuUrl="{% static "contents_41.html" %}" params="">미결업무목록</a></li>
+                    <li type="menu"><a id="menu42" menuInfo="4,2" type="menu" menuUrl="{% static "contents_42.html" %}" params="">미결캘린더</a></li>
+                    <li type="menu"><a id="menu43" menuInfo="4,3" type="menu" menuUrl="{% static "contents_43.html" %}" params="">미결처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp5"><i class="fa fa-edit"></i> <span class="nav-label">예약업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu51" menuInfo="5,1" type="menu" menuUrl="{% static "contents_51.html" %}" params="">예약업무목록</a></li>
+                    <li type="menu"><a id="menu52" menuInfo="5,2" type="menu" menuUrl="{% static "contents_52.html" %}" params="">예약처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp6"><i class="fa fa-group"></i> <span class="nav-label">고객관리</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu61" menuInfo="6,1" type="menu" menuUrl="{% static "contents_61.html" %}" params="">고객목록</a></li>
+                    <li type="menu"><a id="menu62" menuInfo="6,2" type="menu" menuUrl="{% static "contents_62.html" %}" params="">정기문자</a></li>
+                    <li type="menu"><a id="menu63" menuInfo="6,3" type="menu" menuUrl="{% static "contents_63.html" %}" params="">문자발송내역</a></li>
+                    <li type="menu"><a id="menu64" menuInfo="6,4" type="menu" menuUrl="{% static "contents_64.html" %}" params="">고객처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp7"><i class="fa fa-book"></i> <span class="nav-label">수납/장부</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu71" menuInfo="7,1" type="menu" menuUrl="{% static "contents_71.html" %}" params="">월별간편장부</a></li>
+                    <li type="menu"><a id="menu72" menuInfo="7,2" type="menu" menuUrl="{% static "contents_72.html" %}" params="">장부검색</a></li>
+                    <li type="menu"><a id="menu73" menuInfo="7,3" type="menu" menuUrl="{% static "contents_73.html" %}" params="">수납전용장부</a></li>
+                    <li type="menu"><a id="menu74" menuInfo="7,4" type="menu" menuUrl="{% static "contents_74.html" %}" params="">영수증출력</a></li>
+                    <li type="menu"><a id="menu75" menuInfo="7,5" type="menu" menuUrl="{% static "contents_75.html" %}" params="">처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp8"><i class="fa fa-area-chart"></i> <span class="nav-label">통계리포트</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu81" menuInfo="8,1" type="menu" menuUrl="{% static "contents_81.html" %}" params="">일일리포트</a></li>
+                    <li type="menu"><a id="menu82" menuInfo="8,2" type="menu" menuUrl="{% static "contents_82.html" %}" params="">월간리포트</a></li>
+                    <li type="menu"><a id="menu83" menuInfo="8,3" type="menu" menuUrl="{% static "contents_83.html" %}" params="">거래처통계</a></li>
+                    <li type="menu"><a id="menu84" menuInfo="8,4" type="menu" menuUrl="{% static "contents_84.html" %}" params="">직원별통계</a></li>
+                    <li type="menu"><a id="menu85" menuInfo="8,5" type="menu" menuUrl="{% static "contents_85.html" %}" params="">단말기개통</a></li>
+                    <li type="menu"><a id="menu86" menuInfo="8,6" type="menu" menuUrl="{% static "contents_86.html" %}" params="">개통이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp9"><i class="fa fa-gears"></i> <span class="nav-label">환경설정11111</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu91" menuInfo="9,1" type="menu" menuUrl="{% static "contents_91.html" %}" params="">거래처관리</a></li>
+                    <li type="menu"><a id="menu92" menuInfo="9,2" type="menu" menuUrl="{% static "contents_92.html" %}" params="">직원관리</a></li>
+                    <li type="menu"><a id="menu93" menuInfo="9,3" type="menu" menuUrl="{% static "contents_93.html" %}" params="">매장관리</a></li>
+                    <li type="menu"><a id="menu94" menuInfo="9,4" type="menu" menuUrl="{% static "contents_94.html" %}" params="">기본설정</a></li>
+                    <li type="menu"><a id="menu95" menuInfo="9,5" type="menu" menuUrl="{% static "contents_95.html" %}" params="">결제내역</a></li>
+                </ul>
+            </li>          
+            <!-- Left Navi :: Left Menu End -->
+        </ul>
+    </div>
+</nav>
+<!-- Left Navi End -->
+
+<!-- Right Contents Start -->
+<div id="page-wrapper" class="gray-bg">
+    <!-- Right Contents :: Top Navi Start -->
+    <div id="naviTop" class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <!--
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="{% static "img/a7.jpg" %}">
+                                </a>
+                                <div class="media-body">
+                                    <small class="pull-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="{% static "img/a4.jpg" %}">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="profile.html" class="pull-left">
+                                    <img alt="image" class="img-circle" src="{% static "img/profile.jpg" %}">
+                                </a>
+                                <div class="media-body ">
+                                    <small class="pull-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="mailbox.html">
+                                    <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="mailbox.html">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="profile.html">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="grid_options.html">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a href="notifications.html">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                -->
+
+                <!-- 로그아웃 :: Start -->
+                <li>
+                    <a href="{% url 'logout' %}">
+                        <i class="fa fa-sign-out"></i> 로그아웃
+                    </a>
+                </li>
+                <!-- 로그아웃 :: End -->
+                <!-- 로그아웃 :: Start -->
+                <li>
+                    <a>
+                        <i id="btnRefreshSysGDs" class="fa fa-refresh"></i>
+                    </a>
+                </li>
+                <!-- 로그아웃 :: End -->
+            </ul>            
+            
+            
+        </nav>
+    </div>
+    <!-- Right Contents :: Top Navi End -->
+    <!-- Right Contents :: Main Contents Start -->
+    <div id="boxContents">
+        <div class="spinWrap">
+            <div id="mainContents"></div>
+        </div>
+    </div>
+    <!-- Right Contents :: Main Contents End -->
+    <!-- Right Contents :: Bottom Footer Start -->
+    <div class="footer">
+        <div>
+            <strong>Copyright</strong> 엔텔 &copy; 2018-2019
+        </div>
+    </div>
+    <!-- Right Contents :: Bottom Footer End -->
+</div>
+
+<!-- Right Contents End -->
+
+<!-- Mainly scripts -->
+<script src="{% static "js/jquery-3.1.1.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+
+<script src="{% static "js/plugins/jquery-ui/jquery-ui.min.js" %}"></script>
+<script src="{% static "js/plugins/metisMenu/jquery.metisMenu.js" %}"></script>
+
+<script src="{% static "js/plugins/cookie/jquery.cookie.js" %}"></script>
+
+<script src="{% static "js/plugins/pace/pace.min.js" %}"></script>
+<script src="{% static "js/plugins/slimscroll/jquery.slimscroll.min.js" %}"></script>
+<script src="{% static "js/plugins/iCheck/icheck.min.js" %}"></script>
+<script src="{% static "js/plugins/sparkline/jquery.sparkline.min.js" %}"></script>
+<script src="{% static "js/plugins/fullcalendar/moment.min.js" %}"></script>
+<script src="{% static "js/plugins/fullcalendar/fullcalendar.min.js" %}"></script>
+<script src="{% static "js/plugins/jqGrid/i18n/grid.locale-en.js" %}"></script>
+<script src="{% static "js/plugins/jqGrid/jquery.jqGrid.min.js" %}"></script>
+<script src="{% static "js/plugins/jasny/jasny-bootstrap.min.js" %}"></script>
+<script src="{% static "js/plugins/datapicker/bootstrap-datepicker.js" %}"></script>
+
+<script src="{% static "js/plugins/clockpicker/clockpicker.js" %}"></script>
+
+<script src="{% static "js/plugins/datapicker/bootstrap-datepicker.js" %}"></script>
+<script src="{% static "js/plugins/daterangepicker/daterangepicker.js" %}"></script>
+<script src="{% static "js/plugins/chosen/chosen.jquery.js" %}"></script>
+
+<script src="{% static "js/plugins/sweetalert/sweetalert.min.js" %}"></script>
+
+<script src="{% static "js/plugins/moment/moment-with-locales.min.js" %}"></script>
+<script src="{% static "js/plugins/toastr/toastr.min.js" %}"></script>
+<script src="{% static "js/plugins/table-scroll/table-scroll.min.js" %}"></script>
+
+<script src="{% static "js/locales/bootstrap-datepicker.kr.min.js" %}" charset="UTF-8"></script>
+
+
+
+<!-- Javascript Include End -->
+
+<!-- Custom and plugin javascript -->
+<script src="{% static "js/inspinia.js" %}"></script>
+<script src="{% static "js/gv.js" %}"></script>
+<script src="{% static "js/utils.js" %}"></script>
+<script src="{% static "js/common.js" %}"></script>
+
+<!-- Common Javascript Start -->
+<script>
+$(document).ready(function() {
+    // 상단우측 Refresh 버튼 클릭시 처리
+    $("#btnRefreshSysGDs").on("click", function(e, params) {
+        var _this = $(this);
+        
+        /* KKT 모듈화 필요 스핀 처리 >>>>>>>>>> */
+        _this.toggleClass("fa-spin");
+        // 시스템 전역 데이터 리로드
+        $.gfSetGlobalDataAll();
+        // 현재Page Reload
+        $.gfReloadContentsData();
+        _this.toggleClass("fa-spin");
+        /* KKT 모듈화 필요 스핀 처리 >>>>>>>>>> */
+    });
+});
+</script>
+<!-- Common Javascript End -->
+
+</body>
+</html>

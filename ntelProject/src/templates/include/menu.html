@@ -1,0 +1,88 @@
+{#################################}
+{% load staticfiles %}
+{#################################}
+            <!-- Left Navi :: Left Menu Start -->
+            <li>
+                <a id="menuGrp1"><i class="fa fa-home"></i> <span class="nav-label">메인</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu11" menuInfo="1,1" type="menu" menuUrl="{% static "contents_11.html" %}" params="">메인</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp2"><i class="fa fa-cubes"></i> <span class="nav-label">재고업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu21" menuInfo="2,3" type="menu" menuUrl="{% static "contents_21.html" %}" params="">종합재고관리</a></li>
+                    <li type="menu"><a id="menu22" menuInfo="2,3" type="menu" menuUrl="{% static "contents_22.html" %}" params="">보유재고</a></li>
+                    <li type="menu"><a id="menu23" menuInfo="2,3" type="menu" menuUrl="{% static "contents_23.html" %}" params="">회수단말기</a></li>
+                    <li type="menu"><a id="menu24" menuInfo="2,3" type="menu" menuUrl="{% static "contents_24.html" %}" params="">공기기판매</a></li>
+                    <li type="menu"><a id="menu25" menuInfo="2,3" type="menu" menuUrl="{% static "contents_25.html" %}" params="">재고변동이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp3"><i class="fa fa-handshake-o"></i> <span class="nav-label">개통업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu31" menuInfo="3,1" type="menu" menuUrl="{% static "contents_31.html" %}" params="">전체개통관리</a></li>
+                    <!-- 
+                    <li type="menu"><a id="menu32" menuInfo="3,2" type="menu" menuUrl="{% static "contents_32.html" %}" params="">신규개통</a></li>
+                     -->
+                    <li type="menu"><a id="menu32" menuInfo="3,2" type="menu" menuUrl="/main/contents/?id=32" params="">신규개통</a></li>
+                    <li type="menu"><a id="menu33" menuInfo="3,3" type="menu" menuUrl="{% static "contents_33.html" %}" params="">개통처리이력</a></li>
+                    <li type="menu"><a id="menu34" menuInfo="3,4" type="menu" menuUrl="{% static "contents_34.html" %}" params="">홈상품 판매목록</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp4"><i class="fa fa-calendar"></i> <span class="nav-label">미결업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu41" menuInfo="4,1" type="menu" menuUrl="{% static "contents_41.html" %}" params="">미결업무목록</a></li>
+                    <li type="menu"><a id="menu42" menuInfo="4,2" type="menu" menuUrl="{% static "contents_42.html" %}" params="">미결캘린더</a></li>
+                    <li type="menu"><a id="menu43" menuInfo="4,3" type="menu" menuUrl="{% static "contents_43.html" %}" params="">미결처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp5"><i class="fa fa-edit"></i> <span class="nav-label">예약업무</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu51" menuInfo="5,1" type="menu" menuUrl="{% static "contents_51.html" %}" params="">예약업무목록</a></li>
+                    <li type="menu"><a id="menu52" menuInfo="5,2" type="menu" menuUrl="{% static "contents_52.html" %}" params="">예약처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp6"><i class="fa fa-group"></i> <span class="nav-label">고객관리</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu61" menuInfo="6,1" type="menu" menuUrl="{% static "contents_61.html" %}" params="">고객목록</a></li>
+                    <li type="menu"><a id="menu62" menuInfo="6,2" type="menu" menuUrl="{% static "contents_62.html" %}" params="">정기문자</a></li>
+                    <li type="menu"><a id="menu63" menuInfo="6,3" type="menu" menuUrl="{% static "contents_63.html" %}" params="">문자발송내역</a></li>
+                    <li type="menu"><a id="menu64" menuInfo="6,4" type="menu" menuUrl="{% static "contents_64.html" %}" params="">고객처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp7"><i class="fa fa-book"></i> <span class="nav-label">수납/장부</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu71" menuInfo="7,1" type="menu" menuUrl="{% static "contents_71.html" %}" params="">월별간편장부</a></li>
+                    <li type="menu"><a id="menu72" menuInfo="7,2" type="menu" menuUrl="{% static "contents_72.html" %}" params="">장부검색</a></li>
+                    <li type="menu"><a id="menu73" menuInfo="7,3" type="menu" menuUrl="{% static "contents_73.html" %}" params="">수납전용장부</a></li>
+                    <li type="menu"><a id="menu74" menuInfo="7,4" type="menu" menuUrl="{% static "contents_74.html" %}" params="">영수증출력</a></li>
+                    <li type="menu"><a id="menu75" menuInfo="7,5" type="menu" menuUrl="{% static "contents_75.html" %}" params="">처리이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp8"><i class="fa fa-area-chart"></i> <span class="nav-label">통계리포트</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu81" menuInfo="8,1" type="menu" menuUrl="{% static "contents_81.html" %}" params="">일일리포트</a></li>
+                    <li type="menu"><a id="menu82" menuInfo="8,2" type="menu" menuUrl="{% static "contents_82.html" %}" params="">월간리포트</a></li>
+                    <li type="menu"><a id="menu83" menuInfo="8,3" type="menu" menuUrl="{% static "contents_83.html" %}" params="">거래처통계</a></li>
+                    <li type="menu"><a id="menu84" menuInfo="8,4" type="menu" menuUrl="{% static "contents_84.html" %}" params="">직원별통계</a></li>
+                    <li type="menu"><a id="menu85" menuInfo="8,5" type="menu" menuUrl="{% static "contents_85.html" %}" params="">단말기개통</a></li>
+                    <li type="menu"><a id="menu86" menuInfo="8,6" type="menu" menuUrl="{% static "contents_86.html" %}" params="">개통이력</a></li>
+                </ul>
+            </li>
+            <li>
+                <a id="menuGrp9"><i class="fa fa-gears"></i> <span class="nav-label">환경설정11111</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li type="menu"><a id="menu91" menuInfo="9,1" type="menu" menuUrl="{% static "contents_91.html" %}" params="">거래처관리</a></li>
+                    <li type="menu"><a id="menu92" menuInfo="9,2" type="menu" menuUrl="{% static "contents_92.html" %}" params="">직원관리</a></li>
+                    <li type="menu"><a id="menu93" menuInfo="9,3" type="menu" menuUrl="{% static "contents_93.html" %}" params="">매장관리</a></li>
+                    <li type="menu"><a id="menu94" menuInfo="9,4" type="menu" menuUrl="{% static "contents_94.html" %}" params="">기본설정</a></li>
+                    <li type="menu"><a id="menu95" menuInfo="9,5" type="menu" menuUrl="{% static "contents_95.html" %}" params="">결제내역</a></li>
+                </ul>
+            </li>          
+            <!-- Left Navi :: Left Menu End -->

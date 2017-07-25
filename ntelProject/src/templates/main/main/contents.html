@@ -1,0 +1,178 @@
+{#################################}
+{% extends "base/contents.html" %}
+{% load staticfiles %}0
+{#################################}
+
+{% block mainContents %}
+<div class="wrapper wrapper-content animated fadeInRight pt5 pb50">
+    <div class="row">
+        <!-- 이달의 목표 Start -->
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins" id="idBox1">
+                <div class="ibox-content spinWrap" style="padding:5px 5px 5px 5px;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="background-color: #aaaaaa; color: #222222; text-align: center;">이달의 목표</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                <div class="ibox-content">
+                                    <h2><b>100</b>/54</h2>
+                                    <div class="text-center">
+                                        <div id="monGoalChart">
+                                            <canvas width="140" height="140" style="display: inline-block; width: 140px; height: 140px; vertical-align: top;"></canvas>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                   </table>
+                    <!--
+                        <h3>이달의 목표</h5>
+                        <h5>개통 : 30</h2><div> / 90</div>
+                        <div class="progress progress-mini">
+                            <div style="width: 35%;" class="progress-bar progress-bar-info"></div>
+                        </div>
+                        <div id="sparkline2">
+                            <canvas width="120" height="120" style="display: inline-block; width: 140px; height: 140px; vertical-align: top;"></canvas>
+                        </div>
+                    -->
+                </div>
+            </div>
+        </div>
+        <!-- 이달의 목표 End -->
+        <!-- 개통현황 Start -->
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="4" style="background-color: #aaaaaa; color: #222222; text-align: center;">3월의 개통현황(26)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>신규</td>
+                            <td>5</td>
+                            <td>MNP</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td>보상</td>
+                            <td>0</td>
+                            <td>기변</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>에이징</td>
+                            <td>0</td>
+                            <td>가/선불</td>
+                            <td>0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>                       
+        <!-- 개통현황 End -->
+          <!-- 입/출고현황 Start -->
+        <div class="col-lg-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="2" style="background-color: #aaaaaa; color: #222222; text-align: center;">입고(42)</th>
+                            <th colspan="2" style="background-color: #aaaaaa; color: #222222; text-align: center;">출고(27)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td >단말기</td>
+                            <td>42</td>
+                            <td>개통</td>
+                            <td>27</td>
+                        </tr>
+                        <tr>
+                            <td>선유심</td>
+                            <td>0</td>
+                            <td>반품</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>후유심</td>
+                            <td>0</td>
+                            <td>공기기</td>
+                            <td>0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>                       
+        <!-- 입/출고현황 End -->
+    </div>
+</div>
+{% endblock mainContents %}
+
+{% block javascriptLoc %}
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+
+    // 이달의 목표 차트 Start >>
+    var sparklineCharts = function(){
+       $("#monGoalChart").sparkline([100, 54], {
+           type: 'pie',
+           height: '140',
+           sliceColors: ['#1ab394', '#F5F5F5']
+       });
+    };
+    
+    
+    var sparkResize;
+    
+    $(window).resize(function(e) {
+        clearTimeout(sparkResize);
+        sparkResize = setTimeout(monGoalChart, 500);
+    });
+
+    sparklineCharts();
+    // 이달의 목표 차트 End <<
+
+
+
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green'
+    });
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+
+
+    $('#external-events div.external-event').each(function() {
+
+        // store data so the calendar knows to render an event upon drop
+        $(this).data('event', {
+            title: $.trim($(this).text()), // use the element's text as the event title
+            stick: true // maintain when user navigates (see docs on the renderEvent method)
+        });
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+            zIndex: 1111999,
+            revert: true,      // will cause the event to go back to its
+            revertDuration: 0  //  original position after the drag
+        });
+
+    });
+
+});
+</script>
+<!-- Javascript Local Code End -->
+{% endblock javascriptLoc %}

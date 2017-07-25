@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko"  lang="ko">
+<head>
+    <title>ntelStudy Bookmark List</title>
+</head>
+<body>
+    <div id="content">
+        <h1>Bookmark List</h1>
+        <ul>
+            {% for bookmark in object_list %}
+            <li><a href="{%url 'detail' bookmark.id %}">{{bookmark}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
