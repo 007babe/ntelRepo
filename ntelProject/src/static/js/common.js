@@ -160,7 +160,7 @@ $.gfHandlerClickMenu = function(opts) {
     });
 
     // 쿠키에 현재 메뉴 세팅
-    $.cookie("menuInfo", $(this).attr("menuInfo"));
+    $.cookie("menuInfo", _this.attr("menuInfo"));
 }
 
 /*
@@ -773,7 +773,7 @@ $.fn.gfSetCurrency = function() {
         _this.val((firstDigit + numberDigit).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
         // - 일경우 색상처리
-        if(/^\-/.test($(this).val())) {
+        if(/^\-/.test(_this.val())) {
             _this.css("color", "red");
         } else {
             _this.css("color", "inherit");
@@ -823,9 +823,12 @@ $.fn.gfSetTelNo1 = function() {
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
+        var _this = $(this);
+
         // 숫자만 입력받게 하기
-        $(this).val($(this).val().replace(/[^0-9]/g, ""));
-        if($(this).val().length >= 4 || $.inArray($(this).val(), gArrFirstTelNo) > -1) {
+        _this.val(_this.val().replace(/[^0-9]/g, ""));
+
+        if(_this.val().length >= 4 || $.inArray(_this.val(), gArrFirstTelNo) > -1) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
@@ -841,9 +844,12 @@ $.fn.gfSetTelNo2 = function() {
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
+        var _this = $(this);
+
         // 숫자만 입력받게 하기
-        $(this).val($(this).val().replace(/[^0-9]/g, ""));
-        if($(this).val().length >= 4) {
+        _this.val(_this.val().replace(/[^0-9]/g, ""));
+
+        if(_this.val().length >= 4) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
@@ -859,9 +865,12 @@ $.fn.gfSetTelNo3 = function() {
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
+        var _this = $(this);
+        
         // 숫자만 입력받게 하기
-        $(this).val($(this).val().replace(/[^0-9]/g, ""));
-        if($(this).val().length >= 4) {
+        _this.val(_this.val().replace(/[^0-9]/g, ""));
+
+        if(_this.val().length >= 4) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
@@ -913,9 +922,12 @@ $.fn.gfSetBizLicNo1 = function() {
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
+        var _this = $(this);
+        
         // 숫자만 입력받게 하기
-        $(this).val($(this).val().replace(/[^0-9]/g, ""));
-        if($(this).val().length >= 3) {
+        _this.val(_this.val().replace(/[^0-9]/g, ""));
+
+        if(_this.val().length >= 3) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
@@ -931,9 +943,12 @@ $.fn.gfSetBizLicNo2 = function() {
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
+        var _this = $(this);
+
         // 숫자만 입력받게 하기
-        $(this).val($(this).val().replace(/[^0-9]/g, ""));
-        if($(this).val().length >= 2) {
+        _this.val(_this.val().replace(/[^0-9]/g, ""));
+
+        if(_this.val().length >= 2) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
@@ -949,9 +964,12 @@ $.fn.gfSetBizLicNo3 = function() {
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
+        var _this = $(this);
+        
         // 숫자만 입력받게 하기
-        $(this).val($(this).val().replace(/[^0-9]/g, ""));
-        if($(this).val().length >= 5) {
+        _this.val(_this.val().replace(/[^0-9]/g, ""));
+        
+        if(_this.val().length >= 5) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
@@ -993,6 +1011,75 @@ $.gfInitBizLicNo = function(formOnly) {
         _item.gfSetBizLicNo3();
     });
 };
+
+/*
+ * User ID 필드 세팅
+ */
+$.fn.gfSetUserId = function() {
+    var _item = this;
+    var _itemNext = $("#" + _item.attr("tabNext"));
+    var _noti = $("#" + _item.attr("noti")); // 알림필드
+ 
+    // Key Up Event
+    _item.on("keyup", function(e, params) {
+        var _this = $(this);
+        
+        // 숫자만 입력받게 하기
+        _this.val(_this.val().replace(/[^0-9a-zA-Z]/g, ""));
+        
+        if(_this.val().length >= 20) { // 20자 이상일 경우 처리
+            _itemNext.trigger("focus");
+            _itemNext.trigger("select");
+        }
+    });
+    
+    // Blur Event
+    _item.on("blur", function(e, params) {
+        var _this = $(this);
+        
+        // 6자 이하일 경우
+        if(_this.val().length == 0) {
+            if(!$.isEmpty(_noti)){
+                _noti.html("* 아이디 및 비밀번호는 6~20자 사이의 영문/숫자로 입력해주세요.");
+                _noti.css("color", "#858585");
+            }
+        } else if(_this.val().length < 6) {
+            if(!$.isEmpty(_noti)){
+                _noti.html("* 아이디는 6자리 이상 입력하세요.");
+                _noti.css("color", "red");
+                _this.focus();
+            }
+        } else {
+            if(!$.isEmpty(_noti)){
+                _noti.html("* 사용가능한 아이디입니다.");
+                _noti.css("color", "#1ab394");
+            }
+        }
+    });
+};
+
+
+/*
+ * User ID 필드 초기화
+ */
+$.gfInitUserId = function(formOnly) {
+
+    var conditionSelector = "input[formType='userid']";
+
+    if(!$.isEmpty(formOnly)) {
+        conditionSelector + "[formOnly='" + formOnly + "']";
+    }    
+    
+    // 아이디 필드 selector를 구해온다
+
+    var _userId = $(conditionSelector);    
+    
+    _userId.each(function(inx, item) {
+        var _item = $(item);
+        _item.gfSetUserId();
+    });
+};
+
 
 
 /*
@@ -1618,6 +1705,9 @@ $.gfInitFormField = function(formOnly) {
 
     // 전화번호 필드 초기화
     $.gfInitTelNo(formOnly);
+
+    // User ID 필드 초기화
+    $.gfInitUserId(formOnly);
 
     // 사업자번호 필드 초기화
     $.gfInitBizLicNo(formOnly);
@@ -2285,3 +2375,11 @@ $.gfSetConfigBtn = function() {
  * http://momentjs.com/docs/#/parsing/
  */
 
+
+/*
+ * Ajax Post 공통 처리 
+ */
+$.gfPost = function(opts) {
+    if($.isEmpty(opts) || $.isEmpty(opts.url)) return false;
+    
+};
