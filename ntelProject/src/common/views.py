@@ -1,17 +1,16 @@
 import json
 
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 
 from common.models import ComCd
-from src.common.utils.json import jsonDefault
+from common.utils.ajax import login_required_ajax
+from common.utils.json import jsonDefault
 
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def getJsonComCd(request):
     """
-        공통코드(tb_com_cd) 데이터 획득(Json)
+        공통코드(com_cd) 데이터 획득(Json)
     """
     # 공통코드 데이터 획득
     comCds = ComCd.objects.filter(

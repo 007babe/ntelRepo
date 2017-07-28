@@ -1,6 +1,5 @@
 import datetime
 
-
 def jsonDefault(value): 
     '''
     json Datetime 변환용

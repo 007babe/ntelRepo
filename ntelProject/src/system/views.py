@@ -1,18 +1,21 @@
 import json
 
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
+from django.shortcuts import render
 
+from common.utils.ajax import login_required_ajax
 from common.utils.json import jsonDefault
-from system.models import SysMenu, SysUser, SysCompany
+from system.models import SysMenu, SysUser, SysCompany, SysMsg
 
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def getJsonSysMenu(request):
     """
-        사용자메뉴(tb_sys_menu) 데이터 획득(Json)
+        사용자메뉴(sys_menu) 데이터 획득(Json)
     """
     #######################################
     # Query 시스템 사용자별 메뉴 데이터 획득
@@ -50,10 +53,33 @@ def getJsonSysMenu(request):
     jsonData = json.dumps(list(sysMenus), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")    
 
-#@login_required(login_url='/accounts/login/')
+#@login_required_ajax
+def getJsonSysMsg(request):
+    """
+        시스템메세지(sys_msg) 데이터 획득(Json)
+    """
+    # Query 조합
+    qry = Q()
+
+    sysMsgs = SysMsg.objects.filter(
+        qry
+    ).annotate(
+        msgType=F('msgTp__comNm'),
+    ).values(
+        'msgCd', 
+        'msgType', 
+        'title', 
+        'msg', 
+        'useYn', 
+    )
+    
+    jsonData = json.dumps(list(sysMsgs), default=jsonDefault)
+    return HttpResponse(jsonData, content_type="application/json")    
+
+@login_required_ajax
 def getJsonSysCompany(request):
     """
-        시스템회사(tb_sys_company) 데이터 획득(Json)
+        시스템회사(sys_company) 데이터 획득(Json)
     """
     #######################################
     # Query 시스템 사용자별 메뉴 데이터 획득
@@ -108,10 +134,10 @@ def getJsonSysCompany(request):
     return HttpResponse(jsonData, content_type="application/json")    
 
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def getJsonShopStaff(request):
     """
-        매장직원데이터(tb_sys_user) 데이터 획득(Json)
+        매장직원데이터(sys_user) 데이터 획득(Json)
     """
     #######################################
     # Query 매장 직원 데이터 획득
@@ -125,4 +151,3 @@ def getJsonShopStaff(request):
     
     jsonData = json.dumps(list(shopStaffs), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")    
-

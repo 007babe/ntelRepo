@@ -22,7 +22,7 @@ class Company(models.Model):
     mod_dt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True) # 수정일자
 
     class Meta:
-        db_table = "tb_sys_company"
+        db_table = "sys_company"
         unique_together = (("company_cd",),)
         
     def __str__(self):
@@ -126,7 +126,7 @@ class SysUser(AbstractBaseUser):
         return self.is_admin    
     
     class Meta:
-        db_table = "tb_sys_user"
+        db_table = "sys_user"
         
         
 @python_2_unicode_compatible # Python 2.x 지원용
@@ -150,7 +150,7 @@ class SysMenu(models.Model):
     mod_dt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True) # 수정일자
         
     class Meta:
-        db_table = "tb_sys_menu"
+        db_table = "sys_menu"
         unique_together = (("menu_id",),)
         
         

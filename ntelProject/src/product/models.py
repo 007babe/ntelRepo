@@ -17,7 +17,7 @@ class ProductPhone(models.Model):
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
 
     class Meta:
-        db_table = "tb_product_phone"
+        db_table = "product_phone"
         
     def __str__(self):
         return self.id    
@@ -36,7 +36,7 @@ class ProductUsim(models.Model):
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
 
     class Meta:
-        db_table = "tb_product_usim"
+        db_table = "product_usim"
         
     def __str__(self):
         return self.id  

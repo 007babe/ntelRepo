@@ -107,8 +107,8 @@ $.gfGetGlobalData = function(opts) {
             404: function() {
 /*
                 $.gfCommonPopUp({
-                    popUrl: "/static/popup404.html",
-                    width = "300"
+                    popUrl: "/static/error/popup404.html",
+                    width : "300"
                 });
 */
             }
@@ -204,7 +204,7 @@ $.gfLoadContentsData = function(opts) {
             },
             404: function() {
                 $.gfCommonPopUp({
-                    popUrl: "/static/popup404.html",
+                    popUrl: "/static/error/popup404.html",
                     width: "300"
                 });
             }
@@ -1977,7 +1977,7 @@ $.gfLoadContents = function(opts) {
             },
             404: function() {
                 $.gfCommonPopUp({
-                    popUrl: "/static/popup404.html",
+                    popUrl: "/static/error/popup404.html",
                     width: "300"
                 });
             }

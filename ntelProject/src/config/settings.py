@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     # Added Apps
     'common.apps.CommonConfig',  # 공통 App
     'system.apps.SystemConfig',  # System 관련 App
+    'logins.apps.LoginsConfig',  # Login 관련 App
+    'appreq.apps.AppreqConfig',  # 이용신청 관련 App
     'main.apps.MainConfig', # Main App
     'stock.apps.StockConfig', # 재고 App
     'open.apps.OpenConfig', # 개통업무 App
@@ -193,8 +195,8 @@ STATIC_ROOT= os.path.join(PROJECT_DIR,'static/')
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, "static"), ]
 
 # Login/out URL
-#LOGIN_URL  = '/accounts/login/' # default '/accounts/login/'
-LOOUT_URL = '/accounts/logout/' # default '/accounts/logout/'
+LOGIN_URL  = '/logins/login/' # default '/accounts/login/'
+LOOUT_URL = '/logins/logout/' # default '/accounts/logout/'
 
 # Login 후 이동 URL
 LOGIN_REDIRECT_URL = '/main'

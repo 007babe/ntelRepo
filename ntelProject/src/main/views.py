@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
 
+from common.utils.ajax import login_required_ajax
 from system.models import SysMenu
 
 
@@ -31,7 +32,7 @@ class MainView(TemplateView):
 
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/logins/login')
 def mainCV(request):
     '''
     메인 화면 Contents View(Function Based)
@@ -74,29 +75,15 @@ def mainCV(request):
         {}
     )
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def menuCV(request):
     '''
     메뉴별 초기화면 Contents View(Function Based)
     '''
     try :
-        '''
-        Parameter Check
-        '''
-        # POST
-        print("Params:POST===============>")
-        print("menuIdP : %s"  %request.POST.get('menuIdP'))
-        print("menuId : %s"  %request.POST.get('menuId'))
-        print("Params:POST===============<")
-        # GET
-        print("Params:GET===============>")
-        print("menuIdP : %s"  %request.GET.get('menuIdP'))
-        print("menuId : %s"  %request.GET.get('menuId'))
-        print("Params:GET===============<")
-        
         # 메뉴ID(Key)로 메뉴 정보 획득
         sysMenuInfo = SysMenu.objects.get(
-            menuId__exact = request.GET.get('menuId'),
+            menuId__exact = request.POST.get('menuId'),
         )
         
         # 템플릿 렌더링 및 데이터 전달

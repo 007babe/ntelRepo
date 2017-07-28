@@ -25,12 +25,14 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # 인증 및 권한관련(로그인, 비밀번호 변경, 회원가입...)
-    url(r'^accounts/', include('django.contrib.auth.urls',)), # 장고 내장 Auth
+#    url(r'^accounts/', include('django.contrib.auth.urls',)), # 장고 내장 Auth
     
     #  시스템일반 서비스 URL 설정    
     url(r'', include('home.urls', namespace='home',),), # / Home
     url(r'^common/', include('common.urls', namespace='common',),), # /common 연결
     url(r'^system/', include('system.urls', namespace='system',),), # /system 연결
+    url(r'^logins/', include('logins.urls', namespace='logins',),), # /logins 연결 : 로그인관련
+    url(r'^appreq/', include('appreq.urls', namespace='appreq',),), # /appreq 연결 : 이용신청
     url(r'^main/', include('main.urls', namespace='main',),), # /main 연결 : 메인화면
     url(r'^open/', include('open.urls', namespace='open',),), # /open 연결 : 개통업무
     url(r'^plan/', include('plan.urls', namespace='plan',),), # /plan 연결 : 미결업무
@@ -47,5 +49,6 @@ urlpatterns = [
 #    url(r'^bookmark/', include('bookmark.urls', namespace='bookmark',),), # /bookmark 연결
 #    url(r'^blog/', include('blog.urls', namespace='blog',),), # /blog 연결
     url(r'^sample/', include('sample.urls', namespace='sample',),), # /sample 연결
+
 
 ]

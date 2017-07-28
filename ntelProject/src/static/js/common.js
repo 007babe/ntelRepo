@@ -21,8 +21,6 @@ $.gfSetGlobalDataAll = function() {
         var useYn  = item.useYn;
         var desc   = item.desc;
 
-//    console.log(key + ":" + url)
-
         // Key와 동일한 전역 데이터용 Global 변수 생성
         $.globalEval("var " + key + " = new Object();");
 
@@ -64,16 +62,9 @@ $.gfSetGlobalData = function(key) {
 $.gfGetGlobalData = function(opts) {
 	var _formBase = $("#formBase");
 	
-	var paramsPost = _formBase.serializeArray()
-	var paramsGet = _formBase.serialize()
-	var paramsCookies = $.cookie('csrftoken');
-	
-	// KKT Check
-	/*
-	console.log("Post: " + _formBase.serializeArray());
-	console.log("Get: " + _formBase.serialize());
-	console.log("cookies: " + $.cookie('csrftoken'));
-	*/
+	var paramsGet = _formBase.serialize();
+	var paramsPost = _formBase.serializeArray();
+	var paramsCookies = $.cookie('csrftoken');;
 	
     if($.isEmpty(opts) || $.isEmpty(opts.key) || $.isEmpty(opts.url)) return; // option이 없을 경우 return
 
@@ -94,6 +85,7 @@ $.gfGetGlobalData = function(opts) {
 //            $.gfToggleLoading("#boxContents", true);
         },
         success: function(data, cbFunc) {
+//            console.log("gfGetGlobalData Ajax success key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
             try {
 //                    console.log(data);
 //                eval(key + " = $.parseJSON(JSON.stringify(data." + key + "));");
@@ -105,7 +97,7 @@ $.gfGetGlobalData = function(opts) {
             }
         },
         error: function(xhr, ajaxOptions, throwError) {
-            console.log("gfGetGlobalData : error !!! : Key[" + key + "], Url[" + url + "]");
+//            console.log("gfGetGlobalData : error !!! : Key[" + key + "], Url[" + url + "]");
 //            $.gfToggleLoading("#boxContents", false);
         },
         statusCode: {
@@ -115,8 +107,8 @@ $.gfGetGlobalData = function(opts) {
             404: function() {
 /*
                 $.gfCommonPopUp({
-                    popUrl: "/static/popup404.html",
-                    width = "300"
+                    popUrl: "/static/error/popup404.html",
+                    width : "300"
                 });
 */
             }
@@ -128,7 +120,7 @@ $.gfGetGlobalData = function(opts) {
             eval(cbFunc) 
         }
     }).fail(function() { // 실패할 경우
-//        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
     }).always(function() {
 //        console.log("gfGetGlobalData Ajax allways key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
     });
@@ -197,35 +189,37 @@ $.gfLoadContentsData = function(opts) {
     // 옵션이 없을 경우
     if($.isEmpty(opts)) return false;
 
+    var _maincontents = $("#mainContents");
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
     
     params = {
-        'menuIdP' : menuId
+        'menuId' : menuId
     }
-    
-//    console.log(opts.params)
+
     $.ajax({
         type: "POST",
-//    	type: "GET",
-        url: "/main/menu/?menuId=" + menuId,
+        url: "/main/menu/",
         data: params,
         async: true,
         beforeSend: function (jqXHR, settings) {
             $.gfToggleLoading("#boxContents", true);
-            $("#mainContents").empty(); // Main Contents Data Clear
         },
         success: function(html) {
-            $("#mainContents").append(html);
-            $.gfToggleLoading("#boxContents", false);
+            _maincontents.empty().append(html);
         },
         error: function(xhr, ajaxOptions, throwError) {
-            $.gfToggleLoading("#boxContents", false);
         },
         statusCode: {
             200: function() {
 
             },
+            401: function() { // 로그인 권한 없음
+                $.gfCommonPopUp({
+                    popUrl: "/logins/loginpop",
+                    width: "500"
+                });
+            },            
             403: function() {
                 $.gfCommonPopUp({
                     popUrl: "/static/error/popup403.html",
@@ -245,6 +239,14 @@ $.gfLoadContentsData = function(opts) {
                 });
             }
         }
+    }).done(function() { // 성공할 경우
+        
+    }).fail(function() { // 실패할 경우
+        _maincontents.empty();
+        
+//        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+    }).always(function() {
+        $.gfToggleLoading("#boxContents", false);
     });
 };
 
@@ -357,7 +359,6 @@ $.gfErrorPopUp = function(modalId, errCd, errMsg, w, h) {
         type: "POST",
         url: "/static/popupError.html",
         success: function(html) {
-//            alert(html);
             $("#modalPopup").empty().append(html);
             $('#modalPopup').modal("show");
         }
@@ -883,9 +884,9 @@ $.gfInitTelNo = function(formOnly) {
     }    
     
     // 전화번호 각각의 selector를 구해온다
-    var _tel1 = $("conditionSelector1"); // 전화 지역번호
-    var _tel2 = $("conditionSelector2"); // 전화 국번호
-    var _tel3 = $("conditionSelector3"); // 전화 전화번호
+    var _tel1 = $(conditionSelector1); // 전화 지역번호
+    var _tel2 = $(conditionSelector2); // 전화 국번호
+    var _tel3 = $(conditionSelector3); // 전화 전화번호
 
     _tel1.each(function(inx, item) {
         var _item = $(item);
@@ -902,6 +903,97 @@ $.gfInitTelNo = function(formOnly) {
         _item.gfSetTelNo3();
     });
 };
+
+/*
+ * 사업자번호(1) 필드 세팅
+ */
+$.fn.gfSetBizLicNo1 = function() {
+    var _item = this;
+    var _itemNext = $("#" + _item.attr("tabNext"));
+
+    // Key Up Event
+    _item.on("keyup", function(e, params) {
+        // 숫자만 입력받게 하기
+        $(this).val($(this).val().replace(/[^0-9]/g, ""));
+        if($(this).val().length >= 3) {
+            _itemNext.trigger("focus");
+            _itemNext.trigger("select");
+        }
+    });
+};
+
+/*
+ * 사업자번호(2) 필드 세팅
+ */
+$.fn.gfSetBizLicNo2 = function() {
+    var _item = this;
+    var _itemNext = $("#" + _item.attr("tabNext"));
+
+    // Key Up Event
+    _item.on("keyup", function(e, params) {
+        // 숫자만 입력받게 하기
+        $(this).val($(this).val().replace(/[^0-9]/g, ""));
+        if($(this).val().length >= 2) {
+            _itemNext.trigger("focus");
+            _itemNext.trigger("select");
+        }
+    });
+};
+
+/*
+ * 사업자번호(3) 필드 세팅
+ */
+$.fn.gfSetBizLicNo3 = function() {
+    var _item = this;
+    var _itemNext = $("#" + _item.attr("tabNext"));
+
+    // Key Up Event
+    _item.on("keyup", function(e, params) {
+        // 숫자만 입력받게 하기
+        $(this).val($(this).val().replace(/[^0-9]/g, ""));
+        if($(this).val().length >= 5) {
+            _itemNext.trigger("focus");
+            _itemNext.trigger("select");
+        }
+    });
+};
+
+/*
+ * 사업자번호 필드 초기화
+ */
+$.gfInitBizLicNo = function(formOnly) {
+
+    var conditionSelector1 = "input[formType='bizLic1']";
+    var conditionSelector2 = "input[formType='bizLic2']";
+    var conditionSelector3 = "input[formType='bizLic3']";
+
+    if(!$.isEmpty(formOnly)) {
+        conditionSelector1 + "[formOnly='" + formOnly + "']";
+        conditionSelector2 + "[formOnly='" + formOnly + "']";
+        conditionSelector3 + "[formOnly='" + formOnly + "']";
+    }    
+    
+    // 사업자번호 각각의 selector를 구해온다
+    var _bizLic1 = $(conditionSelector1); // 사업자번호1
+    var _bizLic2 = $(conditionSelector2); // 사업자번호2
+    var _bizLic3 = $(conditionSelector3); // 사업자번호3
+
+    _bizLic1.each(function(inx, item) {
+        var _item = $(item);
+        _item.gfSetBizLicNo1();
+    });
+
+    _bizLic2.each(function(inx, item) {
+        var _item = $(item);
+        _item.gfSetBizLicNo2();
+    });
+
+    _bizLic3.each(function(inx, item) {
+        var _item = $(item);
+        _item.gfSetBizLicNo3();
+    });
+};
+
 
 /*
  * 공통코드 Select Box 초기화
@@ -1367,7 +1459,7 @@ $.fn.disabledClick = function(flag) {
 };
 
 /*
- * 사용자 입력 오류등의 알림 메세지(toaster활용)
+ * 사용자 입력 오류등의 알림 메세지(toaster활용) : javascript 처리
  */
 $.gfNotiMsg = function(opts) {
     var msgCd    = "";
@@ -1439,6 +1531,45 @@ $.gfNotiMsg = function(opts) {
     $toastlast = $toast;
 };
 
+/*
+ * 사용자 입력 오류등의 알림 메세지(toaster활용) : 서버 에러코드 및 메시지 처리
+ */
+$.gfNotiMsgSvr = function(opts) {
+    
+    var msgCd    = "";
+    var msgType  = "info";
+    var title    = "";
+    var msg      = "";
+    
+    if($.isEmpty(opts)) return false;
+    else {
+        msgCd = $.n2s(opts.msgCd);
+        msgType = $.isEmpty(opts.msgType) ? "info" : opts.msgType;
+        title = $.n2s(opts.title);
+        msg = $.n2s(opts.msg);
+    }
+    
+    toastr.options = {
+        "closeButton": true,
+        "debug": false, // true일 경우 console.log로 나옴
+        "progressBar": true,
+        "preventDuplicates": false,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "3000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    var $toast = toastr[msgType](msg, title);
+    $toastlast = $toast;
+};
+
 
 /*
  * 그룹코드에 해당하는 공통코드 데이터 값 가져오기
@@ -1467,6 +1598,9 @@ $.fgGetComCdData = function(opts) {
  */
 $.gfInitFormField = function(formOnly) {
 
+    // 체크박스/라디오버튼  초기화
+    $.gfInitCheckbox(formOnly);
+
     // 직원 필드 초기화
     $.gfInitStaff2ComboBox(formOnly);
     
@@ -1485,8 +1619,8 @@ $.gfInitFormField = function(formOnly) {
     // 전화번호 필드 초기화
     $.gfInitTelNo(formOnly);
 
-    // 체크박스/라디오버튼  초기화
-    $.gfInitCheckbox(formOnly);
+    // 사업자번호 필드 초기화
+    $.gfInitBizLicNo(formOnly);
 
     // Readonly 텍스트 박스 초기화
     $.gfInitTextReadonly(formOnly);
@@ -2011,31 +2145,35 @@ $.gfLoadContents = function(opts) {
         async: true,
         beforeSend: function (jqXHR, settings) {
             $.gfToggleLoading("#boxContents", true);
-            _target.empty(); // Contents Data Clear
         },
         success: function(html) {
-            _target.append(html);
+            _target.empty().append(html);
             // 콜백 함수 처리
             if(!$.isEmpty(opts.callback)) {
                 opts.callback();                
             }
-            $.gfToggleLoading("#boxContents", false);
         },
         error: function(xhr, ajaxOptions, throwError) {
-            $.gfToggleLoading("#boxContents", false);
         },
         statusCode: {
             200: function() {
-
             },
-            404: function() {
+            401: function() { // 로그인 권한 없음
                 $.gfCommonPopUp({
-                    popUrl: "/static/popup404.html",
+                    popUrl: "/logins/loginpop",
+                    width: "500"
+                });
+            },
+            404: function() { // 존재하지 않는 페이지
+                $.gfCommonPopUp({
+                    popUrl: "/static/error/popup404.html",
                     width: "300"
                 });
             }
         }
-    });    
+    }).always(function() {
+        $.gfToggleLoading("#boxContents", false);
+    });
 };
 
 /*
@@ -2128,6 +2266,19 @@ $.gfAjaxSetup = function() {
         headers: { "X-CSRFToken": $.cookie("csrftoken") }
 	});       
 };
+
+$.gfSetConfigBtn = function() {
+	///////////////////////////////////////////////////////////////////////////////
+	// 오른쪽 환경 설정 
+    // Append config box / Only for demo purpose
+    // Uncomment on server mode to enable XHR calls
+    $.get("/static/js/skin/skin-config.html", function (data) {
+        if (!$('body').hasClass('no-skin-config'))
+            $('body').append(data);
+    });	
+	///////////////////////////////////////////////////////////////////////////////
+};
+
 
 /*
  * 현재 시간 및 시계 만들기

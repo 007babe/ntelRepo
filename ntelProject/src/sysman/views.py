@@ -1,10 +1,11 @@
-from django.contrib.auth.decorators import login_required
+from common.utils.ajax import login_required_ajax
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from system.models import SysMenu
 
-@login_required(login_url='/accounts/login/')
+
+@login_required_ajax
 def sysmanUseTab1CV(request):
     '''
     시스템관리 > 사용관리  : 사용회사 컨텐츠
@@ -15,7 +16,7 @@ def sysmanUseTab1CV(request):
         {},
     )
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def sysmanUseTab2CV(request):
     '''
     시스템관리 > 사용관리  : 사용자 컨텐츠

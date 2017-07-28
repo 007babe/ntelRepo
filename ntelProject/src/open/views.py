@@ -1,10 +1,8 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from common.utils.ajax import login_required_ajax
 
-from system.models import SysMenu
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def openNewTab1CV(request):
     '''
     개통업무 > 신규개통 : 단말기 컨텐츠
@@ -15,7 +13,7 @@ def openNewTab1CV(request):
         {},
     )
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def openNewTab2CV(request):
     '''
     개통업무 > 신규개통 : 유심/중고 컨텐츠
@@ -26,7 +24,7 @@ def openNewTab2CV(request):
         {},
     )
 
-@login_required(login_url='/accounts/login/')
+@login_required_ajax
 def openNewTab3CV(request):
     '''
     개통업무 > 신규개통 : 홈상품 컨텐츠

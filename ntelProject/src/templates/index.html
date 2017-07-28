@@ -30,7 +30,10 @@
     <img align="center" src="{% static "img/main_image.jpg" %}"/>
     <div style="width: 100%; text-align: center;">
         <span>
-                <button type="button" class="btn btn-outline btn-default" onclick="javascript:window.location.href='/accounts/login'">로그인</button>        
+                <button type="button" class="btn btn-outline btn-default" onclick="javascript:window.location.href='{% url 'logins:login' %}'">로그인</button>        
+        </span>
+        <span>
+                <button type="button" class="btn btn-outline btn-default" onclick="javascript:window.location.href='{% url 'appreq:index' %}'">이용신청</button>        
         </span>
     </div>
 </div>

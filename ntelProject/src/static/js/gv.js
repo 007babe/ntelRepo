@@ -9,7 +9,8 @@
 var gSysGDs =  [
     { key : "GD_COM_CD", url : "/common/json/comcd", cbFunc : "", useYn : true, desc : "공통코드" },
     { key : "GD_SYS_MENU", url : "/system/json/sysmenu", cbFunc : "$.gfSetSysMenu();", useYn : true, desc : "사용자메뉴" },
-    
+    { key : "GD_SYS_MSG", url : "/system/json/sysmsg", cbFunc : "", useYn : true, desc : "시스템메세지 데이터" },
+
     { key : "GD_STAFF", url : "/static/json/staffInfo.json", cbFunc : "", useYn : true, desc : "직원 데이터" },
     { key : "GD_AGENT", url : "/static/json/agentInfo.json", cbFunc : "", useYn : true, desc : "대리/딜러점 데이터" },
     { key : "GD_PROD_PHONE", url : "/static/json/productPhoneInfo.json", cbFunc : "", useYn : true, desc : "입고 단말기" },
@@ -20,7 +21,6 @@ var gSysGDs =  [
     { key : "GD_TELECOM_CALL_PLAN", url : "/static/json/telecomCallPlanInfo.json", cbFunc : "", useYn : true, desc : "요금제 데이터" },
     { key : "GD_SPT_AMT", url : "/static/json/sptAmtInfo.json", cbFunc : "", useYn : true, desc : "공시지원금 데이터" },
     { key : "GD_SRVC", url : "/static/json/srvcInfo.json", cbFunc : "", useYn : true, desc : "필수부가/환수서비스 데이터" },
-    { key : "GD_SYS_MSG", url : "/static/json/sysMsg.json", cbFunc : "", useYn : true, desc : "시스템메세지 데이터" }
 ];
 
 // 현재 일자용

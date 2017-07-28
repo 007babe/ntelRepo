@@ -728,3 +728,12 @@ label.ckbox, label.radio {
 .text-r.nv {
   color: #bbbbbb;   
 }
+
+/*
+ * 이용신청
+ */
+.appreqColumns {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px 20px 20px 20px;
+} 
