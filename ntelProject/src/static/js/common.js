@@ -7,6 +7,13 @@
 
 $(document).ready(function() {
 	// 가능한 추가 하지 마시요
+	// ajax 실행시 로딩중 Spinner 표시
+    $(document).on("ajaxSend", function(){
+        $.gfToggleLoading("#boxContents", true);
+    }).on("ajaxComplete", function(){
+        $.gfToggleLoading("#boxContents", false);
+    });	
+	
 });
 
 /*
@@ -60,11 +67,6 @@ $.gfSetGlobalData = function(key) {
  * 시스템 사용 전역 데이터 가져오기(Ajax json)
  */
 $.gfGetGlobalData = function(opts) {
-	var _formBase = $("#formBase");
-	
-	var paramsGet = _formBase.serialize();
-	var paramsPost = _formBase.serializeArray();
-	var paramsCookies = $.cookie('csrftoken');;
 	
     if($.isEmpty(opts) || $.isEmpty(opts.key) || $.isEmpty(opts.url)) return; // option이 없을 경우 return
 
@@ -72,57 +74,28 @@ $.gfGetGlobalData = function(opts) {
     var key = opts.key; // 데이터 Key(필수)
     var url = opts.url; // 데이터 URL(필수)
     var cbFunc = opts.cbFunc // 정상 처리후 호출 콜백 함수명
-    
-    $.ajax({
-        type: "POST",
+
+    $.gfAjax({
         url: url,
-        data: paramsGet,
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        cache: false,
-        async: true,
-        beforeSend: function (jqXHR, settings) {
-//            $.gfToggleLoading("#boxContents", true);
-        },
-        success: function(data, cbFunc) {
-//            console.log("gfGetGlobalData Ajax success key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+        beforeSendFunc: function(data, textStatus, jqXHR) {
+        },        
+        doneFunc: function(data, textStatus, jqXHR) {
             try {
-//                    console.log(data);
-//                eval(key + " = $.parseJSON(JSON.stringify(data." + key + "));");
                 eval(key + " = $.parseJSON(JSON.stringify(data));");
-//                eval(key + " = $.parseJSON(data." + key + ");");
+                if(!$.isEmpty(cbFunc)) {
+                    eval(cbFunc) 
+                }
             } catch(err) {
                 console.log("gfGetGlobalData Error!!! : Key[" + key + "], Url[" + url + "]");
                 console.log(err);
             }
         },
-        error: function(xhr, ajaxOptions, throwError) {
-//            console.log("gfGetGlobalData : error !!! : Key[" + key + "], Url[" + url + "]");
-//            $.gfToggleLoading("#boxContents", false);
+        failFunc: function(jqXHR, textStatus, errorThrown) {
         },
-        statusCode: {
-            200: function() {
-
-            },
-            404: function() {
-/*
-                $.gfCommonPopUp({
-                    popUrl: "/static/error/popup404.html",
-                    width : "300"
-                });
-*/
-            }
-        }
-    }).done(function() { // 성공할 경우
-//        console.log("gfGetGlobalData Ajax done key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
-        // 콜백함수가 있을 경우 호출
-        if(!$.isEmpty(cbFunc)) {
-            eval(cbFunc) 
-        }
-    }).fail(function() { // 실패할 경우
-        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
-    }).always(function() {
-//        console.log("gfGetGlobalData Ajax allways key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+        alwaysFunc: function(jqXHR, textStatus, errorThrown) {
+        },
     });
 };
 
@@ -203,7 +176,7 @@ $.gfLoadContentsData = function(opts) {
         data: params,
         async: true,
         beforeSend: function (jqXHR, settings) {
-            $.gfToggleLoading("#boxContents", true);
+//            $.gfToggleLoading("#boxContents", true);
         },
         success: function(html) {
             _maincontents.empty().append(html);
@@ -246,7 +219,7 @@ $.gfLoadContentsData = function(opts) {
         
 //        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
     }).always(function() {
-        $.gfToggleLoading("#boxContents", false);
+//        $.gfToggleLoading("#boxContents", false);
     });
 };
 
@@ -1717,6 +1690,7 @@ $.gfInitFormField = function(formOnly) {
 
     // Chosen Select 초기화
     $.gfInitChosen(formOnly);
+    
 };
 
 /*
@@ -2234,7 +2208,7 @@ $.gfLoadContents = function(opts) {
         data: params,
         async: true,
         beforeSend: function (jqXHR, settings) {
-            $.gfToggleLoading("#boxContents", true);
+//            $.gfToggleLoading("#boxContents", true);
         },
         success: function(html) {
             _target.empty().append(html);
@@ -2262,7 +2236,7 @@ $.gfLoadContents = function(opts) {
             }
         }
     }).always(function() {
-        $.gfToggleLoading("#boxContents", false);
+//        $.gfToggleLoading("#boxContents", false);
     });
 };
 
@@ -2357,9 +2331,61 @@ $.gfAjaxSetup = function() {
 	});       
 };
 
+/*
+ * 공통 Ajax함수
+ */
+
+$.gfAjax = function(opts) {
+    // 옵션
+    var type            = $.isEmpty(opts.type) ? "POST" : opts.type; // 사용할 HTTP 메서드
+    var url             = opts.url; // 데이터 URL(필수)
+    var dataType        = $.isEmpty(opts.dataType) ? "" : opts.dataType;
+    var data            = opts.dataType;
+    var async           = $.isEmpty(opts.async) ? true : opts.async;
+    var cache           = $.isEmpty(opts.cache) ? false : opts.cache;
+    var contentType     = $.isEmpty(opts.contentType) ? 'application/x-www-form-urlencoded; charset=UTF-8' : opts.contentType;
+    var beforeSendFunc  = opts.beforeSendFunc; // Ajax 실행전 처리할 함수
+    var successFunc     = opts.successFunc;    // Ajax 실행성공 시 처리할 함수(successFunc -> doneFunc 순서로 둘다 호출됨)
+    var doneFunc        = opts.doneFunc;       // Ajax 실행성공 시 처리할 함수
+    var failFunc        = opts.failFunc;       // Ajax 실패 시 처리할 함수
+    var alwaysFunc      = opts.alwaysFunc;     // Ajax 항상실행 처리할 함수
+        
+    try {
+        // http://api.jquery.com/jquery.ajax/ 참조
+        $.ajax({
+            type: type, // default: 'POST'
+            url: url, // default: The current page
+            data: data,
+            dataType: dataType,   // default: Intelligent Guess (xml, json, script, or html))
+            contentType: contentType,
+            cache: cache,
+            async: async, // default: true
+            beforeSend: function(jqXHR, settings) { // Ajax 실행전 처리
+                if(!$.isEmpty(beforeSendFunc)) beforeSendFunc(jqXHR, settings);
+            },
+            success: function(data, cbFunc) {
+                if(!$.isEmpty(successFunc)) successFunc(data);
+            }            
+        }).done(function(data, textStatus, jqXHR) { // 성공할 경우
+            if(!$.isEmpty(doneFunc)) doneFunc(data, textStatus, jqXHR);
+        }).fail(function(jqXHR, textStatus, errorThrown) { // 실패할 경우
+            if(!$.isEmpty(failFunc)) failFunc(jqXHR, textStatus, errorThrown);
+        }).always(function(jqXHR, textStatus, errorThrown) { // 항상 실행
+            if(!$.isEmpty(alwaysFunc)) alwaysFunc(jqXHR, textStatus, errorThrown);
+        });
+    
+    } catch(err) {    
+        console.log("gfAjax Occured Exception :");
+        console.log(err);
+    }
+};
+
+
+
+/*
+ * 메인 화면의 오른쪽 환경 설정 버튼 
+ */ 
 $.gfSetConfigBtn = function() {
-	///////////////////////////////////////////////////////////////////////////////
-	// 오른쪽 환경 설정 
     // Append config box / Only for demo purpose
     // Uncomment on server mode to enable XHR calls
     $.get("/static/js/skin/skin-config.html", function (data) {
@@ -2374,12 +2400,3 @@ $.gfSetConfigBtn = function() {
  * 현재 시간 및 시계 만들기
  * http://momentjs.com/docs/#/parsing/
  */
-
-
-/*
- * Ajax Post 공통 처리 
- */
-$.gfPost = function(opts) {
-    if($.isEmpty(opts) || $.isEmpty(opts.url)) return false;
-    
-};
