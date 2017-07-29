@@ -157,7 +157,7 @@ $.gfReloadContentsData = function(opts) {
 /*
  * 우측 Main Contens Loading용
  */
-$.gfLoadContentsData = function(opts) {
+$.gfLoadContentsDataBak = function(opts) {
 
     // 옵션이 없을 경우
     if($.isEmpty(opts)) return false;
@@ -168,7 +168,7 @@ $.gfLoadContentsData = function(opts) {
     
     params = {
         'menuId' : menuId
-    }
+    };
 
     $.ajax({
         type: "POST",
@@ -220,6 +220,37 @@ $.gfLoadContentsData = function(opts) {
 //        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
     }).always(function() {
 //        $.gfToggleLoading("#boxContents", false);
+    });
+};
+
+$.gfLoadContentsData = function(opts) {
+    // 옵션이 없을 경우
+    if($.isEmpty(opts)) return false;
+
+    var _maincontents = $("#mainContents");
+    var menuId = opts.menuId;
+    var params = $.isEmpty(opts.params) ? {} : opts.params;
+    
+    params = {
+        'menuId' : menuId
+    };
+
+    $.gfAjax({
+        type: "POST",
+        url: "/main/menu/",
+        data: params,
+        async: true,
+        beforeSendFunc: function(data, textStatus, jqXHR) {
+        },        
+        doneFunc: function(data, textStatus, jqXHR) {
+            _maincontents.empty().append(data);
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            _maincontents.empty();
+        },
+        alwaysFunc: function(jqXHR, textStatus, errorThrown) {
+            console.log("$.gfLoadContentsData status : [" + jqXHR.status + "]");  
+        },
     });
 };
 
@@ -2336,11 +2367,12 @@ $.gfAjaxSetup = function() {
  */
 
 $.gfAjax = function(opts) {
+    
     // 옵션
     var type            = $.isEmpty(opts.type) ? "POST" : opts.type; // 사용할 HTTP 메서드
     var url             = opts.url; // 데이터 URL(필수)
     var dataType        = $.isEmpty(opts.dataType) ? "" : opts.dataType;
-    var data            = opts.dataType;
+    var data            = opts.data;
     var async           = $.isEmpty(opts.async) ? true : opts.async;
     var cache           = $.isEmpty(opts.cache) ? false : opts.cache;
     var contentType     = $.isEmpty(opts.contentType) ? 'application/x-www-form-urlencoded; charset=UTF-8' : opts.contentType;
