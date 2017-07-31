@@ -5,7 +5,8 @@ from django.contrib.auth.models import User, PermissionsMixin
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
-@python_2_unicode_compatible # Python 2.x 지원용
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysPolicy(models.Model):
     """엔텔 운영정책 회사 정보
     """
@@ -19,12 +20,12 @@ class SysPolicy(models.Model):
 
     class Meta:
         db_table = "sys_policy"
-        
+
     def __str__(self):
-        return self.id    
+        return self.id
 
 
-@python_2_unicode_compatible # Python 2.x 지원용
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysCompany(models.Model):
     """엔텔 사용 회사 정보
     고유발생 Key로 PK 설정
@@ -44,7 +45,7 @@ class SysCompany(models.Model):
     cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사휴대폰3')
     bizTp = models.CharField(db_column='biz_tp', max_length=100, null=True, blank=True, verbose_name='업태')
     bizKind = models.CharField(db_column='biz_kind', max_length=100, null=True, blank=True, verbose_name='업종')
-    zipCd = models.CharField(db_column='zip_cd', max_length=6, null=True, blank=True, verbose_name='회사우편번호') # 우편번호   
+    zipCd = models.CharField(db_column='zip_cd', max_length=6, null=True, blank=True, verbose_name='회사우편번호') # 우편번호
     addr1 = models.TextField(db_column='addr_1', max_length=200, null=True, blank=True, verbose_name='회사기본주소') # 기본 주소
     addr2 = models.TextField(db_column='addr_2', max_length=200, null=True, blank=True, verbose_name='회사상세주소') # 상세주소
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
@@ -55,16 +56,17 @@ class SysCompany(models.Model):
 
     class Meta:
         db_table = "sys_company"
-        
-    def __str__(self):
-        return self.companyId    
 
-@python_2_unicode_compatible # Python 2.x 지원용
+    def __str__(self):
+        return self.companyId
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysShop(models.Model):
     """엔텔 사용 매장 정보
     고유발생 Key로 PK 설정
     """
-    shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=8, blank=False, default=None, verbose_name='매장ID') 
+    shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=8, blank=False, default=None, verbose_name='매장ID')
     companyId = models.ForeignKey('system.SysCompany', db_column='company_id', blank=True, null=True, default=None, related_name='r_%(app_label)s_%(class)s_company_id')
     shopNm = models.CharField(db_column='shop_nm', max_length=100, blank=True, verbose_name='매장명')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화1')
@@ -84,18 +86,18 @@ class SysShop(models.Model):
 
     class Meta:
         db_table = "sys_shop"
-        
+
     def __str__(self):
-        return self.shopId    
-        
-@python_2_unicode_compatible # Python 2.x 지원용
+        return self.shopId
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysUserManager(BaseUserManager):
     """
     시스템 사용자 관리 매니저
     """
-
-    def create_user(self, userId, userNm, cellNo, email, password):        
-        """  
+    def create_user(self, userId, userNm, cellNo, email, password):
+        """
         일반 사용자 생성
         """
         if not userId:
@@ -106,21 +108,21 @@ class SysUserManager(BaseUserManager):
 
         if not cellNo:
             raise ValueError('휴대폰번호는 필수 입력입니다.')
-        
+
         if not email:
             raise ValueError('email은 필수 입력입니다.')
 
         user = self.model(
-            userId = userId,
-            userNm = userNm,
-#            email = self.nomalize_email(email),
+            userId=userId,
+            userNm=userNm,
+            # email=self.nomalize_email(email),
         )
-        
+
         user.is_admin = False
         user.set_password(password)
-        user.save(using = self._db)
+        user.save(using=self._db)
         return User
-    
+
     def create_superuser(self, userId, userNm, password):
         """
         Superuser 사용자 생성(createsuperuser)
@@ -132,10 +134,11 @@ class SysUserManager(BaseUserManager):
         )
         user.is_admin = True
         user.is_superuser = True
-        user.save(using = self._db)
-        return user    
+        user.save(using=self._db)
+        return user
 
-@python_2_unicode_compatible # Python 2.x 지원용
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysUser(AbstractBaseUser, PermissionsMixin):
     """장고 User모델 Customized
     """
@@ -160,7 +163,7 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
 #    birthday = models.CharField(max_length=8, verbose_name='생일')
 #    sex = models.CharField(max_length=1, verbose_name='성별')
-    
+
 #    is_active = models.BooleanField(default=True)
 #    is_admin = models.BooleanField(default=False)
 
@@ -168,71 +171,75 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
 
     # 유저 모델에서 필드의 이름을 설명하는 string. 유니크 식별자로 사용
     USERNAME_FIELD = 'userId'
-    
+
     # createsuperuser 커맨드로 유저를 생성할 때 나타날 필드 이름 목록
-    REQUIRED_FIELDS = ['userNm'] # 필수 입력 필드 정의
-        
+    REQUIRED_FIELDS = ['userNm']  # 필수 입력 필드 정의
+
     def userAuthNm(self):
         '''
         사용자 권한 명(등급)
         '''
         return self.userAuth.comNm
-#        return ComCd.objects.get(grpCd__exact='S0001', comCd__exact=self.userAuth).comNm    
+#        return ComCd.objects.get(grpCd__exact='S0001', comCd__exact=self.userAuth).comNm
 
     def shopNm(self):
         '''
         사용자 소속 매장명
         '''
-        return self.shopId.shopNm    
+        return self.shopId.shopNm
 
     def companyId(self):
         '''
         사용자 소속 회사ID
         '''
-        return self.shopId.companyId    
+        return self.shopId.companyId
 
     def companyNm(self):
         '''
         사용자 소속 회사명
         '''
-        return self.shopId.companyId.companyNm    
-        
+        return self.shopId.companyId.companyNm
+
     def companyTp(self):
         '''
         회사구분
         '''
-        return self.shopId.companyId.companyTp   
+        return self.shopId.companyId.companyTp
 
     def companyTpNm(self):
         '''
         회사구분명
         '''
         return self.shopId.companyId.companyTp.comNm
-    
+
     def shopCnt(self):
         '''
         회사의 매장 수
         '''
-        return SysShop.objects.filter(companyId__exact=self.companyId(), useYn__exact=True).count()    
+        return SysShop.objects.filter(
+            companyId__exact=self.companyId(),
+            useYn__exact=True
+        ).count()
 
     def staffCnt(self):
         '''
         매장의 직원 수
         '''
-        return SysUser.objects.filter(shopId__exact=self.shopId, useYn__exact=True).count()    
+        return SysUser.objects.filter(
+            shopId__exact=self.shopId,
+            useYn__exact=True
+        ).count()
 
-            
-        
     def __str__(self):
         return self.userId
-    
+
     class Meta:
         db_table = "sys_user"
-        
-        
-@python_2_unicode_compatible # Python 2.x 지원용
-class SysMenu(models.Model):        
-    """ 
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysMenu(models.Model):
+    """
     시스템 메뉴 ModelClass
     """
     menuId = models.CharField(primary_key=True, db_column='menu_id', max_length=10, blank=True, verbose_name='메뉴ID') # 메뉴ID
@@ -247,44 +254,43 @@ class SysMenu(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
-    
+
     class Meta:
         db_table = "sys_menu"
-    
+
     def __str__(self):
         return self.menuId
-    
+
     def upMenuNm(self):
         '''
         상위 메뉴명
         '''
-        return self.upMenuId.menuNm  
-    
+        return self.upMenuId.menuNm
+
     def topMenuNm(self):
-        ''' 
+        '''
         최상위 메뉴명
-        ''' 
+        '''
         topMenuNm = ''
         if self.menuLvl == 3:
             topMenuNm = self.upMenuId.upMenuId.menuNm
         if self.menuLvl == 2:
             topMenuNm = self.upMenuId.menuNm
-            
+
         return topMenuNm
 
-    
     def upMenuCss(self):
         '''
         상위 메뉴 Css
         '''
-        return self.upMenuId.menuCss  
-    
+        return self.upMenuId.menuCss
 
-@python_2_unicode_compatible # Python 2.x 지원용
-class SysMenuAuth(models.Model):    
-    """ 
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysMenuAuth(models.Model):
+    """
     시스템 메뉴 권한 ModelClass
-    """             
+    """
     menuId = models.ForeignKey('system.SysMenu', db_column='menu_id', related_name='r_%(app_label)s_%(class)s_menu_id', on_delete=models.CASCADE, verbose_name='메뉴ID')
     menuAuth = models.ForeignKey('common.ComCd', db_column='menu_auth', related_name='r_%(app_label)s_%(class)s_menu_auth', verbose_name='메뉴권한')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
@@ -292,19 +298,20 @@ class SysMenuAuth(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
-        
+
     class Meta:
         db_table = "sys_menu_auth"
         unique_together = (("menuId", "menuAuth"),)
-        
+
     def __str__(self):
-        return self.menuId    
-    
-@python_2_unicode_compatible # Python 2.x 지원용
-class SysMenuCompanyTp(models.Model):    
-    """ 
+        return self.menuId
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysMenuCompanyTp(models.Model):
+    """
     시스템 메뉴 회사타입 ModelClass
-    """             
+    """
     menuId = models.ForeignKey('system.SysMenu', db_column='menu_id', related_name='r_%(app_label)s_%(class)s_menu_id', on_delete=models.CASCADE, verbose_name='메뉴ID' )
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='메뉴회사타입')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
@@ -312,19 +319,20 @@ class SysMenuCompanyTp(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
-        
+
     class Meta:
         db_table = "sys_menu_company_tp"
         unique_together = (("menuId", "companyTp"),)
-        
+
     def __str__(self):
-        return self.menuId        
-    
-@python_2_unicode_compatible # Python 2.x 지원용
+        return self.menuId
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysMsg(models.Model):
     """엔텔 시스템 사용 메세지
     """
-    msgCd = models.CharField(primary_key=True, db_column='msg_cd', max_length=6, verbose_name='메세지코드') 
+    msgCd = models.CharField(primary_key=True, db_column='msg_cd', max_length=6, verbose_name='메세지코드')
     msgTp = models.ForeignKey('common.ComCd', db_column='msg_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_msg_tp', verbose_name='메세지타입') # grpCd : S0007
     title = models.CharField(db_column='title', max_length=100, null=False, blank=False, default=None, verbose_name='메세지제목') # 메세지제목
     msg = models.CharField(db_column='msg', max_length=500, null=False, blank=False, default=None, verbose_name='메세지내용') # 메세지내용
@@ -333,19 +341,19 @@ class SysMsg(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
-    
+
     # 속성
     class Meta:
-        db_table="sys_msg"
-    
+        db_table = "sys_msg"
+
     def publish(self):
         self.save()
-        
+
     def __str__(self):
         return self.comCd
 
-    
-@python_2_unicode_compatible # Python 2.x 지원용
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysAppReq(models.Model):
     """이용신청정보
     고유발생 Key로 PK 설정
@@ -367,7 +375,7 @@ class SysAppReq(models.Model):
     cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사휴대폰3')
     bizTp = models.CharField(db_column='biz_tp', max_length=100, null=True, blank=True, verbose_name='업태')
     bizKind = models.CharField(db_column='biz_kind', max_length=100, null=True, blank=True, verbose_name='업종')
-    zipCd = models.CharField(db_column='zip_cd', max_length=6, blank=True, verbose_name='회사우편번호') # 우편번호   
+    zipCd = models.CharField(db_column='zip_cd', max_length=6, blank=True, verbose_name='회사우편번호') # 우편번호
     addr1 = models.TextField(db_column='addr_1', max_length=200, blank=True, verbose_name='회사기본주소') # 기본 주소
     addr2 = models.TextField(db_column='addr_2', max_length=200, blank=True, verbose_name='회사상세주소') # 상세주소
     userId = models.CharField(db_column='user_id', max_length=16, null=False, blank=False, verbose_name='대표사용자아이디')
@@ -381,8 +389,6 @@ class SysAppReq(models.Model):
 
     class Meta:
         db_table = "sys_app_req"
-        
+
     def __str__(self):
-        return self.appId    
-        
-        
+        return self.appId

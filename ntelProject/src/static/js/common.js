@@ -163,72 +163,6 @@ $.gfReloadContentsData = function(opts) {
 /*
  * 우측 Main Contens Loading용
  */
-$.gfLoadContentsDataBak = function(opts) {
-
-    // 옵션이 없을 경우
-    if($.isEmpty(opts)) return false;
-
-    var _maincontents = $("#mainContents");
-    var menuId = opts.menuId;
-    var params = $.isEmpty(opts.params) ? {} : opts.params;
-    
-    params = {
-        'menuId' : menuId
-    };
-
-    $.ajax({
-        type: "POST",
-        url: "/main/menu/",
-        data: params,
-        async: true,
-        beforeSend: function (jqXHR, settings) {
-//            $.gfToggleLoading("#boxContents", true);
-        },
-        success: function(html) {
-            _maincontents.empty().append(html);
-        },
-        error: function(xhr, ajaxOptions, throwError) {
-        },
-        statusCode: {
-            200: function() {
-
-            },
-            401: function() { // 로그인 권한 없음
-                $.gfCommonPopUp({
-                    popUrl: "/logins/loginpop",
-                    width: "500"
-                });
-            },            
-            403: function() {
-                $.gfCommonPopUp({
-                    popUrl: "/static/error/popup403.html",
-                    width: "300"
-                });
-            },
-            404: function() {
-                $.gfCommonPopUp({
-                    popUrl: "/static/error/popup404.html",
-                    width: "300"
-                });
-            },
-            500: function() {
-                $.gfCommonPopUp({
-                    popUrl: "/static/error/popup500.html",
-                    width: "300"
-                });
-            }
-        }
-    }).done(function() { // 성공할 경우
-        
-    }).fail(function() { // 실패할 경우
-        _maincontents.empty();
-        
-//        console.log("gfGetGlobalData Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
-    }).always(function() {
-//        $.gfToggleLoading("#boxContents", false);
-    });
-};
-
 $.gfLoadContentsData = function(opts) {
     // 옵션이 없을 경우
     if($.isEmpty(opts)) return false;
@@ -253,9 +187,16 @@ $.gfLoadContentsData = function(opts) {
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
             _maincontents.empty();
+            // Http Error처리 
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR, 
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : true
+            });
         },
         alwaysFunc: function(jqXHR, textStatus, errorThrown) {
-            console.log("$.gfLoadContentsData status : [" + jqXHR.status + "]");  
+//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");  
         },
     });
 };
@@ -346,6 +287,7 @@ $.gfCommonPopUp = function(opts) {
 /*
  * 에러발생시 모달 창
  */
+/* 
 $.gfErrorPopUp = function(modalId, errCd, errMsg, w, h) {
     $.ajax({
         type: "POST",
@@ -356,7 +298,7 @@ $.gfErrorPopUp = function(modalId, errCd, errMsg, w, h) {
         }
     });
 };
-
+*/
 
 /*
  * Loading용 Spinner 처리
@@ -2221,43 +2163,37 @@ $.gfLoadContents = function(opts) {
     var _target  = opts.target; // selector
     var params   = $.isEmpty(opts.params) ? {} : opts.params;
     
-    $.ajax({
+    $.gfAjax({
         type: "POST",
         url: url,
         data: params,
         async: true,
-        beforeSend: function (jqXHR, settings) {
-//            $.gfToggleLoading("#boxContents", true);
-        },
-        success: function(html) {
-            _target.empty().append(html);
+        beforeSendFunc: function(data, textStatus, jqXHR) {
+        },        
+        doneFunc: function(data, textStatus, jqXHR) {
+            _target.empty().append(data);
             // 콜백 함수 처리
             if(!$.isEmpty(opts.callback)) {
-                opts.callback();                
+                opts.callback(data, textStatus, jqXHR);                
             }
         },
-        error: function(xhr, ajaxOptions, throwError) {
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            _target.empty();
+            
+            // Http Error처리 
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR, 
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : true
+            });
         },
-        statusCode: {
-            200: function() {
-            },
-            401: function() { // 로그인 권한 없음
-                $.gfCommonPopUp({
-                    popUrl: "/logins/loginpop",
-                    width: "500"
-                });
-            },
-            404: function() { // 존재하지 않는 페이지
-                $.gfCommonPopUp({
-                    popUrl: "/static/error/popup404.html",
-                    width: "300"
-                });
-            }
-        }
-    }).always(function() {
-//        $.gfToggleLoading("#boxContents", false);
-    });
+        alwaysFunc: function(jqXHR, textStatus, errorThrown) {
+//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");  
+        },
+    });    
 };
+
 
 /*
  * 메뉴 데이터를 이용한 메뉴 구성
@@ -2403,7 +2339,6 @@ $.gfAjax = function(opts) {
 };
 
 
-
 /*
  * 메인 화면의 오른쪽 환경 설정 버튼 
  */ 
@@ -2414,8 +2349,54 @@ $.gfSetConfigBtn = function() {
         if (!$('body').hasClass('no-skin-config'))
             $('body').append(data);
     });	
-	///////////////////////////////////////////////////////////////////////////////
 };
+
+/*
+ * Http Error 처리
+ */
+$.gfHttpErrorPopup = function(opts) {
+    
+    if($.isEmpty(opts) || $.isEmpty(opts.jqXHR)) return false;
+    
+    var jqXHR = opts.jqXHR;
+    var textStatus = opts.textStatus;
+    var errorThrown = opts.errorThrown;
+    var loginRequired = $.isEmpty(opts.loginRequired) ? false : opts.loginRequired;
+    
+    
+    if(!$.isEmpty(jqXHR.status) && jqXHR.status != 200) {
+        if(loginRequired && jqXHR.status == 401) { // Login Check 401일 경우 로그인 팝업
+            $.gfCommonPopUp({
+                popUrl: "/logins/loginpop",
+                width: "500"
+            });
+        } else {
+            var status = "";
+            var title = "";
+            var message = "";
+            
+            $.each(GD_COM_HTTP_STATUS, function(i, item) {
+                if(item.status == jqXHR.status) {
+                    status = item.status;
+                    title = item.title;
+                    message = item.message;
+                    return;    
+                }
+            });
+            
+            $.gfCommonPopUp({
+                popUrl: "/common/error_popup",
+                width: "300",
+                params: {
+                    status: status,
+                    title: title,
+                    message: message
+                }
+            });
+        }
+    }
+};
+
 
 
 /*

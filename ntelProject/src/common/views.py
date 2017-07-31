@@ -3,10 +3,22 @@ from __future__ import absolute_import
 import json
 
 from django.http import HttpResponse
+from django.shortcuts import render
 
-from common.models import ComCd
+from common.models import ComCd, ComHttpStatus
 from common.utils.ajax import login_required_ajax
 from common.utils.json import jsonDefault
+
+
+def errorPopupCV(request):
+    '''
+    공통 Error 팝업
+    '''
+    return render(
+        request,
+        'common/errors/errorPopup.html',
+        {}
+    )
 
 
 @login_required_ajax
@@ -25,4 +37,20 @@ def getJsonComCd(request):
         'useYn',
     )
     jsonData = json.dumps(list(comCds), default=jsonDefault)
+    return HttpResponse(jsonData, content_type="application/json")
+
+
+def getJsonComHttpStatus(request):
+    """
+        Http Status(com_http_status) 데이터 획득(Json)
+    """
+    comHttpStatuses = ComHttpStatus.objects.filter(
+        useYn=True,
+    ).values(
+        'status',
+        'title',
+        'message',
+        'useYn',
+    )
+    jsonData = json.dumps(list(comHttpStatuses), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")
