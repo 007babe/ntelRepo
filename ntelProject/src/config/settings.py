@@ -26,8 +26,8 @@ SECRET_KEY = 'miozo6krang3o%$&%-ts6t5*3+e69eekm+ll!k#qdn4$$k152i'
 # 디버그 모드 설정
 DEBUG = True
 
-#ALLOWED_HOSTS = ['.ntel.co.kr', '127.0.0.1'] # 서버용
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost'] # local용
+# ALLOWED_HOSTS = ['.ntel.co.kr', '127.0.0.1']  # 서버용
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # local용
 
 # Application definition
 # pip로 설치한 앱 또는 자신이 만든 app을 추가
@@ -38,29 +38,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Added Apps
     'common.apps.CommonConfig',  # 공통 App
     'system.apps.SystemConfig',  # System 관련 App
     'logins.apps.LoginsConfig',  # Login 관련 App
     'appreq.apps.AppreqConfig',  # 이용신청 관련 App
-    'main.apps.MainConfig', # Main App
-    'stock.apps.StockConfig', # 재고 App
-    'open.apps.OpenConfig', # 개통업무 App
-    'plan.apps.PlanConfig', # 미결업무 App
-    'reserve.apps.ReserveConfig', # 예약업무 App
-    'custman.apps.CustmanConfig', # 고객관리 App
-    'receipt.apps.ReceiptConfig', # 수납/장부 App
-    'report.apps.ReportConfig', # 통계리포트 App
-    'setting.apps.SettingConfig', # 환경설정 App
-    
+    'main.apps.MainConfig',  # Main App
+    'stock.apps.StockConfig',  # 재고 App
+    'open.apps.OpenConfig',  # 개통업무 App
+    'plan.apps.PlanConfig',  # 미결업무 App
+    'reserve.apps.ReserveConfig',  # 예약업무 App
+    'custman.apps.CustmanConfig',  # 고객관리 App
+    'receipt.apps.ReceiptConfig',  # 수납/장부 App
+    'report.apps.ReportConfig',  # 통계리포트 App
+    'setting.apps.SettingConfig',  # 환경설정 App
+
     # 시스템관리자 Apps
-    'sysman.apps.SysmanConfig', # 시스템관리자 App
+    'sysman.apps.SysmanConfig',  # 시스템관리자 App
 
     # Sample Apps
-    'sample.apps.SampleConfig', # 예제 App
-
-
+    'sample.apps.SampleConfig',  # 예제 App
 ]
 
 MIDDLEWARE = [
@@ -78,7 +76,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,7 +101,7 @@ DATETIME_INPUT_FORMATS = [
     '%y/%m/%d %H:%M:%S',     # '06/10/25 14:30:59'
     '%y/%m/%d %H:%M:%S.%f',  # '06/10/25 14:30:59.000200'
     '%y/%m/%d %H:%M',        # '06/10/25 14:30'
-    '%y/%m/%d',              # '06/10/25'    
+    '%y/%m/%d',              # '06/10/25'
 ]
 
 
@@ -115,8 +113,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     # local
-    'default' : {
-        'ENGINE': 'django.db.backends.mysql',    
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ntel',
         'USER': 'ntel',
         'PASSWORD': '007kkt',
@@ -124,8 +122,8 @@ DATABASES = {
         'PORT': '3307',
     },
     # dev server
-    'dev' :  {
-        'ENGINE': 'django.db.backends.mysql',    
+    'dev': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'nteldb',
         'USER': 'ntel',
         'PASSWORD': 'baram#315',
@@ -136,8 +134,8 @@ DATABASES = {
         },
     },
     # local
-    'local' :  {
-        'ENGINE': 'django.db.backends.mysql',    
+    'local': {
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ntel',
         'USER': 'ntel',
         'PASSWORD': '007kkt',
@@ -169,13 +167,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.common/en/1.10/topics/i18n/
 
-#LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'ko-kr'
 
-#TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Seoul'
 
-#USE_TZ = True 
+# USE_TZ = True
 USE_TZ = False
 
 USE_I18N = True
@@ -183,34 +181,35 @@ USE_I18N = True
 USE_L10N = True
 
 
-PROJECT_DIR=os.path.dirname(__file__)
+PROJECT_DIR = os.path.dirname(__file__)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.common/en/1.10/howto/static-files/
 # 정적 파일 의 URL
 STATIC_URL = '/static/'
 
-STATIC_ROOT= os.path.join(PROJECT_DIR,'static/')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static/')
 
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, "static"), ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # Login/out URL
-LOGIN_URL  = '/logins/login/' # default '/accounts/login/'
-LOOUT_URL = '/logins/logout/' # default '/accounts/logout/'
+LOGIN_URL = '/logins/login/'  # default '/accounts/login/'
+LOOUT_URL = '/logins/logout/'  # default '/accounts/logout/'
 
 # Login 후 이동 URL
 LOGIN_REDIRECT_URL = '/main'
- 
+
 # 파일 업로드를 위한 디렉토리
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 # 브라우저를 닫았을 때 Session 만료처리(default=False)
-SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Session 만료 시간(5분)
 SESSION_COOKIE_AGE = 60 * 5
 
-# Customized User 
+# Customized User
 AUTH_USER_MODEL = 'system.SysUser'

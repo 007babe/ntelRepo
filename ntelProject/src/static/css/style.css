@@ -7652,7 +7652,7 @@ body.rtls.top-navigation .footer.fixed {
   overflow: hidden;
 }
 .theme-config-box {
-  margin-right: -220px;
+  margin-right: -220px ;
   position: relative;
   z-index: 2000;
   transition-duration: 0.8s;

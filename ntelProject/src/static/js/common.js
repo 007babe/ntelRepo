@@ -5,15 +5,21 @@
  *
  */
 
+var console = window.console || {log:function(){}};
+
 $(document).ready(function() {
+	// AjaxSetup
+    $.gfAjaxSetup();
+    
 	// 가능한 추가 하지 마시요
 	// ajax 실행시 로딩중 Spinner 표시
-    $(document).on("ajaxSend", function(){
+    $(document).ajaxStart(function() {
+    }).ajaxSend(function( event, jqxhr, settings ) {
         $.gfToggleLoading("#boxContents", true);
-    }).on("ajaxComplete", function(){
+    }).ajaxComplete(function( event, xhr, settings ) {
         $.gfToggleLoading("#boxContents", false);
     });	
-	
+    
 });
 
 /*
@@ -254,24 +260,6 @@ $.gfLoadContentsData = function(opts) {
     });
 };
 
-
-/*
- * 최초 선택 화면 처리(쿠키 이용)
- */
-$.gfLoadInitPage___BAK = function () {
-    
-    // 메뉴정보가 없을 경우
-    if($.isEmpty($.cookie("menuInfo"))) {
-        $.cookie("menuInfo", "1,1");
-    }
-    var menuInfo = $.cookie("menuInfo").split(',');
-
-    var menuGrpNo = menuInfo[0];
-    var menuNo = menuGrpNo + "" + menuInfo[1];
-    // 초기 메뉴 선택 세팅(click event)
-    $('#menuGrp' + menuGrpNo).trigger('click');
-    $('#menu' + menuNo).trigger('click');
-};
 
 /*
  * 최초 선택 화면 처리(쿠키 이용)
@@ -2360,6 +2348,8 @@ $.gfAjaxSetup = function() {
 	$.ajaxSetup({
         headers: { "X-CSRFToken": $.cookie("csrftoken") }
 	});       
+	
+	console.log("csrftoken : [" + $.cookie("csrftoken") + "]");
 };
 
 /*

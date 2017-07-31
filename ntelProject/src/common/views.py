@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import json
 
 from django.http import HttpResponse
@@ -16,16 +18,11 @@ def getJsonComCd(request):
     comCds = ComCd.objects.filter(
         useYn=True,
     ).values(
-        'grpCd', 
-        'comCd', 
-        'comNm', 
+        'grpCd',
+        'comCd',
+        'comNm',
         'grpOpt',
-        'useYn', 
+        'useYn',
     )
     jsonData = json.dumps(list(comCds), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")    
-
-
-
-
-
+    return HttpResponse(jsonData, content_type="application/json")
