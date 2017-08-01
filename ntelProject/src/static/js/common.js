@@ -10,7 +10,7 @@ var console = window.console || {log:function(){}};
 $(document).ready(function() {
 	// AjaxSetup
     $.gfAjaxSetup();
-    
+
 	// 가능한 추가 하지 마시요
 	// ajax 실행시 로딩중 Spinner 표시
     $(document).ajaxStart(function() {
@@ -18,8 +18,8 @@ $(document).ready(function() {
         $.gfToggleLoading("#boxContents", true);
     }).ajaxComplete(function( event, xhr, settings ) {
         $.gfToggleLoading("#boxContents", false);
-    });	
-    
+    });
+
 });
 
 /*
@@ -73,7 +73,7 @@ $.gfSetGlobalData = function(key) {
  * 시스템 사용 전역 데이터 가져오기(Ajax json)
  */
 $.gfGetGlobalData = function(opts) {
-	
+
     if($.isEmpty(opts) || $.isEmpty(opts.key) || $.isEmpty(opts.url)) return; // option이 없을 경우 return
 
     // 옵션
@@ -86,12 +86,12 @@ $.gfGetGlobalData = function(opts) {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         beforeSendFunc: function(data, textStatus, jqXHR) {
-        },        
+        },
         doneFunc: function(data, textStatus, jqXHR) {
             try {
                 eval(key + " = $.parseJSON(JSON.stringify(data));");
                 if(!$.isEmpty(cbFunc)) {
-                    eval(cbFunc) 
+                    eval(cbFunc)
                 }
             } catch(err) {
                 console.log("gfGetGlobalData Error!!! : Key[" + key + "], Url[" + url + "]");
@@ -170,7 +170,7 @@ $.gfLoadContentsData = function(opts) {
     var _maincontents = $("#mainContents");
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
-    
+
     params = {
         'menuId' : menuId
     };
@@ -181,22 +181,22 @@ $.gfLoadContentsData = function(opts) {
         data: params,
         async: true,
         beforeSendFunc: function(data, textStatus, jqXHR) {
-        },        
+        },
         doneFunc: function(data, textStatus, jqXHR) {
             _maincontents.empty().append(data);
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
             _maincontents.empty();
-            // Http Error처리 
+            // Http Error처리
             $.gfHttpErrorPopup({
-                jqXHR : jqXHR, 
+                jqXHR : jqXHR,
                 textStatus : textStatus,
                 errorThrown : errorThrown,
                 loginRequired : true
             });
         },
         alwaysFunc: function(jqXHR, textStatus, errorThrown) {
-//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");  
+//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");
         },
     });
 };
@@ -206,16 +206,16 @@ $.gfLoadContentsData = function(opts) {
  * 최초 선택 화면 처리(쿠키 이용)
  */
 $.gfLoadInitPage = function () {
-    
+
     // 메뉴정보가 없을 경우
     if($.isEmpty($.cookie("menuInfo"))) {
         // 메뉴리스트 중에서 제일 첫번째 세팅
         var upMenuId = GD_SYS_MENU[0].upMenuId;
         var menuId   = GD_SYS_MENU[0].menuId;
-        
+
         $.cookie("menuInfo", upMenuId + "," + menuId);
-    } 
-    
+    }
+
     var menuInfo = $.cookie("menuInfo").split(',');
 
     var upMenuId = menuInfo[0];
@@ -287,7 +287,7 @@ $.gfCommonPopUp = function(opts) {
 /*
  * 에러발생시 모달 창
  */
-/* 
+/*
 $.gfErrorPopUp = function(modalId, errCd, errMsg, w, h) {
     $.ajax({
         type: "POST",
@@ -527,7 +527,7 @@ $.fn.gfSetDatePicker = function() {
         _objDateFields.off("input").on("input", function(e, params) {
             var _this = $(this);
             var _picker = _this.closest(".input-group.date");
-            
+
             _this.val(_this.val().replace(/[^0-9\-]/g, ""));
         });
 
@@ -536,17 +536,17 @@ $.fn.gfSetDatePicker = function() {
         _objDateFields.off("blur").on("blur", function(e, params) {
             var _this = $(this);
             var _picker = _this.closest(".input-group.date"); // Datepicker
-            
+
             _this.val(_this.val().replace(/[^0-9\-]/g, "").replace(/([0-9]{4})([0-9]+)([0-9]{2})/,"$1-$2-$3"));
 
             // 입력한 날짜가 올바른 날짜인지 확인
             if(!$.gfIsValidedDate(_this.val())) {
                 _picker.datepicker("setDate", "");
                 _picker.datepicker().trigger("changeDate");
-                
+
                 return false;
             }
-            
+
             // picker changeDate 발생
             _picker.datepicker().trigger("changeDate");
         });
@@ -569,11 +569,11 @@ $.fn.gfSetDatePicker = function() {
  * 달력 Picker 초기화(Customiazed)
  */
 $.gfInitDatePicker = function(formOnly) {
-    
+
     var conditionSelector = "div[formType='datePicker']";
 
     if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
-    
+
     // 달력 Picker 각각의 selector를 구해온다
     var _datePicker = $(conditionSelector); // date picker
     _datePicker.gfSetDatePicker();
@@ -596,11 +596,11 @@ $.fn.gfSetCheckbox = function() {
  * 체크박스/라디오버튼(icheck) 초기화(Customiazed)
  */
 $.gfInitCheckbox = function(formOnly) {
-    
+
     var conditionSelector = "div[formType='iChecks']";
 
     if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
-    
+
     // Checkbox selector를 구해온다
     var _checkbox = $(conditionSelector); // i-checks 객체
     _checkbox.gfSetCheckbox();
@@ -738,11 +738,11 @@ $.fn.gfSetCurrency = function() {
  * 금액필드 초기화
  */
 $.gfInitCurrency = function(formOnly) {
-    
+
     var conditionSelector = "input[formType='currency']";
 
     if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
-    
+
     // 달력 Picker 각각의 selector를 구해온다
     var _currency = $(conditionSelector); // 금액필드
     _currency.gfSetCurrency();
@@ -800,7 +800,7 @@ $.fn.gfSetTelNo3 = function() {
     // Key Up Event
     _item.on("keyup", function(e, params) {
         var _this = $(this);
-        
+
         // 숫자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
@@ -824,8 +824,8 @@ $.gfInitTelNo = function(formOnly) {
         conditionSelector1 + "[formOnly='" + formOnly + "']";
         conditionSelector2 + "[formOnly='" + formOnly + "']";
         conditionSelector3 + "[formOnly='" + formOnly + "']";
-    }    
-    
+    }
+
     // 전화번호 각각의 selector를 구해온다
     var _tel1 = $(conditionSelector1); // 전화 지역번호
     var _tel2 = $(conditionSelector2); // 전화 국번호
@@ -857,7 +857,7 @@ $.fn.gfSetBizLicNo1 = function() {
     // Key Up Event
     _item.on("keyup", function(e, params) {
         var _this = $(this);
-        
+
         // 숫자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
@@ -899,10 +899,10 @@ $.fn.gfSetBizLicNo3 = function() {
     // Key Up Event
     _item.on("keyup", function(e, params) {
         var _this = $(this);
-        
+
         // 숫자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9]/g, ""));
-        
+
         if(_this.val().length >= 5) {
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
@@ -923,8 +923,8 @@ $.gfInitBizLicNo = function(formOnly) {
         conditionSelector1 + "[formOnly='" + formOnly + "']";
         conditionSelector2 + "[formOnly='" + formOnly + "']";
         conditionSelector3 + "[formOnly='" + formOnly + "']";
-    }    
-    
+    }
+
     // 사업자번호 각각의 selector를 구해온다
     var _bizLic1 = $(conditionSelector1); // 사업자번호1
     var _bizLic2 = $(conditionSelector2); // 사업자번호2
@@ -953,24 +953,24 @@ $.fn.gfSetUserId = function() {
     var _item = this;
     var _itemNext = $("#" + _item.attr("tabNext"));
     var _noti = $("#" + _item.attr("noti")); // 알림필드
- 
+
     // Key Up Event
     _item.on("keyup", function(e, params) {
         var _this = $(this);
-        
+
         // 숫자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9a-zA-Z]/g, ""));
-        
+
         if(_this.val().length >= 20) { // 20자 이상일 경우 처리
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
         }
     });
-    
+
     // Blur Event
     _item.on("blur", function(e, params) {
         var _this = $(this);
-        
+
         // 6자 이하일 경우
         if(_this.val().length == 0) {
             if(!$.isEmpty(_noti)){
@@ -979,13 +979,13 @@ $.fn.gfSetUserId = function() {
             }
         } else if(_this.val().length < 6) {
             if(!$.isEmpty(_noti)){
-                _noti.html("* 아이디는 6자리 이상 입력하세요.");
-                _noti.css("color", "red");
+                _noti.html("아이디는 6자리 이상 입력하세요.");
+                _noti.css("color", "#f13221");
                 _this.focus();
             }
         } else {
             if(!$.isEmpty(_noti)){
-                _noti.html("* 사용가능한 아이디입니다.");
+                _noti.html("");
                 _noti.css("color", "#1ab394");
             }
         }
@@ -1002,12 +1002,12 @@ $.gfInitUserId = function(formOnly) {
 
     if(!$.isEmpty(formOnly)) {
         conditionSelector + "[formOnly='" + formOnly + "']";
-    }    
-    
+    }
+
     // 아이디 필드 selector를 구해온다
 
-    var _userId = $(conditionSelector);    
-    
+    var _userId = $(conditionSelector);
+
     _userId.each(function(inx, item) {
         var _item = $(item);
         _item.gfSetUserId();
@@ -1020,7 +1020,7 @@ $.gfInitUserId = function(formOnly) {
  * 공통코드 Select Box 초기화
  */
 $.gfInitComCd2ComboBox = function(formOnly) {
-    
+
     var conditionSelector = "select[formType='comSel']";
 
     if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
@@ -1056,7 +1056,7 @@ $.gfInitComCd2ComboBox = function(formOnly) {
  */
 $.fn.gfSetComCd2ComboBox = function(opts) {
     var _this = this;
-    
+
     if($.isEmpty(opts)) return false;
 
     // 옵션
@@ -1074,7 +1074,7 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
         useYn: opts.useYn,
         grpOpt: opts.grpOpt
     });
-    
+
     // 초기화
     _this.empty();
 
@@ -1094,7 +1094,7 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
             _option.attr(k, v);
             _option.attr("value", item.comCd)
         });
-        
+
         _this.append(_option.text(item.comNm));
     });
 
@@ -1117,19 +1117,19 @@ $.gfInitStaff2ComboBox = function(formOnly) {
     var conditionSelector = "select[formType='staffSel']";
 
     if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
-    
+
     // Select Box로 세팅될 값들을 찾아온다(formType="staffSel")
     var _staffSel = $(conditionSelector); // 공통코드 Select 박스 대상들
-    
+
     _staffSel.each(function(inx, item) {
         var _item = $(item);
-        
+
         var isSetNF = _item.attr("isSetNF") == "true" ? true : false;
         var useYn = _item.attr("useYn") == "true" ? true : false;
         var setValue = $.isEmpty(_item.attr("setValue")) ? "" : _item.attr("setValue");
         var isDisabled = _item.attr("isDisabled") == "true" ? true : false;
         var triggerEvent = $.n2s(_item.attr("triggerEvent"));
-        
+
         _item.gfSetStaff2ComboBox({
             isSetNF : isSetNF,
             useYn : useYn,
@@ -1151,7 +1151,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
     var useYn        = false;                             // 사용여부값 적용
     var setValue     = "";                                // 선택되어질 값 세팅
     var isDisabled   = false;                             // 사용불가
-    var triggerEvent = $.n2s(_this.attr("triggerEvent")); // 발생할 이벤트 
+    var triggerEvent = $.n2s(_this.attr("triggerEvent")); // 발생할 이벤트
 
     if(!$.isEmpty(opts)) {
         isSetNF      = $.isEmpty(opts.isSetNF) ? false : opts.isSetNF; // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
@@ -1168,7 +1168,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
 
     // 초기화
     _this.empty();
-    
+
     // 값이 없는 필드를 가지는 경우
     if(isSetNF) {
         _this.append($("<option/>")
@@ -1193,7 +1193,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
 
     // 사용여부 세팅
     _this.prop("disabled", isDisabled);
-     
+
     // 이벤트 발생(trigger)
     if(!$.isEmpty(triggerEvent)) _this.trigger(triggerEvent);
 };
@@ -1205,19 +1205,19 @@ $.gfInitAgent2ComboBox = function(formOnly) {
     var conditionSelector = "select[formType='agentSel']";
 
     if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
-    
+
     // Select Box로 세팅될 값들을 찾아온다(formType="agentSel")
     var _agentSel = $(conditionSelector); // 공통코드 Select 박스 대상들
-    
+
     _agentSel.each(function(inx, item) {
         var _item = $(item);
-        
+
         var isSetNF = _item.attr("isSetNF") == "true" ? true : false;
         var useYn = _item.attr("useYn") == "true" ? true : false;
         var setValue = $.isEmpty(_item.attr("setValue")) ? "" : _item.attr("setValue");
         var isDisabled = _item.attr("isDisabled") == "true" ? true : false;
         var triggerEvent = $.n2s(_item.attr("triggerEvent"));
-        
+
         _item.gfSetAgent2ComboBox({
             isSetNF : isSetNF,
             useYn : useYn,
@@ -1262,14 +1262,14 @@ $.fn.gfSetAgent2ComboBox = function(opts) {
 
     // 초기화
     _this.empty();
-    
+
     // 값이 없는 필드를 가지는 경우
     if(isSetNF) {
         _this.append($("<option/>")
                         .attr("value", "")
                         .text("")
                        );
-    }    
+    }
     // 옵션값 생성
     $.each(gdAgentF, function(i, item) {
         var _option = $("<option/>");
@@ -1488,6 +1488,7 @@ $.gfNotiMsg = function(opts) {
     var title    = "";
     var msg      = "";
     var focusId  = "";
+    var msgFrom  = "G"; // G : GD_SYS_MSG 에서 획득(default)
 
     if($.isEmpty(opts)) return false;
     else {
@@ -1499,36 +1500,39 @@ $.gfNotiMsg = function(opts) {
             title = $.n2s(opts.title);
             msg = $.n2s(opts.msg);
             focusId = $.n2s(opts.focusId);
+            msgFrom   = $.isEmpty(opts.msgFrom) ? "G" : opts.msgFrom;  
         } else {
             return false;
         }
     }
 
-    // 메세지 코드(msgCd) 값에 의한 Filtering
-    var gdSysmsgF = $.grep(GD_SYS_MSG, function(el, inx){
-        return el.msgCd == msgCd;
-    });
-
-    if(gdSysmsgF.length != 1) {
-        console.log("System Message Code is Not Exist or Duplicated!!! Message Count [" + gdSysmsgF.length + "]");
-        return false;
-    } else {
-        msgCd = gdSysmsgF[0].msgCd;
-        if($.type(opts) === "string"){
-            msgType = gdSysmsgF[0].msgType;
-            title = gdSysmsgF[0].title;
-            msg = gdSysmsgF[0].msg;
+    if(msgFrom == "G") {
+        // 메세지 코드(msgCd) 값에 의한 Filtering
+        var gdSysmsgF = $.grep(GD_SYS_MSG, function(el, inx){
+            return el.msgCd == msgCd;
+        });
+    
+        if(gdSysmsgF.length != 1) {
+            console.log("System Message Code is Not Exist or Duplicated!!! Message Count [" + gdSysmsgF.length + "]");
+            return false;
         } else {
-            msgType = $.isEmpty(msgType) ? gdSysmsgF[0].msgType : msgType;
-            title = $.isEmpty(title) ? gdSysmsgF[0].title : title;
-            msg = $.isEmpty(msg) ? gdSysmsgF[0].msg : msg;
+            msgCd = gdSysmsgF[0].msgCd;
+            if($.type(opts) === "string"){
+                msgType = gdSysmsgF[0].msgType;
+                title = gdSysmsgF[0].title;
+                msg = gdSysmsgF[0].msg;
+            } else {
+                msgType = $.isEmpty(msgType) ? gdSysmsgF[0].msgType : msgType;
+                title = $.isEmpty(title) ? gdSysmsgF[0].title : title;
+                msg = $.isEmpty(msg) ? gdSysmsgF[0].msg : msg;
+            }
         }
-    }
-
-    // focus 되어야할 ID가 존재하는 경우
-    if(!$.isEmpty(focusId)) {
-        _focusTarget = $("#" + focusId);
-        _focusTarget.focus();
+    
+        // focus 되어야할 ID가 존재하는 경우
+        if(!$.isEmpty(focusId)) {
+            _focusTarget = $("#" + focusId);
+            _focusTarget.focus();
+        }
     }
 
     toastr.options = {
@@ -1556,12 +1560,12 @@ $.gfNotiMsg = function(opts) {
  * 사용자 입력 오류등의 알림 메세지(toaster활용) : 서버 에러코드 및 메시지 처리
  */
 $.gfNotiMsgSvr = function(opts) {
-    
+
     var msgCd    = "";
     var msgType  = "info";
     var title    = "";
     var msg      = "";
-    
+
     if($.isEmpty(opts)) return false;
     else {
         msgCd = $.n2s(opts.msgCd);
@@ -1569,7 +1573,7 @@ $.gfNotiMsgSvr = function(opts) {
         title = $.n2s(opts.title);
         msg = $.n2s(opts.msg);
     }
-    
+
     toastr.options = {
         "closeButton": true,
         "debug": false, // true일 경우 console.log로 나옴
@@ -1624,10 +1628,10 @@ $.gfInitFormField = function(formOnly) {
 
     // 직원 필드 초기화
     $.gfInitStaff2ComboBox(formOnly);
-    
+
     // 딜러/대리점 필드 초기화
     $.gfInitAgent2ComboBox(formOnly);
-        
+
     // 날짜 입력란 달력피커 초기화
     $.gfInitDatePicker(formOnly);
 
@@ -1651,7 +1655,7 @@ $.gfInitFormField = function(formOnly) {
 
     // Chosen Select 초기화
     $.gfInitChosen(formOnly);
-    
+
 };
 
 /*
@@ -2156,42 +2160,42 @@ $.fn.gfInitProdItpGrp = function(opts) {
  * 컨텐츠 로딩용 공통 함수
  */
 $.gfLoadContents = function(opts) {
-    // 옵션 확인    
+    // 옵션 확인
     if($.isEmpty(opts) || $.isEmpty(opts.target)) return false;
-    
+
     var url      = opts.url;
     var _target  = opts.target; // selector
     var params   = $.isEmpty(opts.params) ? {} : opts.params;
-    
+
     $.gfAjax({
         type: "POST",
         url: url,
         data: params,
         async: true,
         beforeSendFunc: function(data, textStatus, jqXHR) {
-        },        
+        },
         doneFunc: function(data, textStatus, jqXHR) {
             _target.empty().append(data);
             // 콜백 함수 처리
             if(!$.isEmpty(opts.callback)) {
-                opts.callback(data, textStatus, jqXHR);                
+                opts.callback(data, textStatus, jqXHR);
             }
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
             _target.empty();
-            
-            // Http Error처리 
+
+            // Http Error처리
             $.gfHttpErrorPopup({
-                jqXHR : jqXHR, 
+                jqXHR : jqXHR,
                 textStatus : textStatus,
                 errorThrown : errorThrown,
                 loginRequired : true
             });
         },
         alwaysFunc: function(jqXHR, textStatus, errorThrown) {
-//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");  
+//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");
         },
-    });    
+    });
 };
 
 
@@ -2201,7 +2205,7 @@ $.gfLoadContents = function(opts) {
 $.gfSetSysMenu = function() {
     var _sideMenu = $("#side-menu"); // 메뉴가 들어갈 컨텐츠 자리
     _sideMenu.empty();
-    
+
     var _liMenuGrp,
         _aMenuGrp,
         _iMenuGrp,
@@ -2213,35 +2217,35 @@ $.gfSetSysMenu = function() {
         ;
 
     var tempUpMenuId = "";
-   
+
     $.each(GD_SYS_MENU, function (i, item) {
-        
+
         // 상위 메뉴가 다를 경우 세로운 메뉴그룹을 생성
         if(tempUpMenuId != item.upMenuId) {
-            // 첫번째 메뉴가 아닐 경우 
+            // 첫번째 메뉴가 아닐 경우
             if(i != 0) {
                 _liMenuGrp.append(_aMenuGrp)
                           .append(_ulMenuGrp);
-                _sideMenu.append(_liMenuGrp); 
+                _sideMenu.append(_liMenuGrp);
             }
-            
+
             _liMenuGrp        = $("<li/>");
             _aMenuGrp         = $("<a/>").attr("id", "upmenu_" + item.upMenuId);
             _iMenuGrp         = $("<i/>").addClass(item.upMenuCss);
             _spanMenuGrpNm    = $("<span/>").addClass("nav-label")
                                             .html(item.upMenuNm);
             _spanMenuGrpArrow = $("<span/>").addClass("fa arrow");
-            
+
             _aMenuGrp.append(_iMenuGrp)
                      .append(_spanMenuGrpNm)
                      .append(_spanMenuGrpArrow)
                      ;
-            
+
             _ulMenuGrp        = $("<ul/>").addClass("nav nav-second-level");
 
             tempUpMenuId      = item.upMenuId;
         }
-        
+
         _liMenuSub = $("<li/>").attr("type", "menu")
         _aMenuSub  = $("<a/>").attr("id", "menu_" + item.menuId)
                               .attr("menuInfo", item.upMenuId + "," + item.menuId)
@@ -2251,17 +2255,17 @@ $.gfSetSysMenu = function() {
                               .attr("param", "")
                               .html(item.menuNm)
                               ;
-                              
-        _liMenuSub.append(_aMenuSub);  
+
+        _liMenuSub.append(_aMenuSub);
         _ulMenuGrp.append(_liMenuSub);
 
 
-        // 마지막 메뉴일 경우 
+        // 마지막 메뉴일 경우
         if(i == GD_SYS_MENU.length -1) {
             _liMenuGrp.append(_aMenuGrp)
                       .append(_ulMenuGrp);
-                      
-            _sideMenu.append(_liMenuGrp);                      
+
+            _sideMenu.append(_liMenuGrp);
         }
     });
 
@@ -2271,7 +2275,7 @@ $.gfSetSysMenu = function() {
 
     // 메뉴 클릭 이벤트 초기화
     $.gfInitEventMenu();
-    
+
     // 최초 선택 화면 처리(쿠키 이용)
     $.gfLoadInitPage();
 };
@@ -2283,9 +2287,7 @@ $.gfAjaxSetup = function() {
 	// CSRF 세팅
 	$.ajaxSetup({
         headers: { "X-CSRFToken": $.cookie("csrftoken") }
-	});       
-	
-	console.log("csrftoken : [" + $.cookie("csrftoken") + "]");
+	});
 };
 
 /*
@@ -2293,7 +2295,7 @@ $.gfAjaxSetup = function() {
  */
 
 $.gfAjax = function(opts) {
-    
+
     // 옵션
     var type            = $.isEmpty(opts.type) ? "POST" : opts.type; // 사용할 HTTP 메서드
     var url             = opts.url; // 데이터 URL(필수)
@@ -2307,7 +2309,7 @@ $.gfAjax = function(opts) {
     var doneFunc        = opts.doneFunc;       // Ajax 실행성공 시 처리할 함수
     var failFunc        = opts.failFunc;       // Ajax 실패 시 처리할 함수
     var alwaysFunc      = opts.alwaysFunc;     // Ajax 항상실행 처리할 함수
-        
+
     try {
         // http://api.jquery.com/jquery.ajax/ 참조
         $.ajax({
@@ -2323,7 +2325,7 @@ $.gfAjax = function(opts) {
             },
             success: function(data, cbFunc) {
                 if(!$.isEmpty(successFunc)) successFunc(data);
-            }            
+            }
         }).done(function(data, textStatus, jqXHR) { // 성공할 경우
             if(!$.isEmpty(doneFunc)) doneFunc(data, textStatus, jqXHR);
         }).fail(function(jqXHR, textStatus, errorThrown) { // 실패할 경우
@@ -2331,8 +2333,8 @@ $.gfAjax = function(opts) {
         }).always(function(jqXHR, textStatus, errorThrown) { // 항상 실행
             if(!$.isEmpty(alwaysFunc)) alwaysFunc(jqXHR, textStatus, errorThrown);
         });
-    
-    } catch(err) {    
+
+    } catch(err) {
         console.log("gfAjax Occured Exception :");
         console.log(err);
     }
@@ -2340,30 +2342,30 @@ $.gfAjax = function(opts) {
 
 
 /*
- * 메인 화면의 오른쪽 환경 설정 버튼 
- */ 
+ * 메인 화면의 오른쪽 환경 설정 버튼
+ */
 $.gfSetConfigBtn = function() {
     // Append config box / Only for demo purpose
     // Uncomment on server mode to enable XHR calls
     $.get("/static/js/skin/skin-config.html", function (data) {
         if (!$('body').hasClass('no-skin-config'))
             $('body').append(data);
-    });	
+    });
 };
 
 /*
  * Http Error 처리
  */
 $.gfHttpErrorPopup = function(opts) {
-    
+
     if($.isEmpty(opts) || $.isEmpty(opts.jqXHR)) return false;
-    
+
     var jqXHR = opts.jqXHR;
     var textStatus = opts.textStatus;
     var errorThrown = opts.errorThrown;
     var loginRequired = $.isEmpty(opts.loginRequired) ? false : opts.loginRequired;
-    
-    
+
+
     if(!$.isEmpty(jqXHR.status) && jqXHR.status != 200) {
         if(loginRequired && jqXHR.status == 401) { // Login Check 401일 경우 로그인 팝업
             $.gfCommonPopUp({
@@ -2374,16 +2376,16 @@ $.gfHttpErrorPopup = function(opts) {
             var status = "";
             var title = "";
             var message = "";
-            
+
             $.each(GD_COM_HTTP_STATUS, function(i, item) {
                 if(item.status == jqXHR.status) {
                     status = item.status;
                     title = item.title;
                     message = item.message;
-                    return;    
+                    return;
                 }
             });
-            
+
             $.gfCommonPopUp({
                 popUrl: "/common/error_popup",
                 width: "300",
