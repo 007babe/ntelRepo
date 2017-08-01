@@ -1,31 +1,9 @@
 {#################################}
+{% extends "extends/site.html" %}
 {% load staticfiles %}
 {#################################}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko"  lang="ko">
-<head>
-    <!-- Meta Start -->
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="_xsrf" content="{{.xsrf_token}}" />
-    <!-- Meta End -->
-    
-    <!-- Favicon Start -->
-    <link rel="shortcut icon" href="{% static "favicon.ico" %}" type="image/x-icon">
-    <link rel="icon" href="{% static "favicon.ico" %}" type="image/x-icon">    
-    <!-- Favicon End -->
-    
-    <!-- Title Start -->
-    <title>@엔텔... 모바일의 패러다임을 개척하다.</title>
-    <!-- Title End -->
-
-    <!-- CSS Link Start -->
-    <link type="text/css" rel="stylesheet" href="{% static "css/style.css" %}"/>
-    <link type="text/css" rel="stylesheet" href="{% static "css/custom.css" %}"/>
-    <!-- CSS Link End -->
-
-</head>
-<body style="background-color: white;">
+{% block body_attribute %}style="background-color: #ffffff;"{% endblock body_attribute %}
+{% block body_content %}
 <div style="width: 100%; text-align: center;">
     <img align="center" src="{% static "img/main_image.jpg" %}"/>
     <div style="width: 100%; text-align: center;">
@@ -37,5 +15,13 @@
         </span>
     </div>
 </div>
-</body>
-</html>
+{% endblock body_content%}
+
+{% block body_script_local %}
+<script>
+$(document).ready(function() {
+	$("body").css("background-color", "#ffffff");
+});
+</script>
+{% endblock body_script_local %}
+

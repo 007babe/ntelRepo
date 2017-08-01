@@ -6,8 +6,8 @@ urlpatterns = [
     # Json Data
     ###########################
     # 공통코드 Json데이터 획득
-    url(r'^json/comcd$', views.getJsonComCd, name='json_com_cd'),
-    url(r'^json/httpstatus', views.getJsonComHttpStatus, name='json_com_http_status'),
+    url(r'^json/com_cd$', views.getJsonComCd, name='json__comcd'),
+    url(r'^json/com_http_status', views.getJsonComHttpStatus, name='json__com_http_status'),
     
     ###########################
     # Rendering

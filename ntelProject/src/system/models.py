@@ -30,10 +30,11 @@ class SysCompany(models.Model):
     """엔텔 사용 회사 정보
     고유발생 Key로 PK 설정
     """
-    companyId = models.CharField(db_column='company_id', primary_key=True, max_length=8, blank=False, default=None, verbose_name='회사ID') # 회사ID
+    companyId = models.CharField(db_column='company_id', primary_key=True, max_length=10, blank=False, default=None, verbose_name='회사ID') # 회사ID
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=True, verbose_name='회사명') # 회사명
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
+    isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=True, verbose_name='실회사구분')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
     bizLicNo2 = models.CharField(db_column='biz_lic_no2', max_length=2, null=True, blank=True, verbose_name='사업자번호2')
     bizLicNo3 = models.CharField(db_column='biz_lic_no3', max_length=5, null=True, blank=True, verbose_name='사업자번호3')
@@ -66,7 +67,7 @@ class SysShop(models.Model):
     """엔텔 사용 매장 정보
     고유발생 Key로 PK 설정
     """
-    shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=8, blank=False, default=None, verbose_name='매장ID')
+    shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=12, blank=False, default=None, verbose_name='매장ID')
     companyId = models.ForeignKey('system.SysCompany', db_column='company_id', blank=True, null=True, default=None, related_name='r_%(app_label)s_%(class)s_company_id')
     shopNm = models.CharField(db_column='shop_nm', max_length=100, blank=True, verbose_name='매장명')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화1')
@@ -392,3 +393,22 @@ class SysAppReq(models.Model):
 
     def __str__(self):
         return self.appId
+
+
+class SysSeq(models.Model):
+    """시스템 코드 or Sequence 용
+    """
+    seqCd = models.CharField(primary_key=True, db_column='seq_cd', max_length=6, verbose_name='SEQ코드')
+    seq = models.IntegerField(db_column='seq', null=False, blank=False, default=0, verbose_name='순차번호')
+    seqDesc = models.CharField(db_column='seq_desc', null=True, blank=True, default=None, max_length=100,  verbose_name='SEQ 설명')
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    class Meta:
+        db_table = "sys_seq"
+
+    def __str__(self):
+        return self.id

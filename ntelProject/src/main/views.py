@@ -6,7 +6,7 @@ from django.template.exceptions import TemplateDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
-from common.utils.ajax import login_required_ajax
+from utils.ajax import login_required_ajax
 from system.models import SysMenu
 
 
@@ -59,4 +59,5 @@ def menuCV(request):
             }
         )
     except TemplateDoesNotExist:  # Template이 존재하지 않을 경우
+        print("menuCV :: 템플릿이 존재하지 않음 [%s]" % sysMenuInfo.menuTmp)
         raise Http404

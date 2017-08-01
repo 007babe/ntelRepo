@@ -8,9 +8,13 @@ from django.views.generic.edit import CreateView
 
 # Create your views here.
 class IndexView(TemplateView):
+    '''
+    엔텔 Home Index
+    '''
     template_name = 'index.html'
 
 
+'''
 class HomeView(TemplateView):
     template_name = 'home.html'
 
@@ -31,3 +35,4 @@ class UserCreateDoneView(TemplateView):
     """  사용자 추가 완료
     """
     template_name = 'registration/register_done.html'
+'''

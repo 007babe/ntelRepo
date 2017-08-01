@@ -1,5 +1,5 @@
 ﻿{#################################}
-{% extends "base/global.html" %}
+{% extends "extends/global.html" %}
 {% load staticfiles %}
 {#################################}
 

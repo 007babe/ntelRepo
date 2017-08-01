@@ -170,7 +170,7 @@ $.gfLoadContentsData = function(opts) {
     var _maincontents = $("#mainContents");
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
-
+console.log("gfLoadContentsData menuId : [" + menuId + "]");
     params = {
         'menuId' : menuId
     };
@@ -968,7 +968,7 @@ $.fn.gfSetUserId = function() {
     });
 
     // Blur Event
-    _item.on("blur", function(e, params) {
+    _item.on("change", function(e, params) {
         var _this = $(this);
 
         // 6자 이하일 경우

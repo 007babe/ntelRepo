@@ -9,7 +9,8 @@ class ComCd(models.Model):
     """ 공통코드 ModelClass
     """
     comCd = models.CharField(primary_key=True, db_column='com_cd', max_length=8, verbose_name='공통코드')
-    grpCd = models.CharField(db_column='grp_cd', max_length=5, verbose_name='그룹코드')
+    grpCd = models.CharField(db_column='grp_cd', null=False, max_length=5, verbose_name='그룹코드')
+    srtCd = models.CharField(db_column='srt_cd', max_length=3, null=True, blank=True, default=None, verbose_name='단축코드')
     comNm = models.CharField(db_column='com_nm', max_length=100, null=False, blank=False, default=None, verbose_name='코드명')
     comDesc = models.CharField(db_column='com_desc', max_length=200, null=True, blank=True, verbose_name='코드설명')
     ordSeq = models.IntegerField(db_column='ord_seq', default=1, verbose_name='순서')

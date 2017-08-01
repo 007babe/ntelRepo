@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from django.shortcuts import render
-from common.utils.ajax import login_required_ajax
+from utils.ajax import login_required_ajax
 
 
 @login_required_ajax

@@ -6,8 +6,9 @@ from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
 
-from common.utils.ajax import login_required_ajax
-from common.utils.json import jsonDefault
+from utils.ajax import login_required_ajax
+from utils.json import jsonDefault
+
 from system.models import SysMenu, SysUser, SysCompany, SysMsg
 
 

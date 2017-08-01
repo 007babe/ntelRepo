@@ -6,8 +6,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from common.models import ComCd, ComHttpStatus
-from common.utils.ajax import login_required_ajax
-from common.utils.json import jsonDefault
+from utils.json import jsonDefault
+from utils.ajax import login_required_ajax
 
 
 def errorPopupCV(request):
