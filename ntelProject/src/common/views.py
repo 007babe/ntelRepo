@@ -6,8 +6,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from common.models import ComCd, ComHttpStatus
-from utils.json import jsonDefault
 from utils.ajax import login_required_ajax
+from utils.json import jsonDefault
+from utils.json import makeJsonResult
 
 
 def errorPopupCV(request):
@@ -36,7 +37,8 @@ def getJsonComCd(request):
         'grpOpt',
         'useYn',
     )
-    jsonData = json.dumps(list(comCds), default=jsonDefault)
+
+    jsonData = json.dumps(makeJsonResult(resultData=list(comCds)), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")
 
 
@@ -52,5 +54,5 @@ def getJsonComHttpStatus(request):
         'message',
         'useYn',
     )
-    jsonData = json.dumps(list(comHttpStatuses), default=jsonDefault)
+    jsonData = json.dumps(makeJsonResult(resultData=list(comHttpStatuses)), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")

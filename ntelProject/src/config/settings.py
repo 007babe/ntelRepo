@@ -213,3 +213,22 @@ SESSION_COOKIE_AGE = 60 * 1
 
 # Customized User
 AUTH_USER_MODEL = 'system.SysUser'
+
+# Email 관련
+
+# email Host
+EMAIL_HOST = 'localhost'
+# Port for sending email.
+EMAIL_PORT = 25
+# HOST User
+#EMAIL_HOST_USER = 'hisyfabe'
+# HOST Password
+#EMAIL_HOST_PASSWORD = 'grhksxo73!'
+
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+EMAIL_TIMEOUT = None
+
+

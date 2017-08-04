@@ -1,3 +1,6 @@
+{ "resultCode" : "OK",
+  "resultMessage" : "홈상품 정상",
+  "resultData" : 
 [
 	{ "value" : "HI0001", "text" : "스마트 다이렉트 100M[100Mbps]", "dValue" : "스마트 다이렉트 100M", "prodCd" : "HI0001", "telecomCd" : "G0002SKT", "prodGb" : "I", "prodSpec" : "100Mbps", "prodPrice36" : "22,000", "prodNm" : "스마트 다이렉트 100M", "prodDesc" : "", "useYn" : "Y" },
 	{ "value" : "HI0002", "text" : "Giga 라이트 500M[500Mbps]", "dValue" : "Giga 라이트 500M", "prodCd" : "HI0002", "telecomCd" : "G0002SKT", "prodGb" : "I", "prodSpec" : "500Mbps", "prodPrice36" : "33,000", "prodNm" : "Giga 라이트 500M", "prodDesc" : "", "useYn" : "Y" },
@@ -38,3 +41,4 @@
 	{ "value" : "HI0037", "text" : "망내 무한100", "dValue" : "망내 무한100", "prodCd" : "HI0037", "telecomCd" : "G0002LGT", "prodGb" : "P", "prodSpec" : "", "prodPrice36" : "4,000", "prodNm" : "망내 무한100", "prodDesc" : "", "useYn" : "Y" },
 	{ "value" : "HI0038", "text" : "유무선 무한9000", "dValue" : "유무선 무한9000", "prodCd" : "HI0038", "telecomCd" : "G0002LGT", "prodGb" : "P", "prodSpec" : "", "prodPrice36" : "27,000", "prodNm" : "유무선 무한9000", "prodDesc" : "", "useYn" : "Y" }
 ]
+}

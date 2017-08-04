@@ -1,3 +1,6 @@
+{ "resultCode" : "OK",
+  "resultMessage" : "거래처데이터 정상",
+  "resultData" : 
 [
 	{ "value" : "SA000001", "text" : "SK-동행", "dValue" : "SK-동행", "agentCd" : "SA000001", "agentNm" : "SK-동행", "telecomCd" : "SKT", "useYn" : "Y", "sysYn" : "Y" },
 	{ "value" : "SA000002", "text" : "SK-상상", "dValue" : "SK-상상", "agentCd" : "SA000002", "agentNm" : "SK-상상", "telecomCd" : "SKT", "useYn" : "Y", "sysYn" : "Y" },
@@ -22,3 +25,4 @@
 	{ "value" : "TA000021", "text" : "딜러B-미사용", "dValue" : "딜러B-미사용", "agentCd" : "TA000021", "agentNm" : "딜러B-미사용", "telecomCd" : "SKT,KT,LGT", "useYn" : "Y", "sysYn" : "N" },
 	{ "value" : "SA000014", "text" : "딜러A-사용", "dValue" : "딜러A-사용", "agentCd" : "SA000014", "agentNm" : "딜러A-사용", "telecomCd" : "KT,LGT", "useYn" : "Y", "sysYn" : "N" }
 ]
+}

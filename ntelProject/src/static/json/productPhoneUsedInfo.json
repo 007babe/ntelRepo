@@ -1,3 +1,6 @@
+{ "resultCode" : "OK",
+  "resultMessage" : "중고제품재고 정상",
+  "resultData" : 
 [
 	{ "value" : "U00000000001", "text" : "SM-A310S[김진태]", "dValue" : "SM-A310S", "prodCd" : "U00000000001", "telecomCd" : "G0002SKT", "netType" : "4G", "phoneType" : "P", "serialNo" : "98172893", "color" : "검정", "prodInType" : "직매", "prevPhoneOwner" : "김진태", "prodInDt" : "2017-04-23", "prodInPrice" : "250,000", "modelCd" : "SM-A310S" },
 	{ "value" : "U00000000002", "text" : "SM-G720N0[노승태]", "dValue" : "SM-G720N0", "prodCd" : "U00000000002", "telecomCd" : "G0002SKT", "netType" : "4G", "phoneType" : "P", "serialNo" : "37820234", "color" : "그레이", "prodInType" : "교환매입", "prevPhoneOwner" : "노승태", "prodInDt" : "2017-04-11", "prodInPrice" : "120,000", "modelCd" : "SM-G720N0" },
@@ -11,3 +14,4 @@
 	{ "value" : "U00000000010", "text" : "SM-G920L 32G[박근혜]", "dValue" : "SM-G920L 32G", "prodCd" : "U00000000010", "telecomCd" : "G0002LGT", "netType" : "4G", "phoneType" : "P", "serialNo" : "34824890", "color" : "검정", "prodInType" : "교환매입", "prevPhoneOwner" : "박근혜", "prodInDt" : "2017-03-16", "prodInPrice" : "78,500", "modelCd" : "SM-G920L 32G" },
 	{ "value" : "U00000000011", "text" : "LG-F580L 32G[우병우]", "dValue" : "LG-F580L 32G", "prodCd" : "U00000000011", "telecomCd" : "G0002LGT", "netType" : "4G", "phoneType" : "P", "serialNo" : "28340192", "color" : "스카이블루", "prodInType" : "직매", "prevPhoneOwner" : "우병우", "prodInDt" : "2017-03-19", "prodInPrice" : "48,200", "modelCd" : "LG-F580L 32G" }
 ]
+}

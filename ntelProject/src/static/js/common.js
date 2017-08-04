@@ -89,7 +89,7 @@ $.gfGetGlobalData = function(opts) {
         },
         doneFunc: function(data, textStatus, jqXHR) {
             try {
-                eval(key + " = $.parseJSON(JSON.stringify(data));");
+                eval(key + " = $.parseJSON(JSON.stringify(data.resultData));");
                 if(!$.isEmpty(cbFunc)) {
                     eval(cbFunc)
                 }
@@ -170,7 +170,7 @@ $.gfLoadContentsData = function(opts) {
     var _maincontents = $("#mainContents");
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
-console.log("gfLoadContentsData menuId : [" + menuId + "]");
+
     params = {
         'menuId' : menuId
     };
@@ -953,12 +953,13 @@ $.fn.gfSetUserId = function() {
     var _item = this;
     var _itemNext = $("#" + _item.attr("tabNext"));
     var _noti = $("#" + _item.attr("noti")); // 알림필드
+    var _idChk = $("#idChk"); // ID Check Value
 
     // Key Up Event
-    _item.on("keyup", function(e, params) {
+    _item.on("input", function(e, params) {
         var _this = $(this);
 
-        // 숫자만 입력받게 하기
+        // 숫자 영문자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9a-zA-Z]/g, ""));
 
         if(_this.val().length >= 20) { // 20자 이상일 경우 처리
@@ -967,26 +968,27 @@ $.fn.gfSetUserId = function() {
         }
     });
 
-    // Blur Event
+    // Change Event
     _item.on("change", function(e, params) {
         var _this = $(this);
-
-        // 6자 이하일 경우
-        if(_this.val().length == 0) {
+        
+        if(!$.isEmpty(_idChk)) _idChk.val("N"); // 값이 변했을 경우 idChk값은 "N"
+ 
+        expr = /^[a-zA-Z]+[a-zA-Z0-9]{5,19}$/g
+        
+        // 특수문자 포함
+        //var aa = '/^.*(?=^.{6,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/';​        
+        
+        if(!expr.test(_this.val())) {
             if(!$.isEmpty(_noti)){
-                _noti.html("* 아이디 및 비밀번호는 6~20자 사이의 영문/숫자로 입력해주세요.");
-                _noti.css("color", "#858585");
-            }
-        } else if(_this.val().length < 6) {
-            if(!$.isEmpty(_noti)){
-                _noti.html("아이디는 6자리 이상 입력하세요.");
+                _noti.html("* 아이디는 6~20자 사이의 영문으로 시작하는 영문/숫자 조합으로 입력해주세요.");
                 _noti.css("color", "#f13221");
-                _this.focus();
             }
         } else {
             if(!$.isEmpty(_noti)){
                 _noti.html("");
                 _noti.css("color", "#1ab394");
+                if(!$.isEmpty(_idChk)) _idChk.val("Y"); // 정상적인 값을 경우 idChk값은 "Y"
             }
         }
     });
@@ -2220,7 +2222,7 @@ $.gfSetSysMenu = function() {
 
     $.each(GD_SYS_MENU, function (i, item) {
 
-        // 상위 메뉴가 다를 경우 세로운 메뉴그룹을 생성
+        // 상위 메뉴가 다를 경우 새로운 메뉴그룹을 생성
         if(tempUpMenuId != item.upMenuId) {
             // 첫번째 메뉴가 아닐 경우
             if(i != 0) {
@@ -2293,7 +2295,6 @@ $.gfAjaxSetup = function() {
 /*
  * 공통 Ajax함수
  */
-
 $.gfAjax = function(opts) {
 
     // 옵션
@@ -2324,6 +2325,7 @@ $.gfAjax = function(opts) {
                 if(!$.isEmpty(beforeSendFunc)) beforeSendFunc(jqXHR, settings);
             },
             success: function(data, cbFunc) {
+                if(dataType.toLowerCase() == "json") $.gfAjaxSetResult(data);
                 if(!$.isEmpty(successFunc)) successFunc(data);
             }
         }).done(function(data, textStatus, jqXHR) { // 성공할 경우
@@ -2399,6 +2401,38 @@ $.gfHttpErrorPopup = function(opts) {
     }
 };
 
+/*
+ * Ajax 호출 후 결과 처리
+ */ 
+$.gfAjaxSetResult = function(data) {
+	var resultCode = data["resultCode"];
+	var resultMessage = data["resultMessage"];
+	var errorItem = data["errorItem"];
+
+    if(resultCode != 'OK') {
+
+        var _errorItem = $.isEmpty(errorItem) ? null : $("#" + errorItem);
+        var itemLabel = "";
+        
+        if(!$.isEmpty(_errorItem)) {
+            itemLabel = _errorItem.attr("label");    
+            if(!$.isEmpty(itemLabel)) resultMessage = itemLabel + "은(는)" + resultMessage;
+            _errorItem.focus();
+        }
+
+		$.gfNotiMsg({
+			msgCd : "",
+			msgType : "warning",
+		    title : "확인",
+		    msg : resultMessage,
+		    msgFrom : "S"
+		});
+		
+		return false
+    }
+
+    return true
+};
 
 
 /*

@@ -1,3 +1,6 @@
+{ "resultCode" : "OK",
+  "resultMessage" : "데이터 정상",
+  "resultData" : 
 [
 	{ "value" : "P000001", "text" : "T시그니처 Classic", "dValue" : "T시그니처 Classic", "planCd" : "P000001",  "telecomCd" : "SKT", "netType" : "4G", "phoneType" : "P", "planGrp" : "성인요금제", "telecomPlanType" : "LTE 폰", "telecomPlanGrp" : "T시그니처", "planNm" : "T시그니처 Classic" },
 	{ "value" : "P000002", "text" : "T시그니처 Master", "dValue" : "T시그니처 Master", "planCd" : "P000002",  "telecomCd" : "SKT", "netType" : "4G", "phoneType" : "P", "planGrp" : "성인요금제", "telecomPlanType" : "LTE 폰", "telecomPlanGrp" : "T시그니처", "planNm" : "T시그니처 Master" },
@@ -344,3 +347,4 @@
 	{ "value" : "P000343", "text" : "LTE 빔/액션캠 10GB", "dValue" : "LTE 빔/액션캠 10GB", "planCd" : "P000343",  "telecomCd" : "LGT", "netType" : "4G", "phoneType" : "T", "planGrp" : "태블릿요금제", "telecomPlanType" : "태블릿/스마트기기", "telecomPlanGrp" : "빔/액션캠 요금제", "planNm" : "LTE 빔/액션캠 10GB" },
 	{ "value" : "P000344", "text" : "LTE 빔/액션캠 20GB", "dValue" : "LTE 빔/액션캠 20GB", "planCd" : "P000344",  "telecomCd" : "LGT", "netType" : "4G", "phoneType" : "T", "planGrp" : "태블릿요금제", "telecomPlanType" : "태블릿/스마트기기", "telecomPlanGrp" : "빔/액션캠 요금제", "planNm" : "LTE 빔/액션캠 20GB" }
 ]
+}

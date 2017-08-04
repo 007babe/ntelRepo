@@ -1,3 +1,6 @@
+{ "resultCode" : "OK",
+  "resultMessage" : "모바일상품재고 정상",
+  "resultData" : 
 [
     { "value" : "P00000000001", "text" : "[0739831]SM-G930S 32G[SK-동행]", "dValue" : "SM-G930S 32G", "prodCd" : "P00000000001", "telecomCd" : "G0002SKT", "netType" : "4G", "phoneType" : "P", "serialNo" : "0739831", "color" : "검정", "agentCd" : "SA000001", "agentNm" : "SK-동행", "prodInDt" : "2017-03-15", "prodInPrice" : "836,000", "modelCd" : "SM-G930S 32G" },
     { "value" : "P00000000002", "text" : "[0843702]SM-G930S 32G[SK-상상]", "dValue" : "SM-G930S 32G", "prodCd" : "P00000000002", "telecomCd" : "G0002SKT", "netType" : "4G", "phoneType" : "P", "serialNo" : "0843702", "color" : "실버", "agentCd" : "SA000002", "agentNm" : "SK-상상", "prodInDt" : "2017-03-10", "prodInPrice" : "836,000", "modelCd" : "SM-G930S 32G" },
@@ -9,3 +12,4 @@
     { "value" : "P00000000008", "text" : "[258150]SM-G920L 32G[LG-수인]", "dValue" : "SM-G920L 32G", "prodCd" : "P00000000008", "telecomCd" : "G0002LGT", "netType" : "4G", "phoneType" : "P", "serialNo" : "258150", "color" : "골드플래티넘", "agentCd" : "TA000012", "agentNm" : "LG-수인", "prodInDt" : "2017-03-16", "prodInPrice" : "779,900", "modelCd" : "SM-G920L 32G" },
     { "value" : "P00000000009", "text" : "[80944]LG-F580L 32G[LG-대구]", "dValue" : "LG-F580L 32G", "prodCd" : "P00000000009", "telecomCd" : "G0002LGT", "netType" : "4G", "phoneType" : "P", "serialNo" : "80944", "color" : "블루블랙", "agentCd" : "SA000013", "agentNm" : "LG-대구", "prodInDt" : "2017-03-19", "prodInPrice" : "242,000", "modelCd" : "LG-F580L 32G" }
 ]
+}

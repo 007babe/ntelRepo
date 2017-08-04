@@ -1,3 +1,6 @@
+{ "resultCode" : "OK",
+  "resultMessage" : "유심재고 정상",
+  "resultData" : 
 [
 	{ "value" : "U00000000001", "text" : "[NFCD-C03][8982-0514-0361-1404-778F]", "dValue" : "NFCD-C03", "prodCd" : "U00000000001", "telecomCd" : "G0002SKT", "usimType" : "나노", "usimModelCd" : "NFCD-C03", "serialNo" : "8982-0514-0361-1404-778F", "agentCd" : "TA000004", "agentNm" : "SK-제이비", "prodInDt" : "2017-03-15", "prodInPrice" : "8,800", "payType" : "A" },
 	{ "value" : "U00000000002", "text" : "[NFCD-G03][8982-0514-0240-7361-978F]", "dValue" : "NFCD-G03", "prodCd" : "U00000000002", "telecomCd" : "G0002SKT", "usimType" : "나노", "usimModelCd" : "NFCD-G03", "serialNo" : "8982-0514-0240-7361-978F", "agentCd" : "TA000004", "agentNm" : "SK-제이비", "prodInDt" : "2017-03-10", "prodInPrice" : "8,800", "payType" : "B" },
@@ -14,3 +17,4 @@
 	{ "value" : "U00000000006", "text" : "[NFCN-U04][8982-0515-0840-5644-718F]", "dValue" : "NFCN-U04", "prodCd" : "U00000000006", "telecomCd" : "G0002SKT", "usimType" : "일반", "usimModelCd" : "NFCN-U04", "serialNo" : "8982-0515-0840-5644-718F", "agentCd" : "TA000004", "agentNm" : "SK-제이비", "prodInDt" : "2015-07-02", "prodInPrice" : "8,800", "payType" : "A" },
 	{ "value" : "U00000000009", "text" : "[KE-L1655][8982-3003-1500-7772-288F]", "dValue" : "KE-L1655", "prodCd" : "U00000000009", "telecomCd" : "G0002KT", "usimType" : "일반", "usimModelCd" : "KE-L1655", "serialNo" : "8982-3003-1500-7772-288F", "agentCd" : "SA000009", "agentNm" : "KT-씨엘", "prodInDt" : "2015-07-02", "prodInPrice" : "8,800", "payType" : "A" }
 ]
+}

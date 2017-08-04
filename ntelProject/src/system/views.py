@@ -6,10 +6,10 @@ from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
 
+from system.models import SysMenu, SysUser, SysCompany, SysMsg
 from utils.ajax import login_required_ajax
 from utils.json import jsonDefault
-
-from system.models import SysMenu, SysUser, SysCompany, SysMsg
+from utils.json import makeJsonResult
 
 
 @login_required_ajax
@@ -50,7 +50,7 @@ def getJsonSysMenu(request):
         'topMenuNm',
     )
 
-    jsonData = json.dumps(list(sysMenus), default=jsonDefault)
+    jsonData = json.dumps(makeJsonResult(resultData=list(sysMenus)), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")
 
 
@@ -73,7 +73,7 @@ def getJsonSysMsg(request):
         'useYn',
     )
 
-    jsonData = json.dumps(list(sysMsgs), default=jsonDefault)
+    jsonData = json.dumps(makeJsonResult(resultData=list(sysMsgs)), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")
 
 
@@ -130,8 +130,7 @@ def getJsonSysCompany(request):
     print(sysCompanys)
     print(list(sysCompanys))
 
-    jsonData = json.dumps(list(sysCompanys), default=jsonDefault)
-#    jsonData = json.dumps(sysCompanys)
+    jsonData = json.dumps(makeJsonResult(resultData=list(sysCompanys)), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")
 
 
@@ -150,6 +149,5 @@ def getJsonShopStaff(request):
         qry
     ).values()
 
-    jsonData = json.dumps(list(shopStaffs), default=jsonDefault)
+    jsonData = json.dumps(makeJsonResult(resultData=list(shopStaffs)), default=jsonDefault)
     return HttpResponse(jsonData, content_type="application/json")
-
