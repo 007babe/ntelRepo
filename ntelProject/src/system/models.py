@@ -394,7 +394,7 @@ class SysAppReq(models.Model):
         unique_together = (("userId"),)
 
     def __str__(self):
-        return self.appId
+        return self.reqId
 
 
 class SysSeq(models.Model):
