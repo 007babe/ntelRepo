@@ -1,0 +1,46 @@
+{#################################}
+{% load staticfiles %}
+{#################################}
+<div id="divModalDialog" class="modal-dialog">
+    <div class="modal-content">
+        <!-- header Start -->
+        <div class="modal-header p-header">
+            {% block popHeadClose %}
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            {% endblock popHeadClose %}
+            <!-- header title Start -->
+            <h4 class="modal-title p-title">
+            {% block popHeadTitle %}
+            {% endblock popHeadTitle %}
+            </h4>
+            <!-- header title End -->
+        </div>
+        <!-- header End -->
+        <!-- body Start -->
+        <div class="modal-body p-body">
+            <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+            {% block popBodyContents %}
+            {% endblock popBodyContents %}
+            </div>
+        </div>
+        <!-- body End -->
+        <!-- Footer Start -->
+        <div class="modal-footer p-footer">
+            {% block popFooter %}
+            {% endblock popFooter %}
+        </div>
+        <!-- Footer End -->
+    </div>
+</div>
+{% block javascriptInc %}
+{% endblock javascriptInc %}
+
+<!-- Javascript Local Code Start -->
+<script>
+{% block javascriptLoc %}
+$(document).ready(function() {
+
+});
+{% endblock javascriptLoc %}
+</script>
+<!-- Javascript Local Code End -->

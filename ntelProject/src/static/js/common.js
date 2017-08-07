@@ -971,14 +971,14 @@ $.fn.gfSetUserId = function() {
     // Change Event
     _item.on("change", function(e, params) {
         var _this = $(this);
-        
+
         if(!$.isEmpty(_idChk)) _idChk.val("N"); // 값이 변했을 경우 idChk값은 "N"
- 
+
         expr = /^[a-zA-Z]+[a-zA-Z0-9]{5,19}$/g
-        
+
         // 특수문자 포함
-        //var aa = '/^.*(?=^.{6,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/';​        
-        
+        //var aa = '/^.*(?=^.{6,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/';​
+
         if(!expr.test(_this.val())) {
             if(!$.isEmpty(_noti)){
                 _noti.html("* 아이디는 6~20자 사이의 영문으로 시작하는 영문/숫자 조합으로 입력해주세요.");
@@ -1502,7 +1502,7 @@ $.gfNotiMsg = function(opts) {
             title = $.n2s(opts.title);
             msg = $.n2s(opts.msg);
             focusId = $.n2s(opts.focusId);
-            msgFrom   = $.isEmpty(opts.msgFrom) ? "G" : opts.msgFrom;  
+            msgFrom   = $.isEmpty(opts.msgFrom) ? "G" : opts.msgFrom;
         } else {
             return false;
         }
@@ -1513,7 +1513,7 @@ $.gfNotiMsg = function(opts) {
         var gdSysmsgF = $.grep(GD_SYS_MSG, function(el, inx){
             return el.msgCd == msgCd;
         });
-    
+
         if(gdSysmsgF.length != 1) {
             console.log("System Message Code is Not Exist or Duplicated!!! Message Count [" + gdSysmsgF.length + "]");
             return false;
@@ -1529,7 +1529,7 @@ $.gfNotiMsg = function(opts) {
                 msg = $.isEmpty(msg) ? gdSysmsgF[0].msg : msg;
             }
         }
-    
+
         // focus 되어야할 ID가 존재하는 경우
         if(!$.isEmpty(focusId)) {
             _focusTarget = $("#" + focusId);
@@ -2385,7 +2385,10 @@ $.gfHttpErrorPopup = function(opts) {
         if(loginRequired && jqXHR.status == 401) { // Login Check 401일 경우 로그인 팝업
             $.gfCommonPopUp({
                 popUrl: "/logins/loginpop",
-                width: "500"
+                width: "500",
+                attrs: {
+                    "data-keyboard": "false"
+                }
             });
         } else {
             var status = "";
@@ -2416,7 +2419,7 @@ $.gfHttpErrorPopup = function(opts) {
 
 /*
  * Ajax 호출 후 결과 처리
- */ 
+ */
 $.gfAjaxSetResult = function(data) {
 	var resultCode = data["resultCode"];
 	var resultMessage = data["resultMessage"];
@@ -2426,9 +2429,9 @@ $.gfAjaxSetResult = function(data) {
 
         var _errorItem = $.isEmpty(errorItem) ? null : $("#" + errorItem);
         var itemLabel = "";
-        
+
         if(!$.isEmpty(_errorItem)) {
-            itemLabel = _errorItem.attr("label");    
+            itemLabel = _errorItem.attr("label");
             if(!$.isEmpty(itemLabel)) resultMessage = itemLabel + "은(는)" + resultMessage;
             _errorItem.focus();
         }
@@ -2440,7 +2443,7 @@ $.gfAjaxSetResult = function(data) {
 		    msg : resultMessage,
 		    msgFrom : "S"
 		});
-		
+
 		return false
     }
 

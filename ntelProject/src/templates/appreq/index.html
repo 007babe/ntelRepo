@@ -1,0 +1,335 @@
+{#################################}
+{% extends "extends/site.html" %}
+{% load staticfiles %}
+{#################################}
+{% block body_attribute %}class="gray-bg"{% endblock body_attribute %}
+{% block body_content %}
+    <form id="frmAppreq">
+    <input type="hidden" id="policyId" name="policyId" value="{{ sysPolicy.id }}">
+
+    <div id="divAppreq" class="appreqColumns animated fadeInDown">
+        <div class="spinWrap">
+            <div class="ibox-content">
+                <div class="ac">
+                    <h2 id="headTitle" class="mt5">엔텔이용신청</h2>
+                </div>
+                <div class="al">
+                    <h3 id="headTitle" class="mt5">
+                        <i class="fa fa-edit"></i> 이용약관
+                    </h2>
+                </div>
+                <div id="divAccessTerms" style="margin-bottom:10px; height:100px;border:1px solid #999; background:#fff; overflow:auto;padding:10px">
+                    {{ sysPolicy.accessTerms|safe }}
+                </div>
+                <div class="ac" style="margin-bottom: 10px;">
+                    <label class="">
+                        <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
+                            <input id="confirmAccessTerms" name="confirmAccessTerms" value="confirmAccessTerms" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="이용약관">
+                            <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                        </div>
+                        위 이용약관에 동의합니다.
+                    </label>
+                </div>
+                <div class="al">
+                    <h3 id="headTitle" class="mt5">
+                        <i class="fa fa-key"></i> 개인정보취급방침
+                    </h2>
+                </div>
+                <div id="divPrivacyPolicy" style="margin-bottom:10px; height:100px;border:1px solid #999; background:#fff; overflow:auto;padding:10px">
+                    {{ sysPolicy.privacyPolicy|safe }}
+                </div>
+                <div class="ac" style="margin-bottom: 10px;">
+                    <label class="">
+                        <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
+                            <input id="confirmPrivacyPolicy" name="confirmPrivacyPolicy" value="confirmPrivacyPolicy" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="개인정보취급방침">
+                            <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                        </div>
+                        위 개인정보취급방침에 동의합니다.
+                    </label>
+                </div>
+    
+                <div class="al">
+                    <h3 id="headTitle" class="mt5">
+                        <i class="fa fa-building"></i> 업체정보
+                    </h2>
+                </div>
+    
+                <div id="divCompanyInfo" style="margin-bottom: 10px;">
+                    <table class="t-table">
+                        <colgroup>
+                            <col width="120">
+                            <col width="240">
+                            <col width="120">
+                            <col width="240">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td class="t-label t-l-w">사업자구분</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span>
+                                        {% for companyTp in companyTps %}
+                                        <div formType="iChecks" class="i-checks disp-ib">
+                                            <label class="radio">
+                                                <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="사업자구분">
+                                                <span>{{ companyTp.comNm }}</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="t-label t-l-w">사업자상호</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="companyNm" name="companyNm" class="form-control form-box" label="사업자상호">
+                                    </span>
+                                </td>
+                                <td class="t-label t-l-w">기본매장명</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="shopNm" name="shopNm" class="form-control form-box" label="기본매장명">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="t-label t-l-w">사업자등록번호</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="bizLicNo1" name="bizLicNo1" formType="bizLic1" tabNext="bizLicNo2" class="form-control form-box" style="width: 30px; text-align: center;" maxlength="3" value="" label="사업자번호">
+                                    </span>
+                                    <span>
+                                        <input type="text" id="bizLicNo2" name="bizLicNo2" formType="bizLic2" tabNext="bizLicNo3" class="form-control form-box" style="width: 20px; text-align: center;" maxlength="2" value="" label="사업자번호">
+                                    </span>
+                                    <span>
+                                        <input type="text" id="bizLicNo3" name="bizLicNo3" formType="bizLic3" tabNext="telNo1" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="5" value="" label="사업자번호">
+                                    </span>
+                                </td>
+                                <td class="t-label t-l-w">연락처</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="telNo1" name="telNo1" formType="tel1" tabNext="telNo2" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="" label="연락처">
+                                    </span>
+                                    <span>
+                                        <input type="text" id="telNo2" name="telNo2" formType="tel2" tabNext="telNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="" label="연락처">
+                                    </span>
+                                    <span>
+                                        <input type="text" id="telNo3" name="telNo3" formType="tel3" tabNext="bizTp" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="" label="연락처">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="t-label t-l-w">업태</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="bizTp" name="bizTp" class="form-control form-box" label="업태">
+                                    </span>
+                                </td>
+                                <td class="t-label t-l-w">업종</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="bizKind" name="bizKind" class="form-control form-box" label="업종">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="t-label t-l-w">주소</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span>
+                                        <input type="text" id="addr1" name="addr1" class="form-control form-box" label="주소">
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="al">
+                    <h3 id="headTitle" class="mt5">
+                        <i class="fa fa-user-circle"></i> 대표자정보
+                    </h2>
+                </div>
+                <div id="divCompanyInfo" style="margin-bottom: 10px;">
+                    <table class="t-table">
+                        <colgroup>
+                            <col width="120">
+                            <col width="240">
+                            <col width="120">
+                            <col width="240">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td class="t-label t-l-w">대표자명</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="userNm" name="userNm" tabNext="cellNo1" class="form-control form-box" style="width: 150px; text-align: left;" maxlength="30" value="" label="대표자명">
+                                    </span>
+                                </td>
+                                <td class="t-label t-l-w">휴대폰</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="cellNo1" name="cellNo1" formType="tel1" tabNext="cellNo2" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="" label="휴대폰번호">
+                                    </span>
+                                    <span>
+                                        <input type="text" id="cellNo2" name="cellNo2" formType="tel2" tabNext="cellNo3" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="" label="휴대폰번호">
+                                    </span>
+                                    <span>
+                                        <input type="text" id="cellNo3" name="cellNo3" formType="tel3" tabNext="userId" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="" label="휴대폰번호">
+                                    </span>
+                                </td>
+                            <tr>
+                            <tr>
+                                <td class="t-label t-l-w">아이디</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span>
+                                        <input type="text" id="userId" name="userId" formType="userid" tabNext="password" noti="spanUserIdCmt" class="form-control form-box" style="width: 150px; text-align: left;" maxlength="20" value="" label="아이디">
+                                        <input type="hidden" id="idChk" name="idChk" value="N">
+                                    </span>
+                                    <span id="spanUserIdCmt" style="color: #858585;">
+                                        * 아이디는 6~20자 사이의 영문으로 시작하는 영문/숫자 조합으로 입력해주세요.
+                                    </span>
+                                </td>
+                            <tr>
+                            <tr>
+                                <td class="t-label t-l-w">비밀번호</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span>
+                                        <input type="password" id="password" name="password" tabNext="passwordChk" class="form-control form-box" style="width: 150px; text-align: left;" maxlength="20" value="" label="비밀번호">
+                                    </span>
+                                    <span id="spanUserIdCmt" style="color: #858585;">
+                                        * 비밀번호는 6~20자 사이의 영문/숫자/특수문자로 입력해주세요.
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="t-label t-l-w">비밀번호확인</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="password" id="passwordChk" name="passwordChk" tabNext="email" class="form-control form-box" style="width: 150px; text-align: left;" maxlength="20" value="" label="비밀번호확인">
+                                    </span>
+                                </td>
+                                <td class="t-label t-l-w">이메일</td>
+                                <td class="t-content t-c-w al">
+                                    <span>
+                                        <input type="text" id="email" name="email" tabNext="btnRegData" class="form-control form-box" label="이메일">
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="divButtons">
+                    <!-- 처리 버튼 -->
+                    <table id="tableExeButtonGrp" class="t-table">
+                        <colgroup>
+                            <col width="800">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td class="t-white-line" colpan="8"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button id="btnRegData" type="submit" class="btn btn-primary" style="width: 120px;">이용신청</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Copyright</strong> 엔텔 &copy; 2018-2019
+                </div>
+            </div>
+        </div>
+    </div>        
+    </form>
+{% endblock body_content %}
+
+{% block body_script_local %}
+<script>
+$(document).ready(function() {
+    // 일반 form 객체 초기화
+    $.gfInitFormField();
+
+	// 사용가능 아이디 확인 이벤트 처리
+	$("#userId").on("change", function() {
+	    var _this = $(this);
+        var _idChk = $("#idChk");
+
+        // 아이디 체크
+        if(_idChk.val() == "Y") {
+	        // ID 중복 체크
+            $.gfAjax({
+                url: "{% url 'appreq:json__is_usable_id' %}",
+                data: {
+                    'userId': _this.val(),
+                },
+                dataType: "json",
+                async: true,
+                doneFunc: function(data, textStatus, jqXHR) {
+                	var resultCode = data["resultCode"];
+                	var resultMessage = data["resultMessage"];
+              	    var _noti = $("#spanUserIdCmt");
+
+               	    _noti.html(resultMessage);
+                    _noti.css("color", resultCode == "OK" ? "#1ab394" : "#f13221");
+                    _idChk.val(resultCode == "OK" ? "Y" : "N")
+                },
+                failFunc: function(jqXHR, textStatus, errorThrown) {
+              	    console.log("dupcheck=>failFunc status[" + jqXHR.status + "],textStatus[" + textStatus + "]");
+
+            		$.gfNotiMsg({
+            			msgCd : "",
+            			msgType : "warning",
+            		    title : "시스템 오류",
+            		    msg : "시스템 오류 입니다. 관리자에게 문의하세요.",
+            		    msgFrom : "S"
+            		});
+                },
+            });
+	    }
+	});
+
+	// 이용신청 등록 요청
+    $("#frmAppreq").submit(function(e, params) {
+        event.preventDefault();
+
+        var _this = $(this);
+
+        $.gfAjax({
+            url: "{% url 'appreq:regist' %}",
+            data: _this.serializeArray(),
+            async: true,
+            dataType: "json",
+            okFunc: function(data, cbFunc) {
+                $.gfCommonPopUp({
+                    popUrl: "{% url 'appreq:result' %}",
+                    width: "520",
+                    params: {
+                        reqId: data.resultData.reqId
+                    },
+                    attrs: {
+                        "data-keyboard": "false"        
+                    }
+                });
+            },
+            failFunc: function(jqXHR, textStatus, errorThrown) {
+        		$.gfNotiMsg({
+        			msgCd : "",
+        			msgType : "warning",
+        		    title : "시스템 오류",
+        		    msg : "시스템 오류 입니다. 관리자에게 문의하세요.",
+        		    msgFrom : "S"
+        		});
+            },
+            spinTarget: $("#divAppreq"),
+        });
+    });
+
+
+});
+</script>
+{% endblock body_script_local %}
+
+
