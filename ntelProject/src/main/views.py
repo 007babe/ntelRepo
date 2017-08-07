@@ -1,13 +1,15 @@
 from __future__ import absolute_import
+
 from django.contrib.auth.decorators import login_required
 from django.http.response import Http404
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
+from django.urls.base import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
-from utils.ajax import login_required_ajax
 from system.models import SysMenu
+from utils.ajax import login_required_ajax
 
 
 class MainView(TemplateView):
@@ -26,7 +28,7 @@ class MainView(TemplateView):
         return render(request, 'main/main.html', {})
 
 
-@login_required(login_url='/logins/login')
+@login_required(login_url=reverse_lazy("logins:login"))
 def mainCV(request):
     '''
     메인 화면

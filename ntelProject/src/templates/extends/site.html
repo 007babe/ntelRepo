@@ -55,10 +55,11 @@
     {% endblock head_style_local %}
 </head>
 <body {% block body_attribute %}{% endblock body_attribute %}>
+<div class="spinWrap">
 {% block body_content %}
-{% comment %} 각페이지별 Body Contents 추가 {% endcomment %}
+    {% comment %} 각페이지별 Body Contents 추가 {% endcomment %}
 {% endblock body_content%}
-
+</div>
 {% block body_js_common %}
 <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>

@@ -214,21 +214,20 @@ SESSION_COOKIE_AGE = 60 * 1
 # Customized User
 AUTH_USER_MODEL = 'system.SysUser'
 
-# Email 관련
-
+######################
+# email 관련 smtp -> gmail 이용
+######################
 # email Host
-EMAIL_HOST = 'localhost'
+EMAIL_HOST = 'smtp.gmail.com'
 # Port for sending email.
-EMAIL_PORT = 25
+EMAIL_PORT = 587
 # HOST User
-#EMAIL_HOST_USER = 'hisyfabe'
+EMAIL_HOST_USER = 'hisfybabe@gmail.com'
 # HOST Password
-#EMAIL_HOST_PASSWORD = 'grhksxo73!'
-
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = False
-EMAIL_SSL_CERTFILE = None
-EMAIL_SSL_KEYFILE = None
-EMAIL_TIMEOUT = None
+EMAIL_HOST_PASSWORD = 'grhksxo73!'
+# TLS 사용 여부
+EMAIL_USE_TLS = True
+# 기본 메일 발송자 설정
+DEFAULT_FROM_EMAIL = 'ntel5400@naver.com'
 
 

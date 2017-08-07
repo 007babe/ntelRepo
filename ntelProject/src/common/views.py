@@ -38,8 +38,15 @@ def getJsonComCd(request):
         'useYn',
     )
 
-    jsonData = json.dumps(makeJsonResult(resultData=list(comCds)), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(comCds)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )
 
 
 def getJsonComHttpStatus(request):
@@ -54,5 +61,13 @@ def getJsonComHttpStatus(request):
         'message',
         'useYn',
     )
-    jsonData = json.dumps(makeJsonResult(resultData=list(comHttpStatuses)), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")
+
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(comHttpStatuses)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )

@@ -50,8 +50,15 @@ def getJsonSysMenu(request):
         'topMenuNm',
     )
 
-    jsonData = json.dumps(makeJsonResult(resultData=list(sysMenus)), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(sysMenus)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )
 
 
 def getJsonSysMsg(request):
@@ -73,8 +80,15 @@ def getJsonSysMsg(request):
         'useYn',
     )
 
-    jsonData = json.dumps(makeJsonResult(resultData=list(sysMsgs)), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(sysMsgs)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )
 
 
 @login_required_ajax
@@ -127,11 +141,15 @@ def getJsonSysCompany(request):
         'modNm',
     )
 
-    print(sysCompanys)
-    print(list(sysCompanys))
-
-    jsonData = json.dumps(makeJsonResult(resultData=list(sysCompanys)), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(sysCompanys)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )
 
 
 @login_required_ajax
@@ -149,5 +167,12 @@ def getJsonShopStaff(request):
         qry
     ).values()
 
-    jsonData = json.dumps(makeJsonResult(resultData=list(shopStaffs)), default=jsonDefault)
-    return HttpResponse(jsonData, content_type="application/json")
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(shopStaffs)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )

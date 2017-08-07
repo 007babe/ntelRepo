@@ -359,7 +359,7 @@ class SysAppReq(models.Model):
     """이용신청정보
     고유발생 Key로 PK 설정
     """
-    reqId = models.CharField(db_column='req_id', primary_key=True, max_length=10, verbose_name='요청ID') # 요청ID
+    reqId = models.CharField(db_column='req_id', primary_key=True, null=False, blank=False, max_length=10, verbose_name='요청ID') # 요청ID
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     companyId = models.ForeignKey('system.SysCompany', db_column='company_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_cd', verbose_name='회사코드')
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명') # 회사명

@@ -15,9 +15,11 @@ $(document).ready(function() {
 	// ajax 실행시 로딩중 Spinner 표시
     $(document).ajaxStart(function() {
     }).ajaxSend(function( event, jqxhr, settings ) {
-        $.gfToggleLoading("#boxContents", true);
+//        $.gfToggleLoading($("#boxContents"), true);
+//        $.gfToggleLoading($(document.body), true);
     }).ajaxComplete(function( event, xhr, settings ) {
-        $.gfToggleLoading("#boxContents", false);
+//        $.gfToggleLoading($("#boxContents"), false);
+//        $.gfToggleLoading($(document.body), false);
     });
 
 });
@@ -86,6 +88,7 @@ $.gfGetGlobalData = function(opts) {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         beforeSendFunc: function(data, textStatus, jqXHR) {
+            $("#btnRegData").prop('disabled', true);
         },
         doneFunc: function(data, textStatus, jqXHR) {
             try {
@@ -101,6 +104,7 @@ $.gfGetGlobalData = function(opts) {
         failFunc: function(jqXHR, textStatus, errorThrown) {
         },
         alwaysFunc: function(jqXHR, textStatus, errorThrown) {
+            $("#btnRegData").prop('disabled', false);
         },
     });
 };
@@ -180,9 +184,7 @@ $.gfLoadContentsData = function(opts) {
         url: "/main/menu/",
         data: params,
         async: true,
-        beforeSendFunc: function(data, textStatus, jqXHR) {
-        },
-        doneFunc: function(data, textStatus, jqXHR) {
+        successFunc: function(data, textStatus, jqXHR) {
             _maincontents.empty().append(data);
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
@@ -195,9 +197,7 @@ $.gfLoadContentsData = function(opts) {
                 loginRequired : true
             });
         },
-        alwaysFunc: function(jqXHR, textStatus, errorThrown) {
-//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");
-        },
+        spinTarget: $("#boxContents"),
     });
 };
 
@@ -226,7 +226,6 @@ $.gfLoadInitPage = function () {
     $('#menu_' + menuId).trigger('click');
 };
 
-
 /*
  * 공통Popup용
  * 주의 사항
@@ -234,7 +233,6 @@ $.gfLoadInitPage = function () {
  *    id, data-backdrop, tabindex, role, aria-hidden
  */
 $.gfCommonPopUp = function(opts) {
-
     if($.isEmpty(opts)) return;
 
     var popUrl = opts.popUrl; // 필수
@@ -243,11 +241,12 @@ $.gfCommonPopUp = function(opts) {
     var attrs = $.isEmpty(opts.attrs) ? new Object() : opts.attrs; // modalId의 Popup Div의 속성에 추가 할 내용(key, value)
     var params = opts.params;
 
-    $.ajax({
+    $.gfAjax({
         type: "POST",
         url: popUrl,
         data: params,
-        success: function(html) {
+        async: true,
+        successFunc: function(data, textStatus, jqXHR) {
             var _divPop = $("<div/>").attr("id", modalId)
                                      .attr("data-backdrop", "static")
                                      .attr("tabindex", "-1")
@@ -263,7 +262,7 @@ $.gfCommonPopUp = function(opts) {
             }
 
             // divPop에 html 추가
-            _divPop.empty().append(html)
+            _divPop.empty().append(data)
 
             // div 너비 지정
             if(!$.isEmpty(width)){
@@ -280,9 +279,11 @@ $.gfCommonPopUp = function(opts) {
 
             // 팝업 보이기
             $("#" + modalId).modal("show");
-        }
+        },
     });
 };
+
+
 
 /*
  * 에러발생시 모달 창
@@ -303,9 +304,8 @@ $.gfErrorPopUp = function(modalId, errCd, errMsg, w, h) {
 /*
  * Loading용 Spinner 처리
  */
-$.gfToggleLoading = function(id, flag){
-
-    if($(id).children(".spinWrap").children("#spinWrap").length == 0) {
+$.gfToggleLoading = function(_target, flag){
+    if(_target.children(".spinWrap").children("#spinWrap").length == 0) {
         var divSpin = "<div id='spinWrap' class='sk-spinner sk-spinner-wave'>"
                     + "    <div class='sk-rect1'></div>"
                     + "    <div class='sk-rect2'></div>"
@@ -313,13 +313,13 @@ $.gfToggleLoading = function(id, flag){
                     + "    <div class='sk-rect4'></div>"
                     + "    <div class='sk-rect5'></div>"
                     + "</div>";
-        $(id).children(".spinWrap").prepend(divSpin);
+        _target.children(".spinWrap").prepend(divSpin);
     }
 
     if(flag) {
-        $(id).children(".spinWrap").addClass("sk-loading");
+        _target.children(".spinWrap").addClass("sk-loading");
     } else {
-        $(id).children(".spinWrap").removeClass("sk-loading");
+        _target.children(".spinWrap").removeClass("sk-loading");
     }
 };
 
@@ -2194,9 +2194,7 @@ $.gfLoadContents = function(opts) {
                 loginRequired : true
             });
         },
-        alwaysFunc: function(jqXHR, textStatus, errorThrown) {
-//            console.log("$.gfLoadContentsData allways status : [" + jqXHR.status + "]");
-        },
+        spinTarget: $("#boxContents"),
     });
 };
 
@@ -2307,9 +2305,12 @@ $.gfAjax = function(opts) {
     var contentType     = $.isEmpty(opts.contentType) ? 'application/x-www-form-urlencoded; charset=UTF-8' : opts.contentType;
     var beforeSendFunc  = opts.beforeSendFunc; // Ajax 실행전 처리할 함수
     var successFunc     = opts.successFunc;    // Ajax 실행성공 시 처리할 함수(successFunc -> doneFunc 순서로 둘다 호출됨)
+    var okFunc          = opts.okFunc;         // ReturnCode가 'OK' 일 경우 처리할 함수
+    var ngFunc          = opts.ngFunc;         // ReturnCode가 'OK' 일 경우 처리할 함수
     var doneFunc        = opts.doneFunc;       // Ajax 실행성공 시 처리할 함수
     var failFunc        = opts.failFunc;       // Ajax 실패 시 처리할 함수
     var alwaysFunc      = opts.alwaysFunc;     // Ajax 항상실행 처리할 함수
+    var _spinTarget     = opts.spinTarget;     // Ajax 실행시 spinner 처리 대상
 
     try {
         // http://api.jquery.com/jquery.ajax/ 참조
@@ -2322,10 +2323,19 @@ $.gfAjax = function(opts) {
             cache: cache,
             async: async, // default: true
             beforeSend: function(jqXHR, settings) { // Ajax 실행전 처리
+                if(!$.isEmpty(_spinTarget)) {
+                    $.gfToggleLoading(_spinTarget, true);
+                }
                 if(!$.isEmpty(beforeSendFunc)) beforeSendFunc(jqXHR, settings);
             },
             success: function(data, cbFunc) {
-                if(dataType.toLowerCase() == "json") $.gfAjaxSetResult(data);
+                var resultCode = data.resultCode;
+                if(resultCode == "OK") {
+                    if(!$.isEmpty(okFunc)) okFunc(data, cbFunc);
+                } else if(resultCode == "NG") {
+                    if(dataType.toLowerCase() == "json") $.gfAjaxSetResult(data);
+                    if(!$.isEmpty(ngFunc)) ngFunc(data, cbFunc);
+                }
                 if(!$.isEmpty(successFunc)) successFunc(data);
             }
         }).done(function(data, textStatus, jqXHR) { // 성공할 경우
@@ -2333,6 +2343,9 @@ $.gfAjax = function(opts) {
         }).fail(function(jqXHR, textStatus, errorThrown) { // 실패할 경우
             if(!$.isEmpty(failFunc)) failFunc(jqXHR, textStatus, errorThrown);
         }).always(function(jqXHR, textStatus, errorThrown) { // 항상 실행
+            if(!$.isEmpty(_spinTarget)) {
+                $.gfToggleLoading(_spinTarget, false);
+            }
             if(!$.isEmpty(alwaysFunc)) alwaysFunc(jqXHR, textStatus, errorThrown);
         });
 
