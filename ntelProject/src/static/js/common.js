@@ -970,6 +970,7 @@ $.fn.gfSetUserId = function() {
 
     // Change Event
     _item.on("change", function(e, params) {
+        console.log("hahahahahaha");
         var _this = $(this);
 
         if(!$.isEmpty(_idChk)) _idChk.val("N"); // 값이 변했을 경우 idChk값은 "N"

@@ -28,6 +28,7 @@ def loginCV(request):
     )
 
 
+@csrf_exempt
 def loginPopCV(request):
     '''
     로그인 팝업 화면 Contents View(Function Based)

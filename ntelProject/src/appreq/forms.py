@@ -31,6 +31,8 @@ class SysAppReqForm(ModelForm):
     passwordChk = forms.CharField(widget=forms.PasswordInput(), min_length=6, max_length=20)
     # 이메일
     email = forms.EmailField(max_length=255)
+    # 진행상태
+    reqStatus = forms.CharField(required=False)  # 신청ID는 신규생성이므로 Null=True
 
     def __init__(self, *args, **kwargs):
         # 로그인 사용자 정보 활용
@@ -73,8 +75,12 @@ class SysAppReqForm(ModelForm):
         self.reqId = getSysSeqId('APRQID')
         instance.reqId = self.reqId
 
+        # 진행상태 신청('00')  세팅
+        instance.reqStatus = '00'
+
         # 비밀번호 암호화
         instance.password = make_password(cleaned_data.get('password'))
+
         if commit:
             instance.save()
         return instance

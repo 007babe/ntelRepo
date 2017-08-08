@@ -661,7 +661,8 @@ $(document).ready(function() {
             {name: 'agentNm',     index:'agentNm',     editable: true, width:40,  align: "center"},
             {name: 'openStatus',  index:'openStatus',   editable: true, width:30,  align: "center"},
             {name: 'custNm',      index:'custNm',    editable: true, width:40,  align: "center", cellattr: function(rowId, val, rowObject, cm, rdata) {
-                                                                                                                   return "style='background-color: #FFFEE7; font-weight: bold;'";
+                                                                                                                   return $.jqGridHighlightColAttr();
+//                                                                                                                   return "style='background-color: #FFFEE7; font-weight: bold;'";
                                                                                                            }
             },
             {name: 'payType',     index:'payType', editable: true, width:30,  align: "center"},
@@ -672,8 +673,9 @@ $(document).ready(function() {
             {name: 'balAccounts', index:'balAccounts', editable: true, width:30,  align: "right", formatter: "currency", 
              formatoptions: {thousandsSeparator:",", decimalPlaces: 0}, 
              cellattr: function(rowId, val, rowObject, cm, rdata) {
-                           return Number(val.replace(",", "")) < 0 ? "style='color: darkred;'" : "";
-                       }   
+            	 return $.jqGridMoneyAttr(val);
+			                 //return Number(val.replace(",", "")) < 0 ? "style='color: darkred;'" : "";
+             }   
             
             },
             {name: 'margin',      index:'margin', editable: true, width:30,  align: "right", formatter: "currency", formatoptions: {thousandsSeparator:",", decimalPlaces: 0}, cellattr: function(rowId, val, rowObject, cm, rdata) {

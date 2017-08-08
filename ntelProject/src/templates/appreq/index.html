@@ -16,7 +16,7 @@
                 <div class="al">
                     <h3 id="headTitle" class="mt5">
                         <i class="fa fa-edit"></i> 이용약관
-                    </h2>
+                    </h3>
                 </div>
                 <div id="divAccessTerms" style="margin-bottom:10px; height:100px;border:1px solid #999; background:#fff; overflow:auto;padding:10px">
                     {{ sysPolicy.accessTerms|safe }}
@@ -33,7 +33,7 @@
                 <div class="al">
                     <h3 id="headTitle" class="mt5">
                         <i class="fa fa-key"></i> 개인정보취급방침
-                    </h2>
+                    </h3>
                 </div>
                 <div id="divPrivacyPolicy" style="margin-bottom:10px; height:100px;border:1px solid #999; background:#fff; overflow:auto;padding:10px">
                     {{ sysPolicy.privacyPolicy|safe }}
@@ -51,7 +51,7 @@
                 <div class="al">
                     <h3 id="headTitle" class="mt5">
                         <i class="fa fa-building"></i> 업체정보
-                    </h2>
+                    </h3>
                 </div>
     
                 <div id="divCompanyInfo" style="margin-bottom: 10px;">
@@ -146,7 +146,7 @@
                 <div class="al">
                     <h3 id="headTitle" class="mt5">
                         <i class="fa fa-user-circle"></i> 대표자정보
-                    </h2>
+                    </h3>
                 </div>
                 <div id="divCompanyInfo" style="margin-bottom: 10px;">
                     <table class="t-table">
@@ -254,6 +254,7 @@ $(document).ready(function() {
 
 	// 사용가능 아이디 확인 이벤트 처리
 	$("#userId").on("change", function() {
+		console.log("1111111111111111888888888>on.change");
 	    var _this = $(this);
         var _idChk = $("#idChk");
 

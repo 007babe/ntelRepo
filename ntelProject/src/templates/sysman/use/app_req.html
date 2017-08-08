@@ -1,0 +1,150 @@
+<!-- 탭 본문 : 이용신청관리 Start -->
+<div id="divContents01">
+    <div class="spinWrap">
+        <div class="jqGrid_wrapper">
+            <table id="dataGrid"></table>
+            <div id="pagerList"></div>
+        </div>
+    </div>
+</div>
+<!-- 탭 본문 : 단말기 End -->
+<!-- Javascript Include Start -->
+
+<!-- Javascript Include End -->
+
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+	// 1. JQGrid 객체 생성(초기화)
+
+    // Configuration for jqGrid
+    $("#dataGrid").jqGrid({
+//        data: mydata,
+        datatype: "local",
+//        url: "{% url 'sysman:use__app_req__list__json' %}",
+//        mtype: "post",
+//        data: {},
+//        datatype: "json",
+        height: "600",
+        autowidth: true,
+        shrinkToFit: false,
+        rowNum: 20,
+        rowList: [10, 20, 30],
+        colNames:[
+        	'요청번호', '요청일시', '회사구분', '회사명', '대표매장',
+        	'전화', '휴대폰', '주소', '사용여부'
+        ],
+        colModel:[
+            {
+                name: 'reqId',
+                width: 100,
+                align: "center"
+            },
+            {
+                name: 'reqDt',
+                editable: false,
+                width: 140,
+                align: "center",
+                formatter: "date", 
+                formatoptions: { 
+                   srcformat: 'Y-m-d H:i:s', 
+                   newformat: 'y-m-d H:i:s'
+                }                
+            },
+            {
+                name: 'companyTpNm',
+                editable: false,
+                width: 70,
+                align: "center"
+            },
+            {
+                name: 'companyNm',
+                editable: false,
+                width: 150,
+                align: "left"
+            },
+            {
+                name: 'shopNm',
+                editable: false,
+                width: 150,
+                align: "left"
+            },
+            {
+                name: 'telNo1',
+                editable: false,
+                width: 100,
+                align: "center",
+            },
+            {
+                name: 'cellNo',
+                editable: false,
+                width: 100,
+                align: "center"
+            },
+            {
+                name: 'addr1',
+                editable: false,
+                width: 200,
+                align: "left"
+            },
+            {
+                name: 'useYn',
+                editable: false,
+                width: 80,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridUseYn(cellvalue);
+                }
+            }
+        ],
+        formatter: {
+             currency : {
+                thousandsSeparator: ",",
+                defaultValue: '0',
+                decimalPlaces: 0
+             }
+        },
+        multiselect: false,
+        multiselectWidth: 30,
+        pager: "#pagerList",
+        viewrecords: true,
+        caption: "",
+        add: true,
+        edit: true,
+        addtext: 'Add',
+        edittext: 'Edit',
+        hidegrid: false,
+        ondblClickRow: function(id) {
+            alert("reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");  
+        },
+        onSelectRow: function(id) {
+            
+        },
+        loadComplete: function() {
+        },
+        emptyrecords: "전체 : 0 건",
+        recordtext: "전체 : {2}건",
+//        loadtext: "조회 중...",
+    });
+
+	// 2. 초기 데이터 획득(Ajax-Json)
+    $.gfAjax({
+        type: "POST",
+        url: "{% url 'sysman:use__app_req__list__json' %}",
+        async: true,
+        successFunc: function(data, textStatus, jqXHR) {
+            var resultData = data.resultData;
+            console.log(resultData);
+            
+            $("#dataGrid").jqGrid("clearGridData");
+            $("#dataGrid").jqGrid("setGridParam", {data: data.resultData});
+            $("#dataGrid").trigger("reloadGrid");
+        },
+//        spinTarget: $("#divContents01")
+    });
+});
+</script>
+<!-- Javascript Local Code End -->
+
+
+

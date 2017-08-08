@@ -4,10 +4,10 @@ import json
 from smtplib import SMTPDataError
 
 from django.core.mail import send_mail
+from django.db import connection
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
-from django.template.context_processors import request
 
 from appreq.forms import SysAppReqForm
 from system.models import SysAppReq
@@ -31,6 +31,9 @@ def appReqCV(request):
     ).order_by(
         '-id'
     ).first()
+
+    for query in connection.queries:
+        print(query)
 
     # 업체구분 데이터 획득
     companyTps = getComCdList(grpCd='S0004', grpOpt='B')
@@ -100,7 +103,9 @@ def appReqRegistSV(request):
                 print("메일 발송 실패")
                 print(smtpErr)
             # 가입후 메일 보내기(함수, 클래스 화 => 쓰레드 처리) ===<
-
+        
+        print(sysAppReqForm.errors)
+        
     return HttpResponse(
         json.dumps(
             makeJsonResult(
@@ -149,7 +154,7 @@ def getJsonAppReq(request):
     appReqs = SysAppReq.objects.filter(
         qry
     ).order_by(
-        '-reqDt'
+        '-reqId'
     )
 
     return HttpResponse(

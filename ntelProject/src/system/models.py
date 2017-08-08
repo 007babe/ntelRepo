@@ -1,9 +1,13 @@
 from __future__ import unicode_literals  # Python 2.x 지원용
 
+from datetime import datetime
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User, PermissionsMixin
 from django.db import models
+from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
+
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysPolicy(models.Model):
@@ -355,14 +359,26 @@ class SysMsg(models.Model):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
+class PublishedManager(models.Manager):
+    '''기본 매니저
+    '''
+    use_for_related_fields = True
+
+    def pulished(self, **kwargs):
+        return self.filter(status='published', **kwargs)
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysAppReq(models.Model):
     """이용신청정보
     고유발생 Key로 PK 설정
     """
+    objects = PublishedManager()
+
     reqId = models.CharField(db_column='req_id', primary_key=True, null=False, blank=False, max_length=10, verbose_name='요청ID') # 요청ID
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     companyId = models.ForeignKey('system.SysCompany', db_column='company_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_cd', verbose_name='회사코드')
-    companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명') # 회사명
+    companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명')
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     shopNm = models.CharField(db_column='shop_nm', max_length=100, null=False, blank=False, verbose_name='대표매장명')
@@ -384,7 +400,9 @@ class SysAppReq(models.Model):
     userNm = models.CharField(db_column='user_nm', max_length=30, null=False, blank=False, default=None, verbose_name='대표사용자명')
     password = models.CharField(db_column='password', max_length=128, null=False, blank=False, verbose_name='대표사용자비밀번호')
     email = models.EmailField(db_column='email', max_length=255, null=True, blank=True, default=None, verbose_name='이메일')
-    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    reqStatus = models.CharField(db_column='req_status', max_length=2, null=False, blank=False, default="00", verbose_name='진행상태')
+    reqDt = models.DateTimeField(db_column='req_dt', auto_now_add=True, null=True, blank=True, verbose_name='요청일자')
+    useYn = models.BooleanField(db_column='use_yn', null=False, blank=False, default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
