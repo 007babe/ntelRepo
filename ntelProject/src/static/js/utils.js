@@ -23,6 +23,12 @@ $.n2s = function(value){
     return $.isEmpty(value) ? "" : value;
 };
 
+/*
+ * ovalue가 null이면 ovalue로 변환
+ */
+$.nvl = function(ovalue, cvalue){
+    return $.isEmpty(ovalue) ? cvalue : ovalue;
+};
 
 /*
  * 숫자를 통화형식으로 변환
