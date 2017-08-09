@@ -2,9 +2,11 @@ import re
 
 from django import forms
 from django.contrib.auth.hashers import make_password
+from django.db.models.expressions import Value
 from django.forms.models import ModelForm
 from django.utils.translation import gettext as _
 
+from common.models import ComCd
 from system.models import SysAppReq
 from system.models import SysPolicy
 from utils.data import getSysSeqId
@@ -75,8 +77,10 @@ class SysAppReqForm(ModelForm):
         self.reqId = getSysSeqId('APRQID')
         instance.reqId = self.reqId
 
-        # 진행상태 신청('00')  세팅
-        instance.reqStatus = '00'
+        # 진행상태 승인요청('S0008R')  세팅(comCd.grpCd='S0008' 참조)
+#        instance.reqStatus = 'S0008A' ==> 안된다
+        instance.reqStatus_id = 'S0008A'
+#        instance.reqStatus = ComCd.objects.get(comCd__exact='S0008A') ==> 된다
 
         # 비밀번호 암호화
         instance.password = make_password(cleaned_data.get('password'))

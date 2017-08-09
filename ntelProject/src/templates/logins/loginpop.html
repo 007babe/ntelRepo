@@ -50,63 +50,38 @@ $(document).ready(function() {
 	// 로그인 처리
     $("#frmLogin").submit(function(e, params) {
         event.preventDefault();
-        
-        alert("hahaah");
 
         var _this = $(this);
-        // Ajax 처리
-        $.ajax({
-            type: "POST",
-            url: "{% url 'logins:logincheck' %}" ,
-            data: _this.serializeArray(),    	
-            async: true,
-            beforeSend: function (jqXHR, settings) {
-            },
-            success: function(data, cbFunc) {
-            	var resultCode = data["resultCode"]; 
-            	var msg = data["msg"]; 
 
-            	// 정상로그인
-            	if(resultCode == "IL0000") {
-            		// 로그인 팝업창 닫기
-            		$("#btnDialogClose").trigger("click");
-            		$.gfAjaxSetup();
-            	} else {
-            		// 팝업 메시지 처리
-            		$.gfNotiMsgSvr({
-            			msgCd : resultCode,
-            			msgType : "warning",
-            		    title : "로그인 실패",
-            		    msg : msg
-            		});
-            	}
+        $.gfAjax({
+            type: "POST",
+            url: "{% url 'logins:logincheck' %}",
+            data: _this.serializeArray(),
+            async: true,
+            okFunc: function(data, textStatus, jqXHR) {
+        		// 로그인 팝업창 닫기
+        		$("#btnDialogClose").trigger("click");
+        		$.gfAjaxSetup();
             },
-            error: function(xhr, ajaxOptions, throwError) {
+            ngFunc: function(data, cbFunc) {
+           		// 팝업 메시지 처리
         		$.gfNotiMsgSvr({
         			msgCd : "",
         			msgType : "warning",
-        		    title : "시스템 오류",
-        		    msg : "시스템 오류 입니다. 관리자에게 문의하세요."
+        		    title : "로그인 실패",
+        		    msg : data.resultMessage
         		});
             },
-            statusCode: {
-                404: function() {
-    /*
-                    $.gfCommonPopUp({
-                        popUrl: "{% static '/error/popup404.html' %}",
-                        width : "300"
-                    });
-    */
-                }
-            }
-        }).done(function() { // 성공할 경우
-//            console.log("gfLogin Ajax done key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
-        }).fail(function() { // 실패할 경우
-//            console.log("gfLogin Ajax fail key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
-        }).always(function() {
-//            console.log("gfLogin Ajax allways key[" + key + "],url[" + url + "],cbFunc[" + cbFunc + "]");
+            failFunc: function(jqXHR, textStatus, errorThrown) {
+                // Http Error처리
+                $.gfHttpErrorPopup({
+                    jqXHR : jqXHR,
+                    textStatus : textStatus,
+                    errorThrown : errorThrown,
+                    loginRequired : false
+                });
+            },
         });
-		return false;
     });
 });
 </script>

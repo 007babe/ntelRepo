@@ -25,14 +25,15 @@ $(document).ready(function() {
 //        mtype: "post",
 //        data: {},
 //        datatype: "json",
-        height: "600",
+        height: "630",
         autowidth: true,
         shrinkToFit: false,
         rowNum: 20,
         rowList: [10, 20, 30],
         colNames:[
-        	'요청번호', '요청일시', '회사구분', '회사명', '대표매장',
-        	'전화', '휴대폰', '주소', '사용여부'
+        	'요청번호', '요청일', '진행상태', '구분', '회사명', '대표매장',
+        	'대표자', '아이디', '전화', '휴대폰', '이메일', 
+        	'주소'
         ],
         colModel:[
             {
@@ -43,13 +44,23 @@ $(document).ready(function() {
             {
                 name: 'reqDt',
                 editable: false,
-                width: 140,
+                width: 80,
                 align: "center",
-                formatter: "date", 
-                formatoptions: { 
-                   srcformat: 'Y-m-d H:i:s', 
-                   newformat: 'y-m-d H:i:s'
-                }                
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d'
+                }
+            },
+            {
+                name: 'reqStatusNm',
+                editable: false,
+                width: 80,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata) {
+                    console.log(rowObject.reqStatusCss);
+                    return rowObject.reqStatusCss;
+                }
             },
             {
                 name: 'companyTpNm',
@@ -70,31 +81,46 @@ $(document).ready(function() {
                 align: "left"
             },
             {
-                name: 'telNo1',
+                name: 'userNm',
                 editable: false,
-                width: 100,
+                width: 70,
+                align: "left"
+            },
+            {
+                name: 'userId',
+                editable: false,
+                width: 90,
+                align: "left"
+            },
+            {
+                name: 'telNo',
+                editable: false,
+                width: 120,
                 align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNo(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);                    
+                }
             },
             {
                 name: 'cellNo',
                 editable: false,
-                width: 100,
-                align: "center"
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNo(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);                    
+                }
+            },
+            {
+                name: 'email',
+                editable: false,
+                width: 150,
+                align: "left"
             },
             {
                 name: 'addr1',
                 editable: false,
                 width: 200,
                 align: "left"
-            },
-            {
-                name: 'useYn',
-                editable: false,
-                width: 80,
-                align: "center",
-                formatter: function(cellvalue, options, rowObject) {
-                    return $.jqGridUseYn(cellvalue);
-                }
             }
         ],
         formatter: {
@@ -114,11 +140,12 @@ $(document).ready(function() {
         addtext: 'Add',
         edittext: 'Edit',
         hidegrid: false,
+        rownumbers: true,
         ondblClickRow: function(id) {
-            alert("reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");  
+            alert("reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
         },
         onSelectRow: function(id) {
-            
+
         },
         loadComplete: function() {
         },
@@ -134,8 +161,7 @@ $(document).ready(function() {
         async: true,
         successFunc: function(data, textStatus, jqXHR) {
             var resultData = data.resultData;
-            console.log(resultData);
-            
+
             $("#dataGrid").jqGrid("clearGridData");
             $("#dataGrid").jqGrid("setGridParam", {data: data.resultData});
             $("#dataGrid").trigger("reloadGrid");

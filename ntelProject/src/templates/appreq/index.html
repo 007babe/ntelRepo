@@ -249,12 +249,13 @@
 {% block body_script_local %}
 <script>
 $(document).ready(function() {
+
     // 일반 form 객체 초기화
     $.gfInitFormField();
 
+
 	// 사용가능 아이디 확인 이벤트 처리
-	$("#userId").on("change", function() {
-		console.log("1111111111111111888888888>on.change");
+    $("#userId").on("change", function(e, params) {
 	    var _this = $(this);
         var _idChk = $("#idChk");
 
@@ -327,6 +328,7 @@ $(document).ready(function() {
             spinTarget: $("#divAppreq"),
         });
     });
+
 
 
 });

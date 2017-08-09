@@ -103,9 +103,7 @@ def appReqRegistSV(request):
                 print("메일 발송 실패")
                 print(smtpErr)
             # 가입후 메일 보내기(함수, 클래스 화 => 쓰레드 처리) ===<
-        
-        print(sysAppReqForm.errors)
-        
+
     return HttpResponse(
         json.dumps(
             makeJsonResult(
@@ -156,7 +154,8 @@ def getJsonAppReq(request):
     ).order_by(
         '-reqId'
     )
-
+    
+    print("188888888")
     return HttpResponse(
         json.dumps(
             makeJsonResult(

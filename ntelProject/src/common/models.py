@@ -16,6 +16,7 @@ class ComCd(models.Model):
     ordSeq = models.IntegerField(db_column='ord_seq', default=1, verbose_name='순서')
     grpOpt = models.CharField(db_column='grp_opt', max_length=50, null=True, verbose_name='그룹옵션')
     grpOptDesc = models.CharField(db_column='grp_opt_desc', max_length=200, null=True, blank=True, verbose_name='옵션설명')
+    cdCss = models.CharField(db_column='cd_css', max_length=200, null=True, blank=True, verbose_name='코드CSS')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')

@@ -3,7 +3,8 @@ from __future__ import absolute_import
 import json
 
 from django.core import serializers
-from django.db.models.expressions import F
+from django.db.models.expressions import F, Value
+from django.db.models.functions.base import Concat
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 from django.shortcuts import render
@@ -40,8 +41,10 @@ def useAppReqListJson(request):
     ).annotate(
         companyTpNm=F('companyTp__comNm'),
         companyGradeNm=F('companyGrade__comNm'),
-#        telNo=F('telNo1') + "-" + F('telNo2') + "-" + F('telNo3'),
-#        cellNo=F('cellNo1') + "-" + F('cellNo2') + "-" + F('cellNo3'),
+#        telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
+#        cellNo=Concat(Concat('cellNo1',  Value('-'), 'cellNo2'), Value('-'), 'cellNo3'),
+        reqStatusNm=F('reqStatus__comNm'),
+        reqStatusCss=F('reqStatus__cdCss'),
         regNm=F('regId__userNm'),
         modNm=F('modId__userNm'),
     ).values(
@@ -62,6 +65,10 @@ def useAppReqListJson(request):
         "regNm",
         "userId",
         "userNm",
+        "email",
+        "reqStatus",
+        "reqStatusNm",
+        "reqStatusCss",
     )
 
     return HttpResponse(

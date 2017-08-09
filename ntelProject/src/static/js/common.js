@@ -756,7 +756,7 @@ $.fn.gfSetTelNo1 = function() {
     var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
-    _item.on("keyup", function(e, params) {
+    _item.on("input", function(e, params) {
         var _this = $(this);
 
         // 숫자만 입력받게 하기
@@ -777,7 +777,7 @@ $.fn.gfSetTelNo2 = function() {
     var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
-    _item.on("keyup", function(e, params) {
+    _item.on("input", function(e, params) {
         var _this = $(this);
 
         // 숫자만 입력받게 하기
@@ -798,7 +798,7 @@ $.fn.gfSetTelNo3 = function() {
     var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
-    _item.on("keyup", function(e, params) {
+    _item.on("input", function(e, params) {
         var _this = $(this);
 
         // 숫자만 입력받게 하기
@@ -955,22 +955,35 @@ $.fn.gfSetUserId = function() {
     var _noti = $("#" + _item.attr("noti")); // 알림필드
     var _idChk = $("#idChk"); // ID Check Value
 
-    // Key Up Event
+    // Input Event
     _item.on("input", function(e, params) {
         var _this = $(this);
 
+        console.log("input------------->" + _this.val());
+        
         // 숫자 영문자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9a-zA-Z]/g, ""));
+
+        var len = _this.val().length;
+        
+        if(len < 6) {
+            if(!$.isEmpty(_noti)){
+                _noti.html("* 아이디는 6~20자 사이의 영문으로 시작하는 영문/숫자 조합으로 입력해주세요.");
+                _noti.css("color", "#f13221");
+            }
+        } 
+
+        if(len >= 6) _this.trigger("change");
 
         if(_this.val().length >= 20) { // 20자 이상일 경우 처리
             _itemNext.trigger("focus");
             _itemNext.trigger("select");
+            _this.trigger("change");
         }
     });
-
+    
     // Change Event
     _item.on("change", function(e, params) {
-        console.log("hahahahahaha");
         var _this = $(this);
 
         if(!$.isEmpty(_idChk)) _idChk.val("N"); // 값이 변했을 경우 idChk값은 "N"
