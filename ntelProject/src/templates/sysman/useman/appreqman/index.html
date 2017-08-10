@@ -46,7 +46,6 @@ $(document).ready(function() {
                 width: 80,
                 align: "center",
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
-                    console.log(rowObject.reqStatusCss);
                     return rowObject.reqStatusCss;
                 }
             },
@@ -123,9 +122,8 @@ $(document).ready(function() {
             // 상세 팝업
             var reqId = $(this).jqGrid('getCell', id, 'reqId'); // 요청번호
 
-            alert("ondblClickRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
             $.gfCommonPopUp({
-                popUrl: "{% url 'sysman:use__app_req__detail' %}",
+                popUrl: "{% url 'sysman:useman__appreqman__detail' %}",
                 modalId: "divAppreqDetailPopup",
                 width: "700",
                 params: {
@@ -153,7 +151,7 @@ $(document).ready(function() {
 $.getAppreqList = function(){
     $.gfAjax({
         type: "POST",
-        url: "{% url 'sysman:use__app_req__list__json' %}",
+        url: "{% url 'sysman:useman__appreqman__json__list' %}",
         async: true,
         successFunc: function(data, textStatus, jqXHR) {
             var resultData = data.resultData;

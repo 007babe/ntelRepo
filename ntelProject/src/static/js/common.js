@@ -195,7 +195,7 @@ $.gfLoadContentsData = function(opts) {
                 textStatus : textStatus,
                 errorThrown : errorThrown,
                 loginRequired : true,
-                loginCompletedFun: function() {
+                loginCompletedFunc: function() {
                     // 로그인 후 처리 이벤트
                 }
             });
@@ -243,6 +243,7 @@ $.gfCommonPopUp = function(opts) {
     var width = opts.width;
     var attrs = $.isEmpty(opts.attrs) ? new Object() : opts.attrs; // modalId의 Popup Div의 속성에 추가 할 내용(key, value)
     var params = opts.params;
+    var loginRequired = $.isEmpty(opts.loginRequired) ? true : opts.loginRequired;
 
     $.gfAjax({
         type: "POST",
@@ -283,6 +284,15 @@ $.gfCommonPopUp = function(opts) {
             // 팝업 보이기
             $("#" + modalId).modal("show");
         },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            // Http Error처리
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : loginRequired
+            });            
+        }
     });
 };
 
@@ -2205,10 +2215,10 @@ $.gfLoadContents = function(opts) {
 
             // Http Error처리
             $.gfHttpErrorPopup({
-                jqXHR : jqXHR,
-                textStatus : textStatus,
-                errorThrown : errorThrown,
-                loginRequired : true
+                jqXHR: jqXHR,
+                textStatus: textStatus,
+                errorThrown: errorThrown,
+                loginRequired: true
             });
         },
         spinTarget: $("#boxContents"),
@@ -2428,7 +2438,8 @@ $.gfHttpErrorPopup = function(opts) {
                     status: status,
                     title: title,
                     message: message
-                }
+                },
+                loginRequired: false
             });
         }
     }

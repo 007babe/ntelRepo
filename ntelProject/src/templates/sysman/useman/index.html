@@ -9,12 +9,9 @@
         <div class="col-lg-12">
             <div class="tabs-container">
                 <ul id="ulTabOpenTarget" class="nav nav-tabs" tabCode="">
-                    <li code="10" class="active" url="{% url 'sysman:use__app_req' %}"><a class="p-tab" data-toggle="tab">이용신청관리</a></li>
-                    <li code="20" class="" url="{% url 'sysman:use__company' %}"><a class="p-tab" data-toggle="tab">사용회사관리</a></li>
-                    <li code="30" class="" url="{% url 'sysman:use__user' %}"><a class="p-tab" data-toggle="tab">사용자관리</a></li>
-                    {% comment %}
-                    <li code="40" class="" url="{% url 'sysman:new_tab3' %}"><a class="p-tab" data-toggle="tab">사용권한관리</a></li>
-                    {% endcomment %}
+                    <li code="10" class="active" url="{% url 'sysman:useman__appreqman' %}"><a class="p-tab" data-toggle="tab">이용신청관리</a></li>
+                    <li code="20" class="" url="{% url 'sysman:useman__companyman' %}"><a class="p-tab" data-toggle="tab">사용회사관리</a></li>
+                    <li code="30" class="" url="{% url 'sysman:useman__userman' %}"><a class="p-tab" data-toggle="tab">사용자관리</a></li>
                 </ul>
                 <!-- 탭 본문 Start -->
                 <div class="tab-content ibox-content tab">

@@ -139,7 +139,7 @@ $.fn.jqGridInit = function(opts) {
         // Formatter
         // http://www.trirand.com/jqgridwiki/doku.php?id=wiki:predefined_formatter
         formatter: {
-            integer : {
+            integer: {
                 thousandsSeparator: "",
                 defaultValue: '0'
             },
@@ -148,21 +148,21 @@ $.fn.jqGridInit = function(opts) {
                 decimalSeparator: ".",
                 defaultValue: '0'
             },
-            currency : { // 통화
+            currency: {
                 thousandsSeparator: ",",
                 decimalSeparator: ".",
                 defaultValue: '0',
                 decimalPlaces: 0
             },
-            date : { // 날짜
+            date: { 
                 dayNames: [
                     "일", "월", "화", "수", "목", "금", "토",
                     "일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"
                 ],
-                AmPm : ["오전","오후","오전","오후"],
+                AmPm : ["오전", "오후", "오전", "오후"],
                 S: function(j) {
                     return "";
-                }
+                },
                 srcformat: "Y-m-d H:i:s",
                 newformat: "Y-m-d",
                 reformatAfterEdit : false
@@ -182,56 +182,6 @@ $.fn.jqGridInit = function(opts) {
         edittext: '수정'
     });
 };
-
-/*
- * jqGrid용 Class
- */
-var jqGridCls ={
-    /*
-     * Class Member
-     */
-    $target: null,             // jqGrid Target Object
-    $pager: null,
-    $data: null,
-    $url: null,
-    $datatype: "local",
-    $autowidth: true,
-    $shrinkToFit: false,
-    $rowNum: 20,
-    $rowList: [10, 20, 30],
-    $colNames: null,
-    $colModel: null,
-    $formatter: {
-         currency : {
-            thousandsSeparator: ",",
-            defaultValue: '0',
-            decimalPlaces: 0
-         }
-    },
-    $multiselect: false,
-    $multiselectWidth: 30,
-    $viewrecords: true,
-    $caption: null,
-    $add: true,
-    $edit: true,
-    $addtext: null,
-    $edittext: null,
-    $hidegrid: false,
-    $ondblClickRow: null,
-    $onSelectRow: null,
-    $loadComplete: null,
-    $emptyrecords: "전체 : 0 건",
-    $recordtext: "전체 : {2}건",
-    // 초기화
-    init: function(opt) {
-
-
-
-    }
-
-};
-
-
 
 /*
  * 데이터에서 useYn(boolean)에 따른 사용여부 표기값
@@ -277,7 +227,6 @@ $.jqGridTelNo = function(telNo1, telNo2, telNo3) {
     return telNo;
 
 };
-
 
 $.jqGridStatus = function(code) {
 

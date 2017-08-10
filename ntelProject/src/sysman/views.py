@@ -15,18 +15,18 @@ from utils.json import makeJsonResult, jsonDefault
 
 
 @login_required_ajax
-def useAppReqCV(request):
+def appreqmanIndexCV(request):
     '''
     시스템관리 > 사용관리  : 이용신청관리 컨텐츠
     '''
     return render(
         request,
-        'sysman/use/app_req.html',
+        'sysman/useman/appreqman/index.html',
         {},
     )
 
 @login_required_ajax
-def useAppReqDetailCV(request):
+def appreqmanDetailCV(request):
     '''
     시스템관리 > 사용관리  : 이용신청관리 컨텐츠 상세
     '''
@@ -35,21 +35,23 @@ def useAppReqDetailCV(request):
         reqId__exact=request.POST.get("reqId")
     )
 
-    appReq = SysAppReq.objects.get(
+    appreq = SysAppReq.objects.annotate(
+        companyTpNm=F("companyTp__comNm")
+    ).get(
         qry
     )
 
     return render(
         request,
-        'sysman/use/app_req_detail.html',
+        'sysman/useman/appreqman/detail.html',
         {
-            "appReq": appReq
+            "appreq": appreq
         },
     )
 
 
 @login_required_ajax
-def useAppReqListJson(request):
+def appreqmanJsonList(request):
     """
     시스템관리 > 사용관리  : 이용신청관리 Json List
     """
@@ -105,24 +107,24 @@ def useAppReqListJson(request):
 
 
 @login_required_ajax
-def useCompanyCV(request):
+def companymanIndexCV(request):
     '''
     시스템관리 > 사용관리  : 사용회사관리 컨텐츠
     '''
     return render(
         request,
-        'sysman/use/company.html',
+        'sysman/useman/companyman/index.html',
         {},
     )
 
 
 @login_required_ajax
-def useUserCV(request):
+def usermanIndexCV(request):
     '''
     시스템관리 > 사용관리  : 사용자관리 컨텐츠
     '''
     return render(
         request,
-        'sysman/use/user.html',
+        'sysman/useman/userman/index.html',
         {},
     )
