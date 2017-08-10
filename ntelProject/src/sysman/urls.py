@@ -14,8 +14,8 @@ urlpatterns = [
     url(r'^use/app_req/$', views.useAppReqCV, name='use__app_req'),
     # 이용신청관리 리스트(Json)
     url(r'^use/app_req_man/list/json/$', views.useAppReqListJson, name='use__app_req__list__json'),
-    # 이용신청관리 상세(Json)
-    url(r'^use/app_req_man/detail/$', views.useAppReqListJson, name='use__app_req__detail'),
+    # 이용신청관리 상세 화면
+    url(r'^use/app_req_man/detail/$', views.useAppReqDetailCV, name='use__app_req__detail'),
 
     ########################
     # 사용회사관리(tab)

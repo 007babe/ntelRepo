@@ -118,26 +118,39 @@ $(document).ready(function() {
                 decimalPlaces: 0
              }
         },
-        
-        
-        add: true,
-        edit: true,
-        addtext: 'Add',
-        edittext: 'Edit',
         // 이벤트 처리
         ondblClickRow: function(id) { // 더블클릭
+            // 상세 팝업
+            var reqId = $(this).jqGrid('getCell', id, 'reqId'); // 요청번호
+
             alert("ondblClickRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
+            $.gfCommonPopUp({
+                popUrl: "{% url 'sysman:use__app_req__detail' %}",
+                modalId: "divAppreqDetailPopup",
+                width: "700",
+                params: {
+                    reqId: reqId
+                },
+                loginCheck: true
+            });
         },
         onSelectRow: function(id) { // Row가 선택되었을때
-            alert("onSelectRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
+//            alert("onSelectRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
         },
         loadComplete: function() {
-            alert("loadComplete :: !!!!!!!!!!!");
-        },
+//            alert("loadComplete :: !!!!!!!!!!!");
+        }
     });
 
+    // 최초 전체 데이터 획득
+    $.getAppreqList();
 
-	// 2. 초기 데이터 획득(Ajax-Json)
+});
+
+/*
+ * 이용신청 데이터 획득(Ajax-Json)
+ */
+$.getAppreqList = function(){
     $.gfAjax({
         type: "POST",
         url: "{% url 'sysman:use__app_req__list__json' %}",
@@ -148,10 +161,10 @@ $(document).ready(function() {
             $("#dataGrid").jqGrid("clearGridData");
             $("#dataGrid").jqGrid("setGridParam", {data: data.resultData});
             $("#dataGrid").trigger("reloadGrid");
-        },
-//        spinTarget: $("#divContents01")
+        }
     });
-});
+};
+
 </script>
 <!-- Javascript Local Code End -->
 

@@ -25,6 +25,28 @@ def useAppReqCV(request):
         {},
     )
 
+@login_required_ajax
+def useAppReqDetailCV(request):
+    '''
+    시스템관리 > 사용관리  : 이용신청관리 컨텐츠 상세
+    '''
+    qry = Q()
+    qry &= Q(
+        reqId__exact=request.POST.get("reqId")
+    )
+
+    appReq = SysAppReq.objects.get(
+        qry
+    )
+
+    return render(
+        request,
+        'sysman/use/app_req_detail.html',
+        {
+            "appReq": appReq
+        },
+    )
+
 
 @login_required_ajax
 def useAppReqListJson(request):
