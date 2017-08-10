@@ -194,7 +194,10 @@ $.gfLoadContentsData = function(opts) {
                 jqXHR : jqXHR,
                 textStatus : textStatus,
                 errorThrown : errorThrown,
-                loginRequired : true
+                loginRequired : true,
+                loginCompletedFun: function() {
+                    // 로그인 후 처리 이벤트
+                }
             });
         },
         spinTarget: $("#boxContents"),

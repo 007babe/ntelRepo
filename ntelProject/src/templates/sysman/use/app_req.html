@@ -16,146 +16,6 @@
 <script>
 $(document).ready(function() {
 	// 1. JQGrid 객체 생성(초기화)
-/*    
-
-    // Configuration for jqGrid
-    $("#dataGrid").jqGrid({
-//        data: mydata,
-        datatype: "local",
-//        url: "{% url 'sysman:use__app_req__list__json' %}",
-//        mtype: "post",
-//        data: {},
-//        datatype: "json",
-        height: "630",
-        autowidth: true,
-        shrinkToFit: false,
-        rowNum: 20,
-        rowList: [10, 20, 30],
-        colNames:[
-        	'요청번호', '요청일', '진행상태', '구분', '회사명', '대표매장',
-        	'대표자', '아이디', '전화', '휴대폰', '이메일', 
-        	'주소'
-        ],
-        colModel:[
-            {
-                name: 'reqId',
-                width: 100,
-                align: "center"
-            },
-            {
-                name: 'reqDt',
-                editable: false,
-                width: 80,
-                align: "center",
-                formatter: "date",
-                formatoptions: {
-                   srcformat: 'Y-m-d H:i:s',
-                   newformat: 'y-m-d'
-                }
-            },
-            {
-                name: 'reqStatusNm',
-                editable: false,
-                width: 80,
-                align: "center",
-                cellattr: function(rowId, val, rowObject, cm, rdata) {
-                    console.log(rowObject.reqStatusCss);
-                    return rowObject.reqStatusCss;
-                }
-            },
-            {
-                name: 'companyTpNm',
-                editable: false,
-                width: 70,
-                align: "center"
-            },
-            {
-                name: 'companyNm',
-                editable: false,
-                width: 150,
-                align: "left"
-            },
-            {
-                name: 'shopNm',
-                editable: false,
-                width: 150,
-                align: "left"
-            },
-            {
-                name: 'userNm',
-                editable: false,
-                width: 70,
-                align: "left"
-            },
-            {
-                name: 'userId',
-                editable: false,
-                width: 90,
-                align: "left"
-            },
-            {
-                name: 'telNo',
-                editable: false,
-                width: 120,
-                align: "center",
-                formatter: function(cellvalue, options, rowObject) {
-                    return $.jqGridTelNo(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);                    
-                }
-            },
-            {
-                name: 'cellNo',
-                editable: false,
-                width: 120,
-                align: "center",
-                formatter: function(cellvalue, options, rowObject) {
-                    return $.jqGridTelNo(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);                    
-                }
-            },
-            {
-                name: 'email',
-                editable: false,
-                width: 150,
-                align: "left"
-            },
-            {
-                name: 'addr1',
-                editable: false,
-                width: 200,
-                align: "left"
-            }
-        ],
-        formatter: {
-             currency : {
-                thousandsSeparator: ",",
-                defaultValue: '0',
-                decimalPlaces: 0
-             }
-        },
-        multiselect: false,
-        multiselectWidth: 30,
-        pager: "#pagerList",
-        viewrecords: true,
-        caption: "",
-        add: true,
-        edit: true,
-        addtext: 'Add',
-        edittext: 'Edit',
-        hidegrid: false,
-        rownumbers: true,
-        ondblClickRow: function(id) {
-            alert("reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
-        },
-        onSelectRow: function(id) {
-
-        },
-        loadComplete: function() {
-        },
-        emptyrecords: "전체 : 0 건",
-        recordtext: "전체 : {2}건",
-//        loadtext: "조회 중...",
-    });
-*/
-    
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
@@ -264,15 +124,15 @@ $(document).ready(function() {
         edit: true,
         addtext: 'Add',
         edittext: 'Edit',
-
-
-        ondblClickRow: function(id) {
-            alert("reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
+        // 이벤트 처리
+        ondblClickRow: function(id) { // 더블클릭
+            alert("ondblClickRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
         },
-        onSelectRow: function(id) {
-
+        onSelectRow: function(id) { // Row가 선택되었을때
+            alert("onSelectRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
         },
         loadComplete: function() {
+            alert("loadComplete :: !!!!!!!!!!!");
         },
     });
 

@@ -11,8 +11,10 @@ $.fn.jqGridInit = function(opts) {
     var _this = this;
 
     if($.isEmpty(_this) || $.isEmpty(opts)) return false;
-
+    
     _this.jqGrid({
+        // Options
+        // 참조 http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options 
         ajaxGridOptions   : $.nvl(opts.ajaxGridOptions, new Object()),
         ajaxSelectOptions : $.nvl(opts.ajaxSelectOptions, new Object()),
         altclass          : $.nvl(opts.altclass, ""),
@@ -112,19 +114,68 @@ $.fn.jqGridInit = function(opts) {
         viewrecords       : $.nvl(opts.viewrecords, true),
         viewsortcols      : $.nvl(opts.viewsortcols, [false, 'vertical', true]),
         width             : opts.width,
-        xmlReader         : opts.xmlReader,
-        // event
-        ondblClickRow     : opts.ondblClickRow,
-        onSelectRow       : opts.onSelectRow,
+        xmlReader         : opts.xmlReader, 
+        // Events
+        // 참조 http://www.trirand.com/jqgridwiki/doku.php?id=wiki:events
+        afterInsertRow    : opts.afterInsertRow,
+        beforeProcessing  : opts.beforeProcessing,
+        beforeRequest     : opts.beforeRequest,
+        beforeSelectRow   : opts.beforeSelectRow,
+        gridComplete      : opts.gridComplete,
+        loadBeforeSend    : opts.loadBeforeSend,
         loadComplete      : opts.loadComplete,
-        // etc
+        loadError         : opts.loadError,
+        ondblClickRow     : opts.ondblClickRow,
+        onHeaderClick     : opts.onHeaderClick,
+        onPaging          : opts.onPaging,
+        onRightClickRow   : opts.onRightClickRow,
+        onSelectAll       : opts.onSelectAll,
+        onSelectRow       : opts.onSelectRow,
+        onSortCol         : opts.onSortCol,
+        rowattr           : opts.rowattr,
+        resizeStart       : opts.resizeStart,
+        resizeStop        : opts.resizeStop,
+        serializeGridData : opts.serializeGridData,       
+        // Formatter
+        // http://www.trirand.com/jqgridwiki/doku.php?id=wiki:predefined_formatter
         formatter: {
-             currency : {
+            integer : {
+                thousandsSeparator: "",
+                defaultValue: '0'
+            },
+            number: {
                 thousandsSeparator: ",",
+                decimalSeparator: ".",
+                defaultValue: '0'
+            },
+            currency : { // 통화
+                thousandsSeparator: ",",
+                decimalSeparator: ".",
                 defaultValue: '0',
                 decimalPlaces: 0
-             }
+            },
+            date : { // 날짜
+                dayNames: [
+                    "일", "월", "화", "수", "목", "금", "토",
+                    "일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"
+                ],
+                AmPm : ["오전","오후","오전","오후"],
+                S: function(j) {
+                    return "";
+                }
+                srcformat: "Y-m-d H:i:s",
+                newformat: "Y-m-d",
+                reformatAfterEdit : false
+            },
+            baseLinkUrl: '',
+            showAction: '',
+            target: '',
+            checkbox: {
+                disabled:true
+            },
+            idName : 'id'            
         },
+        // Etc
         add: true,
         edit: true,
         addtext: '추가',
