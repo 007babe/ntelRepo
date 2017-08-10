@@ -27,6 +27,7 @@ encoding//src/manage.py.dev=UTF-8
 encoding//src/manage2.py.svr=UTF-8
 encoding//src/sample/migrations/0001_initial.py=utf-8
 encoding//src/static/js/common.js.bak=UTF-8
+encoding//src/system/migrations/0013_auto_20170728_1152.py=utf-8
 encoding//src/system/migrations/0033_sysappreq_reqstatus.py=utf-8
 encoding//src/system/migrations/0034_sysappreq_reqdt.py=utf-8
 encoding//src/system/migrations/0040_remove_sysappreq_reqstatus.py=utf-8

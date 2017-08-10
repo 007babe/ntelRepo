@@ -7,15 +7,15 @@ from django.forms.models import ModelForm
 from django.utils.translation import gettext as _
 
 from common.models import ComCd
-from system.models import SysAppReq
+from system.models import SysAppreq
 from system.models import SysPolicy
 from utils.data import getSysSeqId
 from utils.data import isUsableId
 
 
-class SysAppReqForm(ModelForm):
+class SysAppreqForm(ModelForm):
     '''
-    이용신청 Form class
+    이용신청(SysAppreq) Form class
     '''
     # 신청ID
     reqId = forms.CharField(required=False)  # 신청ID는 신규생성이므로 Null=True
@@ -39,7 +39,7 @@ class SysAppReqForm(ModelForm):
     def __init__(self, *args, **kwargs):
         # 로그인 사용자 정보 활용
         # self.user = kwargs.pop('user', None)
-        super(SysAppReqForm, self).__init__(*args, **kwargs)
+        super(SysAppreqForm, self).__init__(*args, **kwargs)
 
         self.fields.keyOrder = [
             'confirmAccessTerms',
@@ -59,7 +59,7 @@ class SysAppReqForm(ModelForm):
         ]
 
     def clean(self):
-        cleaned_data = super(SysAppReqForm, self).clean()
+        cleaned_data = super(SysAppreqForm, self).clean()
         # 사용가능한 ID인지 체크
         if not isUsableId(cleaned_data.get('userId')):
             self.add_error('userId', _('사용하실 수 없는 아이디입니다.'))
@@ -71,16 +71,17 @@ class SysAppReqForm(ModelForm):
             self.add_error('password', _('비밀번호확인과 일치하지 않습니다.'))
 
     def save(self, commit=True):
-        cleaned_data = super(SysAppReqForm, self).clean()
-        instance = super(SysAppReqForm, self).save(commit=False)
+        cleaned_data = super(SysAppreqForm, self).clean()
+        instance = super(SysAppreqForm, self).save(commit=False)
         # 신규 이용 신청 번호 획득 후 세팅
         self.reqId = getSysSeqId('APRQID')
         instance.reqId = self.reqId
 
+        # 회사등급 ('S0006A')  일반등급으로 세팅(comCd.grpCd='S0006' 참조)
+        instance.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
+
         # 진행상태 승인요청('S0008R')  세팅(comCd.grpCd='S0008' 참조)
-#        instance.reqStatus = 'S0008A' ==> 안된다
-        instance.reqStatus_id = 'S0008A'
-#        instance.reqStatus = ComCd.objects.get(comCd__exact='S0008A') ==> 된다
+        instance.reqStatus = ComCd.objects.get(comCd__exact='S0008A')
 
         # 비밀번호 암호화
         instance.password = make_password(cleaned_data.get('password'))
@@ -90,5 +91,5 @@ class SysAppReqForm(ModelForm):
         return instance
 
     class Meta:
-        model = SysAppReq
+        model = SysAppreq
         fields = "__all__"

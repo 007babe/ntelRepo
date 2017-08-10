@@ -9,16 +9,15 @@ from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
-from appreq.forms import SysAppReqForm
-from system.models import SysAppReq
+from appreq.forms import SysAppreqForm
+from system.models import SysAppreq
 from system.models import SysPolicy
-from utils.ajax import login_required_ajax
 from utils.data import getComCdList
 from utils.data import isUsableId
 from utils.json import makeJsonResult
 
 
-def appReqCV(request):
+def appreqIndexCV(request):
     '''
     이용신청 초기 화면 Contents View(Function Based)
     '''
@@ -49,14 +48,14 @@ def appReqCV(request):
     )
 
 
-def appReqResultPopCV(request):
+def appreqResultCV(request):
     '''
-    이용신청 결과 처리 Popup
+    이용신청 결과
     '''
     if request.POST:
         qry = Q()
         qry &= Q(reqId__exact=request.POST.get("reqId"))
-        appreq = SysAppReq.objects.get(
+        appreq = SysAppreq.objects.get(
             qry
         )
 
@@ -70,7 +69,7 @@ def appReqResultPopCV(request):
         raise Http404
 
 
-def appReqRegistSV(request):
+def appreqJsonRegist(request):
     '''
     이용신청 요청처리
     '''
@@ -78,14 +77,14 @@ def appReqRegistSV(request):
 
     if request.method == 'POST':
         # 이용신청 폼
-        sysAppReqForm = SysAppReqForm(
+        sysAppreqForm = SysAppreqForm(
             request.POST,
         )
 
         # 데이터 검증 후 저장
-        if(sysAppReqForm.is_valid()):
-            sysAppReqForm.save()
-            resultData["reqId"] = sysAppReqForm.reqId
+        if(sysAppreqForm.is_valid()):
+            sysAppreqForm.save()
+            resultData["reqId"] = sysAppreqForm.reqId
 
             # 가입후 메일 보내기(함수, 클래스 화 => 쓰레드 처리) ===>
             try:
@@ -94,10 +93,10 @@ def appReqRegistSV(request):
                     '엔텔에 가입해 주셔서 감사합니다.',
                     '엔텔 ',
                     'ntel5004@naver.com',
-                    [sysAppReqForm.cleaned_data.get("email")],
+                    [sysAppreqForm.cleaned_data.get("email")],
                     fail_silently=False,
                 )
-                print(sysAppReqForm.cleaned_data.get("email"))
+                print(sysAppreqForm.cleaned_data.get("email"))
                 print("sendmail --------------<")
             except SMTPDataError as smtpErr:
                 print("메일 발송 실패")
@@ -107,7 +106,7 @@ def appReqRegistSV(request):
     return HttpResponse(
         json.dumps(
             makeJsonResult(
-                form=sysAppReqForm,
+                form=sysAppreqForm,
                 resultData=resultData
             )
         ),
@@ -138,29 +137,5 @@ def getJsonIsUsableId(request):
 
     return HttpResponse(
         json.dumps(jsonResult),
-        content_type="application/json"
-    )
-
-
-@login_required_ajax
-def getJsonAppReq(request):
-    '''
-    이용신청 리스트 데이터 조회
-    '''
-    # 검색조건
-    qry = Q()
-    appReqs = SysAppReq.objects.filter(
-        qry
-    ).order_by(
-        '-reqId'
-    )
-    
-    print("188888888")
-    return HttpResponse(
-        json.dumps(
-            makeJsonResult(
-                resultData=appReqs
-            )
-        ),
         content_type="application/json"
     )

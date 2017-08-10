@@ -37,7 +37,7 @@ class SysCompany(models.Model):
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=True, verbose_name='회사명') # 회사명
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
-    isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=True, verbose_name='실회사구분')
+    isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실회사구분')
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
     bizLicNo2 = models.CharField(db_column='biz_lic_no2', max_length=2, null=True, blank=True, verbose_name='사업자번호2')
@@ -369,7 +369,7 @@ class PublishedManager(models.Manager):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
-class SysAppReq(models.Model):
+class SysAppreq(models.Model):
     """이용신청정보
     고유발생 Key로 PK 설정
     """

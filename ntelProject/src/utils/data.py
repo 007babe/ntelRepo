@@ -5,7 +5,7 @@ from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 
 from common.models import ComCd
-from system.models import SysUser, SysAppReq
+from system.models import SysUser, SysAppreq
 from system.models import SysSeq
 from utils.const import NTEL_EXCLUDE_IDS
 
@@ -93,12 +93,12 @@ def isUsableId(userId):
     ).first()
 
     if sysUser is None:
-        # 이용신청(SysAppReq)에 등록된 ID 중복 확인
-        userAppReq = SysAppReq.objects.filter(
+        # 이용신청(SysAppreq)에 등록된 ID 중복 확인
+        userAppreq = SysAppreq.objects.filter(
             qry
         ).first()
 
-        if userAppReq is None:
+        if userAppreq is None:
             return True
         else:
             return False

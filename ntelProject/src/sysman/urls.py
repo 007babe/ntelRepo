@@ -15,8 +15,7 @@ urlpatterns = [
     # 이용신청관리 리스트(Json)
     url(r'^useman/appreqman/json/list/$', views.appreqmanJsonList, name='useman__appreqman__json__list'),
     # 이용신청관리 승인/취소 처리(Json)
-    url(r'^useman/appreqman/json/appr$', views.appreqmanDetailCV, name='useman__appreqman__json_appr'),
-
+    url(r'^useman/appreqman/json/appr$', views.appreqmanJsonAppr, name='useman__appreqman__json_appr'),
     # 이용신청관리 상세 화면
     url(r'^useman/appreqman/detail/$', views.appreqmanDetailCV, name='useman__appreqman__detail'),
 

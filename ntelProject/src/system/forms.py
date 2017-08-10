@@ -1,8 +1,35 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, \
     UserCreationForm, UserChangeForm
+from django.forms.models import ModelForm
 
-from system.models import SysUser
+from system.models import SysUser, SysCompany
+from utils.data import getSysSeqId
+
+
+class SysCompanyForm(ModelForm):
+    '''
+    SysCompany등록 폼
+    '''
+    def __init__(self, *args, **kwargs):
+        super(SysCompanyForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(SysCompanyForm, self).clean()
+
+    def save(self, commit=True):
+        cleaned_data = super(SysCompanyForm, self).clean()
+        instance = super(SysCompanyForm, self).save(commit=False)
+
+        self.companyId = getSysSeqId('SELLID')
+        instance.companyId = self.companyId
+
+        if commit:
+            instance.save()
+
+    class Meta:
+        model = SysCompany
+        fields = "__all__"
 
 
 class SysUserCreationForm(UserCreationForm):
@@ -17,7 +44,7 @@ class SysUserCreationForm(UserCreationForm):
 
     class Meta:
         model = SysUser
-        fields = ('user_id',)
+        fields = ('userId',)
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -46,4 +73,4 @@ class SysUserChangeForm(UserChangeForm):
 
     class Meta:
         model = SysUser
-        fields = ('user_id',)
+        fields = ('userId',)
