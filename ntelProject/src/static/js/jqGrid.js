@@ -89,7 +89,7 @@ $.fn.jqGridInit = function(opts) {
         scrollrows        : $.nvl(opts.scrollrows, false),
         selarrrow         : $.nvl(opts.selarrrow, false),
         selrow            : opts.selrow,
-        shrinkToFit       : $.nvl(opts.shrinkToFit, false),               // boolean or integer
+        shrinkToFit       : $.nvl(opts.shrinkToFit, true),               // boolean or integer
         sortable          : $.nvl(opts.sortable, false),
         sortname          : $.nvl(opts.sortname, ""),
         sortorder         : $.nvl(opts.sortorder, "asc"),
@@ -113,7 +113,7 @@ $.fn.jqGridInit = function(opts) {
         userDataOnFooter  : $.nvl(opts.userDataOnFooter, false),
         viewrecords       : $.nvl(opts.viewrecords, true),
         viewsortcols      : $.nvl(opts.viewsortcols, [false, 'vertical', true]),
-        width             : opts.width,
+//        width             : opts.width,
         xmlReader         : opts.xmlReader, 
         // Events
         // 참조 http://www.trirand.com/jqgridwiki/doku.php?id=wiki:events
@@ -187,12 +187,42 @@ $.fn.jqGridInit = function(opts) {
  * 데이터에서 useYn(boolean)에 따른 사용여부 표기값
  */
 $.jqGridUseYn = function(useYn){
-	useYnNm = ""
+	var useYnNm = ""
 	if(useYn == true) useYnNm = "사용"
     else if(useYn == false) useYnNm = "미사용"
+
     return useYnNm;
 };
 
+/*
+ * 데이터에서 useYn(boolean)에 따른 Attribute
+ */
+$.jqGridUseYnAttr = function(useYn){
+
+    var attr = "";
+	if(useYn == true) attr = "style='color: green; font-weight: bold;'";
+    else if(useYn == false) attr = "style='color: darkred; font-weight: bold;'";
+
+    return attr;
+};
+
+/*
+ * 데이터에서 userAuth에 따른 Attribute
+ */
+$.jqGridUserAuthAttr = function(userAuth){
+    var attr = "";
+	switch(userAuth) {
+	    case "S0001M": // 시스템관리자
+	        attr = "style='background-color: #FFFEE7; font-weight: bold; color: green;'"
+	        break;
+	    case "S0001C": // 대표    
+	        attr = "style='background-color: #FFFEE7; font-weight: bold; color: darkred;'"
+	        break;
+	    default:
+	        break;
+	}
+    return attr;
+};
 
 /*
  * 금액일 경우 -/+에 따른 속성
@@ -207,7 +237,7 @@ $.jqGridMoneyAttr = function(moneyVal){
 
 
 /*
- * 하이라이트 컬럼 속성
+ * 일반 하이라이트 컬럼 속성
  */
 $.jqGridHighlightColAttr = function(){
     return "style='background-color: #FFFEE7; font-weight: bold;'";
