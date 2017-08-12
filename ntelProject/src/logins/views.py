@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import json
+import re
 
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import HttpResponse, HttpResponseRedirect
@@ -45,17 +46,23 @@ def loginCheckCV(request):
     '''
     로그인 화면 Contents View(Function Based)
     '''
+    ''' 접속 기기 관련 ==> 추가 개선 필요
+    httpUserAgent = request.META['HTTP_USER_AGENT']
+    print("HTTP_USER_AGENT", httpUserAgent)
+    '''
+
     jsonResult = {}
     if request.method == 'POST':
         # 사용자 체크
         user = authenticate(
             request,
             userId=request.POST.get('userId'),
-            password=request.POST.get('password')
+            password=request.POST.get('password'),
+            useYn=True,
         )
 
         # 추가 필요 : 업체, 매장, UseYn... authenticate 관련
-        if user is not None:
+        if user is not None and user.useYn:
             # Login 처리
             login(request, user)
             jsonResult = makeJsonResult(

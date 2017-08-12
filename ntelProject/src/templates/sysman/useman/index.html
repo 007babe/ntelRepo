@@ -30,16 +30,15 @@
 <script>
 $(document).ready(function() {
     
-    // 개통 방식(단말기, 유심/중고, 홈/인터넷) 탭 클릭 이벤트
+    // 탭화면 클릭시 이벤트 처리
     $("#ulTabOpenTarget li").on("click", function(e, params) {
         var _tab = $(this);
         var _tabGroup = _tab.parent();
         var tabCode = _tabGroup.attr("tabCode");
-        var code = _tab.attr("code"); // 단말기:10, 유심/중고:20, 홈/인터넷:30
+        var code = _tab.attr("code");
         var url = _tab.attr("url"); // tab Contents 주소
         var _divTabContents = $("#divTabContents"); // 컨텐츠 출력 대상
 
-        
         if(tabCode != code) {
             // 해당 컨텐츠 로딩
             $.gfLoadContents({

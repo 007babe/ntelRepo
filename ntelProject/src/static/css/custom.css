@@ -216,7 +216,7 @@ td .fc-sat {
 /* ibox Contents 검색조건용 */
 
 .ibox-content.search {
- 	padding: 5px 20px 5px 20px;
+ 	padding: 10px 10px 10px 10px;
 }
 
 .form-group.search {
@@ -240,6 +240,9 @@ td .fc-sat {
 	padding-left:5px;
 }
 
+.control-label.search {
+    padding-top: 2px;    
+}
 
 /*
  * jqGrid 용

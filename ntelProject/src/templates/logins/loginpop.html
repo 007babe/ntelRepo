@@ -59,9 +59,10 @@ $(document).ready(function() {
             data: _this.serializeArray(),
             async: true,
             okFunc: function(data, textStatus, jqXHR) {
-        		// 로그인 팝업창 닫기
+                // CSRF 세팅
         		$.gfAjaxSetup();
-                $('#divCommonModalPopup').modal('hide');
+        		// 로그인 팝업창 닫기
+                $.gfCommonPopUpClose();
             },
             ngFunc: function(data, cbFunc) {
            		// 팝업 메시지 처리

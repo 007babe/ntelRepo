@@ -296,8 +296,13 @@ $.gfCommonPopUp = function(opts) {
     });
 };
 
-
-
+/*
+ * 공통팝업 닫기
+ */
+$.gfCommonPopUpClose = function(_target) {
+    _target = $.isEmpty(_target) ? $('#divCommonModalPopup') : _target;
+    _target.modal('hide');
+}
 /*
  * 에러발생시 모달 창
  */

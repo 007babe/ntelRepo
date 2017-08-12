@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from datetime import date
+import datetime
 import json
 
 from django.db import transaction
@@ -9,7 +11,6 @@ from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
 from common.models import ComCd
-from system.forms import SysCompanyForm
 from system.models import SysAppreq, SysCompany, SysShop, SysUser
 from utils.ajax import login_required_ajax
 from utils.data import getSysSeqId
@@ -60,7 +61,6 @@ def appreqmanJsonList(request):
     """
     시스템관리 > 사용관리  : 이용신청관리 : 리스트 데이터 Json
     """
-    # sysMenu
     qry = Q()
 
     sysAppreq = SysAppreq.objects.filter(
@@ -111,8 +111,8 @@ def appreqmanJsonList(request):
     )
 
 
-@transaction.atomic
 @login_required_ajax
+@transaction.atomic
 def appreqmanJsonAppr(request):
     '''
     이용신청 승인처리
@@ -120,24 +120,22 @@ def appreqmanJsonAppr(request):
     if request.method == 'POST':
         statusGrpCd = "S0008"  # 진행상태 Group 코드
         reqId = request.POST.get("reqId")  # 요청ID
-        reqStatus = request.POST.get("reqStatus")  # 처리상태단축코드
+        reqStatus = request.POST.get("reqStatus")  # 진행상태단축코드
 
-        print(reqId, reqStatus, statusGrpCd + reqStatus)
+        ##################################
+        # 0. 승인처리 대상 사용요청데이터를 획득
+        ##################################
+        appreq = SysAppreq.objects.get(
+            reqId__exact=reqId
+        )
 
-        if reqStatus == 'F':  # 승인처리일 경우
-            ##################################
-            # 1. 승인처리 대상 사용요청데이터를 획득
-            ##################################
-            appreq = SysAppreq.objects.get(
-                reqId__exact=request.POST.get("reqId")
-            )
+        if reqStatus == 'F':  # 승인처리 요청일 경우
 
             ##################################
-            # 2. SysCompany에 데이터 등록
+            # 1. SysCompany에 데이터 등록
             ##################################
             companyId = getSysSeqId('SELLID')  # 회사ID 획득
             shopId = companyId + "01"  # 기본매장ID 획득
-            print(companyId, shopId)
 
             sysCompany = SysCompany.objects.create(
                 companyId=companyId,
@@ -163,9 +161,9 @@ def appreqmanJsonAppr(request):
                 regId=SysUser.objects.get(userId__exact=request.user.userId),
                 modId=SysUser.objects.get(userId__exact=request.user.userId),
             )
-            #sysCompany.save()
+
             ##################################
-            # 3. SysShop에 데이터 등록
+            # 2. SysShop에 데이터 등록
             ##################################
             sysShop = SysShop.objects.create(
                 shopId=shopId,
@@ -183,13 +181,14 @@ def appreqmanJsonAppr(request):
                 regId=SysUser.objects.get(userId__exact=request.user.userId),
                 modId=SysUser.objects.get(userId__exact=request.user.userId),
             )
-            #sysShop.save()
+
             ##################################
-            # 5. SysUser에 데이터 등록
+            # 3. SysUser에 데이터 등록
             ##################################
-            sysUser = SysUser.objects.create(
+            SysUser.objects.create(
                 userId=appreq.userId,
                 password=appreq.password,
+                useYn=True,
                 email=appreq.email,
                 userNm=appreq.userNm,
                 userAuth=ComCd.objects.get(comCd__exact="S0001C"),
@@ -206,23 +205,38 @@ def appreqmanJsonAppr(request):
                 regId=SysUser.objects.get(userId__exact=request.user.userId),
                 modId=SysUser.objects.get(userId__exact=request.user.userId),
             )
-            #sysUser.save()
 
             ##################################
-            # 6. 진행상태 Update
+            # 4. 진행상태 Update => 승인처리(F)
             ##################################
             appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
             appreq.companyId = sysCompany
             appreq.save()
 
-        elif reqStatus == 'C':  # 승인취소일 경우
-            pass
+        elif reqStatus == 'C':  # 요청취소일 경우
+            ##################################
+            # 1. 진행상태 Update => 요청취소(C)
+            ##################################
+            appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
+            appreq.save()
+        elif reqStatus == 'A':  # 승인요청일 경우
+            ##################################
+            # 1. 진행상태 Update => 승인요청(A)
+            ##################################
+            appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
+            appreq.save()
+        elif reqStatus == 'D':  # 삭제일 경우
+            print("DDDDDDDDDDDDDDD");
+            sysCompany = SysCompany.objects.get(
+                companyId__exact=appreq.companyId
+            )
+            sysCompany.delete()
     else:
         raise Http404
 
     return HttpResponse(
         json.dumps(
-            makeJsonResult()
+            makeJsonResult(resultMessage="처리가완료되었습니다.")
         ),
         content_type="application/json"
     )
