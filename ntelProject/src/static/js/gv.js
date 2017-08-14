@@ -11,6 +11,7 @@ var gSysGDs =  [
     { key : "GD_COM_HTTP_STATUS", url : "/common/json/com_http_status", cbFunc : "", useYn : true, desc : "HTTP 상태 데이터" },
     { key : "GD_SYS_MENU", url : "/system/json/sys_menu", cbFunc : "$.gfSetSysMenu();", useYn : true, desc : "사용자메뉴" },
     { key : "GD_SYS_MSG", url : "/system/json/sys_msg", cbFunc : "", useYn : true, desc : "시스템메세지 데이터" },
+    { key : "GD_SYS_SHOP", url : "/system/json/sys_shop", cbFunc : "", useYn : true, desc : "소속매장" },
 
     { key : "GD_STAFF", url : "/static/json/staffInfo.json", cbFunc : "", useYn : true, desc : "직원 데이터" },
     { key : "GD_AGENT", url : "/static/json/agentInfo.json", cbFunc : "", useYn : true, desc : "대리/딜러점 데이터" },

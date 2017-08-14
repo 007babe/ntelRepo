@@ -1,6 +1,44 @@
 <!-- 탭 본문 :  Start -->
 <div id="divContents01">
     <div class="spinWrap">
+        
+    <!-- 검색조건 Start -->
+    <form id="frmSearch" method="post" class="form-horizontal search">
+    {% csrf_token %}
+    <div class="iboxloat-e-margins" style="margin-bottom: 10px;">
+        <div class="ibox-content search">
+            <div class="form-group search">
+                <label class="col-sm control-label search">진행상태</label>
+                <div class="col-sm">
+                    <select id="sReqStatus" name="sReqStatus" class="form-control form-box" formType="comSel" grpCd="S0008" isSetNF="true" textNF="전체" setValue="S0008A">
+                    </select>
+                </div>
+                <label class="col-sm control-label search">요청번호</label>
+                <div class="col-sm">
+                    <input type="text" id="sReqId" name="sReqId" class="form-control form-box" size="15">
+                </div>
+                <label class="col-sm control-label search">대표자명</label>
+                <div class="col-sm">
+                    <input type="text" id="sUserNm" name="sUserNm" class="form-control form-box" size="15">
+                </div>
+                <label class="col-sm control-label search">회사명</label>
+                <div class="col-sm">
+                    <input type="text" id="sCompanyNm" name="sCompanyNm" class="form-control form-box" size="20">
+                </div>
+            </div>
+            <div class="hr-line-dashed search"></div>            
+            <!-- 버튼 Start -->
+            <div style="text-align:center;">
+                <div class="">
+                    <span><button id="btnSearch" type="submit" class="btn btn-primary" value="검색">검색</button></span>
+                </div>
+            </div>
+            <!-- 버튼 End -->
+        </div>
+    </div>
+    </form>
+    <!-- 검색조건 End -->        
+        
         <div class="jqGrid_wrapper">
             <table id="dataGrid"></table>
             <div id="pagerList"></div>
@@ -19,27 +57,11 @@ $(document).ready(function() {
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
-        	'요청번호', '요청일', '진행상태코드', '진행상태', '구분', '회사명', '대표매장',
+        	'진행상태코드', '진행상태', '요청번호', '요청일', '승인일',   '구분', '회사명', '대표매장',
         	'대표자', '아이디', '전화', '휴대폰', '이메일', 
         	'주소'
         ],
         colModel:[
-            {
-                name: 'reqId',
-                width: 100,
-                align: "center"
-            },
-            {
-                name: 'reqDt',
-                editable: false,
-                width: 80,
-                align: "center",
-                formatter: "date",
-                formatoptions: {
-                   srcformat: 'Y-m-d H:i:s',
-                   newformat: 'y-m-d'
-                }
-            },
             {
                 name: 'reqStatus',
                 editable: false,
@@ -58,6 +80,33 @@ $(document).ready(function() {
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
                     return $.jqGridStatusCss(rowObject.reqStatusCss);
                 },
+            },
+            {
+                name: 'reqId',
+                width: 100,
+                align: "center"
+            },
+            {
+                name: 'reqDt',
+                editable: false,
+                width: 80,
+                align: "center",
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d'
+                }
+            },
+            {
+                name: 'appDt',
+                editable: false,
+                width: 80,
+                align: "center",
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d'
+                }
             },
             {
                 name: 'companyTpNm',
@@ -135,16 +184,18 @@ $(document).ready(function() {
                 loginCheck: true
             });
         },
-        onSelectRow: function(id) { // Row가 선택되었을때
-//            alert("onSelectRow :: reqId:[" + $(this).jqGrid('getCell', id, 'reqId') + "]");
-        },
-        loadComplete: function() {
-//            alert("loadComplete :: !!!!!!!!!!!");
-        }
     });
+
+    // 일반 form 객체 초기화
+    $.gfInitFormField();
 
     // 최초 전체 데이터 획득
     $.getAppreqList();
+    
+    $("#frmSearch").submit(function(e, params) {
+        event.preventDefault();
+        $.getAppreqList();
+    });    
 
 });
 
@@ -152,10 +203,13 @@ $(document).ready(function() {
  * 이용신청 데이터 획득(Ajax-Json)
  */
 $.getAppreqList = function(){
+    var _data = $("#frmSearch");
+    
     $.gfAjax({
         type: "POST",
         url: "{% url 'sysman:useman__appreqman__json__list' %}",
         async: true,
+        data: _data.serializeArray(),
         successFunc: function(data, textStatus, jqXHR) {
             var resultData = data.resultData;
 

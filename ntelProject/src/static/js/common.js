@@ -211,7 +211,8 @@ $.gfLoadContentsData = function(opts) {
 $.gfLoadInitPage = function () {
 
     // 메뉴정보가 없을 경우
-    if($.isEmpty($.cookie("menuInfo"))) {
+    if(!$.gfIsValidMenu()) {
+        
         // 메뉴리스트 중에서 제일 첫번째 세팅
         var upMenuId = GD_SYS_MENU[0].upMenuId;
         var menuId   = GD_SYS_MENU[0].menuId;
@@ -228,6 +229,28 @@ $.gfLoadInitPage = function () {
     $('#upmenu_' + upMenuId).trigger('click');
     $('#menu_' + menuId).trigger('click');
 };
+
+/* 
+ * 쿠키에 메뉴정보가 있는지 메뉴정보가 존재하는지 확인
+ */
+
+$.gfIsValidMenu = function() {
+    var isValidMenu = false;
+    
+    // 쿠키에 메뉴정보가 없을 경우
+    if($.isEmpty($.cookie("menuInfo"))) return false;
+    
+    // 메뉴가 공통메뉴 데이터에 있을 경우
+    var menuId = $.cookie("menuInfo").split(',')[1];
+    $.each(GD_SYS_MENU, function(index, value) {
+        if(menuId == value.menuId) {
+            isValidMenu = true;
+            return;
+        }
+    });
+    return isValidMenu;
+};
+
 
 /*
  * 공통Popup용
@@ -1072,6 +1095,7 @@ $.gfInitComCd2ComboBox = function(formOnly) {
         // options
         var grpCd = _item.attr("grpCd");
         var isSetNF = _item.attr("isSetNF") == "true" ? true : false;
+        var textNF = $.isEmpty(_item.attr("textNF")) ? "" : _item.attr("textNF");
         var useYn = _item.attr("useYn") == "true" ? true : false;
         var setValue = $.isEmpty(_item.attr("setValue")) ? "" : _item.attr("setValue");
         var isDisabled = _item.attr("isDisabled") == "true" ? true : false;
@@ -1081,6 +1105,7 @@ $.gfInitComCd2ComboBox = function(formOnly) {
         _item.gfSetComCd2ComboBox({
             grpCd : grpCd,
             isSetNF : isSetNF,
+            textNF : textNF,
             useYn : useYn,
             setValue : setValue,
             isDisabled : isDisabled,
@@ -1104,6 +1129,7 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
     var grpOpt = opts.grpOpt; // 그룹 옵션
 
     var isSetNF = $.isEmpty(opts.isSetNF) ? false : opts.isSetNF; // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
+    var textNF = $.isEmpty(opts.textNF) ? "" : opts.textNF; // 값이 없는 필드의 Text
     var setValue = opts.setValue; // 선택되어질 값 세팅
     var isDisabled = $.isEmpty(opts.isDisabled) ? false : opts.isDisabled; // 사용불가 세팅 true/false
     var triggerEvent = $.n2s(opts.triggerEvent); // 발생할 이벤트
@@ -1121,7 +1147,7 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
     if(isSetNF) {
         _this.append($("<option/>")
                         .attr("value", "")
-                        .text("")
+                        .text(textNF)
                        );
     }
 
@@ -1238,6 +1264,102 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
 };
 
 /*
+ * 매장 데이터 SelectBox 초기화
+ */
+$.gfInitShop2ComboBox = function(formOnly) {
+    var conditionSelector = "select[formType='shopSel']";
+
+    if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
+
+    // Select Box로 세팅될 값들을 찾아온다(formType="shopSel")
+    var _shopSel = $(conditionSelector); // 공통코드 Select 박스 대상들
+
+    _shopSel.each(function(inx, item) {
+        var _item = $(item);
+
+        var isSetNF = _item.attr("isSetNF") == "true" ? true : false;
+        var textNF = $.isEmpty(_item.attr("textNF")) ? "" : _item.attr("textNF");
+        var useYn = _item.attr("useYn") == "true" ? true : false;
+        var setValue = $.isEmpty(_item.attr("setValue")) ? "" : _item.attr("setValue");
+        var isDisabled = _item.attr("isDisabled") == "true" ? true : false;
+        var triggerEvent = $.n2s(_item.attr("triggerEvent"));
+
+        _item.gfSetShop2ComboBox({
+            isSetNF : isSetNF,
+            textNF : textNF,
+            useYn : useYn,
+            setValue : setValue,
+            isDisabled : isDisabled,
+            triggerEvent: triggerEvent
+        });
+    });
+};
+
+/*
+ * 매장 데이터 SelectBox 세팅하기
+ */
+$.fn.gfSetShop2ComboBox = function(opts) {
+    var _this = this;
+
+    // 옵션
+    var isSetNF      = false;                             // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
+    var textNF       = "";                                // 값이 없는 필드 text
+    var useYn        = false;                             // 사용여부값 적용
+    var setValue     = "";                                // 선택되어질 값 세팅
+    var isDisabled   = false;                             // 사용불가
+    var triggerEvent = $.n2s(_this.attr("triggerEvent")); // 발생할 이벤트
+
+    if(!$.isEmpty(opts)) {
+        isSetNF      = $.isEmpty(opts.isSetNF) ? false : opts.isSetNF; // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
+        textNF       = $.isEmpty(opts.textNF) ? "" : opts.textNF; // 값이 없는 필드 text
+        useYn        = $.isEmpty(opts.useYn) ? false : opts.useYn;
+        setValue     = opts.setValue;
+        isDisabled   = $.isEmpty(opts.isDisabled) ? false : opts.isDisabled;
+        triggerEvent = $.n2s(_this.attr("triggerEvent"));
+    }
+
+    console.log(GD_SYS_SHOP)
+
+    // 사용여부(useYn) 값에 의한 Filtering
+    var gdShopF = $.grep(GD_SYS_SHOP, function(el, inx){
+        return useYn ? el.useYn == "Y" : true;
+    });
+
+    console.log(gdShopF)
+
+    // 초기화
+    _this.empty();
+
+    // 값이 없는 필드를 가지는 경우
+    if(isSetNF) {
+        _this.append($("<option/>")
+                        .attr("value", "")
+                        .text(textNF)
+                       );
+    }
+
+    // 옵션값 생성
+    $.each(gdShopF, function(i, item) {
+        var _option = $("<option/>");
+        $.each(item, function(k, v) {
+            _option.attr(k, v);
+        });
+        _this.append(_option.text(item.shopNm));
+    });
+
+    // 선택되어질 값 설정
+    if(!$.isEmpty(setValue)) {
+        _this.val(setValue).prop("selected", true);
+    }
+
+    // 사용여부 세팅
+    _this.prop("disabled", isDisabled);
+
+    // 이벤트 발생(trigger)
+    if(!$.isEmpty(triggerEvent)) _this.trigger(triggerEvent);
+};
+
+/*
  * 직원 데이터 SelectBox 세팅하기
  */
 $.gfInitAgent2ComboBox = function(formOnly) {
@@ -1268,7 +1390,7 @@ $.gfInitAgent2ComboBox = function(formOnly) {
 };
 
 /*
- * 대리/딜러점 데이터 SelectBox 세팅하기
+ * 거래처 데이터 SelectBox 세팅하기
  */
 $.fn.gfSetAgent2ComboBox = function(opts) {
     var _this = this;
@@ -1694,6 +1816,9 @@ $.gfInitFormField = function(formOnly) {
 
     // Chosen Select 초기화
     $.gfInitChosen(formOnly);
+    
+    // 매장 필드 초기화
+    $.gfInitShop2ComboBox(formOnly);
 
 };
 

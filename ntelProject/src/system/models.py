@@ -410,10 +410,9 @@ class SysAppreq(models.Model):
     userNm = models.CharField(db_column='user_nm', max_length=30, null=False, blank=False, default=None, verbose_name='대표사용자명')
     password = models.CharField(db_column='password', max_length=128, null=False, blank=False, verbose_name='대표사용자비밀번호')
     email = models.EmailField(db_column='email', max_length=255, null=True, blank=True, default=None, verbose_name='이메일')
-#    reqStatus = models.CharField(db_column='req_status', max_length=8, null=True, blank=True, default=None, verbose_name='진행상태')
     reqStatus = models.ForeignKey('common.ComCd', db_column='req_status', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_req_status', verbose_name='요청진행상태') # ComCd.grpCd = 'S0008'
-#    reqStatus = models.TextField(db_column='req_status', max_length=1000, null=True, blank=True, default=None, verbose_name='진행상태')
     reqDt = models.DateTimeField(db_column='req_dt', auto_now_add=True, null=True, blank=True, verbose_name='요청일자')
+    appDt = models.DateTimeField(db_column='app_dt', null=True, blank=True, verbose_name='승인일자')
     useYn = models.BooleanField(db_column='use_yn', null=False, blank=False, default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')

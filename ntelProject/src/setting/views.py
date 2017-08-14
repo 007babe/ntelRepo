@@ -18,24 +18,32 @@ def staffmanJsonList(request):
     """
     환경설정 > 직원관리  : 리스트 데이터 Json
     """
-    if request.method == 'POST' and request.user.userAuth not in ["S0001M", "S0001C", "S0001A"]:
-        # 검색조건
-        sUserNm = request.POST.get("sUserNm") # 직원명
-        sUserId = request.POST.get("sUserId") # 직원아이디
+    if request.method == 'POST' and request.user.userAuth_id in ["S0001M", "S0001C", "S0001A"]:
+        userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
         # Query
         qry = Q()
         # 동일회사조건
         qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
         # 총괄일 경우는 소속매장 직원만 조회
-        if request.user.userAuth not in ["S0001A"]:
+        if userAuth == "S0001A":
             qry &= Q(shopId__exact=request.user.shopId)
 
-        qry &= Q(userNm__contains=sUserNm)
-        qry &= Q(userId__contains=sUserId)
+        # 검색조건
+        qry &= Q(userNm__contains=request.POST.get("sUserNm"))  # 직원명
+        qry &= Q(userId__contains=request.POST.get("sUserId"))  # 직원아이디
+        qry &= Q(userAuth__comCd__contains=request.POST.get("sUserAuth"))  # 직원아이디
+
+        # Exclude Query
+        qryEx = Q()
+
+        if userAuth not in ["S0001M", "S0001C"]:
+            qryEx &= Q(userAuth__in=["S0001M", "S0001C"])
 
         staffs = SysUser.objects.filter(
             qry
+        ).exclude(
+            qryEx
         ).annotate(
             shopNm=F('shopId__shopNm'),  # 매장명
             companyNm=F('shopId__companyId__companyNm'),  # 회사명
@@ -82,4 +90,37 @@ def staffmanJsonList(request):
         raise Http404
 
 
+@login_required_ajax
+def staffmanDetailCV(request):
+    '''
+    환경설정 > 직원관리 : 상세
+    '''
+    if request.method == 'POST' and request.user.userAuth_id in ["S0001M", "S0001C", "S0001A"]:
+        # Query
+        qry = Q()
+        # 동일회사조건
+        qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
+        # 총괄일 경우는 소속매장 직원만 가능
+        if request.user.userAuth not in ["S0001A"]:
+            qry &= Q(shopId__exact=request.user.shopId)
 
+        qry &= Q(
+            userId__exact=request.POST.get("userId")
+        )
+
+        userInfo = SysUser.objects.annotate(
+            companyNm=F("shopId__companyId__companyNm"),
+            shopNm=F("shopId__shopNm"),
+        ).get(
+            qry
+        )
+
+        return render(
+            request,
+            'setting/staffman/detail.html',
+            {
+                "userInfo": userInfo
+            },
+        )
+    else:
+        raise Http404

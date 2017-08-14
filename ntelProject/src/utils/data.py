@@ -5,8 +5,8 @@ from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 
 from common.models import ComCd
+from system.models import SysSeq, SysShop
 from system.models import SysUser, SysAppreq
-from system.models import SysSeq
 from utils.const import NTEL_EXCLUDE_IDS
 
 
@@ -104,3 +104,24 @@ def isUsableId(userId):
             return False
     else:
         return False
+
+
+def getShopList(companyId=None, shopId=None, shopOnly=True, useYn=True):
+    '''
+     소속 매장 목록 데이터 획득
+    '''
+    qry = Q()
+    # 사용여부 조건
+    if useYn:
+        qry &= Q(useYn__exact=useYn)
+    # 대상 매장 조건
+    if shopOnly:
+        qry &= Q(shopId__exact=shopId)
+    else:
+        qry &= Q(shopId__companyId__exact=companyId)
+    shopList = SysShop.objects.filter(
+        qry
+    ).order_by(
+        "shopId",
+    )
+    return shopList

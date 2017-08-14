@@ -36,6 +36,9 @@ def getJsonComCd(request):
         'comNm',
         'grpOpt',
         'useYn',
+    ).order_by(
+        'grpCd',
+        'ordSeq',
     )
 
     return HttpResponse(

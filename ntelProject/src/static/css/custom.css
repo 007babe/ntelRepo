@@ -209,14 +209,15 @@ td .fc-sat {
 /* ibox Title */
 .ibox-title {
 	padding: 5px 10px 5px;
-	min-height: 30px;
+	min-height: 15px;
 }
 
 
 /* ibox Contents 검색조건용 */
 
 .ibox-content.search {
- 	padding: 10px 10px 10px 10px;
+ 	padding: 5px 10px 5px 10px;
+ 	border-color: transparent;
 }
 
 .form-group.search {
@@ -241,7 +242,8 @@ td .fc-sat {
 }
 
 .control-label.search {
-    padding-top: 2px;    
+    padding-top: 2px; 
+    padding-left: 30px;   
 }
 
 /*

@@ -1,15 +1,11 @@
 from __future__ import absolute_import
 
-from datetime import date
-import datetime
+from datetime import datetime
 import json
-from pprint import pprint
 
-from django.core import serializers
 from django.db import transaction
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
-from django.forms.models import model_to_dict
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
@@ -31,6 +27,7 @@ def appreqmanIndexCV(request):
         {},
     )
 
+
 @login_required_ajax
 def appreqmanDetailCV(request):
     '''
@@ -41,22 +38,22 @@ def appreqmanDetailCV(request):
         qry &= Q(
             reqId__exact=request.POST.get("reqId")
         )
+
+        appreq = SysAppreq.objects.annotate(
+            companyTpNm=F("companyTp__comNm")
+        ).get(
+            qry
+        )
+
+        return render(
+            request,
+            'sysman/useman/appreqman/detail.html',
+            {
+                "appreq": appreq
+            },
+        )
     else:
         raise Http404
-
-    appreq = SysAppreq.objects.annotate(
-        companyTpNm=F("companyTp__comNm")
-    ).get(
-        qry
-    )
-
-    return render(
-        request,
-        'sysman/useman/appreqman/detail.html',
-        {
-            "appreq": appreq
-        },
-    )
 
 
 @login_required_ajax
@@ -64,54 +61,63 @@ def appreqmanJsonList(request):
     """
     시스템관리 > 사용관리  : 이용신청관리 : 리스트 데이터 Json
     """
-    qry = Q()
+    if request.method == 'POST':
+        qry = Q()
+        # 검색조건
+        qry &= Q(reqStatus__comCd__contains=request.POST.get("sReqStatus"))  # 진행상태
+        qry &= Q(reqId__contains=request.POST.get("sReqId"))  # 요청번호
+        qry &= Q(companyNm__contains=request.POST.get("sCompanyNm"))  # 회사명
+        qry &= Q(userNm__contains=request.POST.get("sUserNm"))  # 대표자명
 
-    sysAppreq = SysAppreq.objects.annotate(
-        companyTpNm=F('companyTp__comNm'),
-        companyGradeNm=F('companyGrade__comNm'),
-#        telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
-#        cellNo=Concat(Concat('cellNo1',  Value('-'), 'cellNo2'), Value('-'), 'cellNo3'),
-        reqStatusNm=F('reqStatus__comNm'),
-        reqStatusCss=F('reqStatus__cdCss'),
-        regNm=F('regId__userNm'),
-        modNm=F('modId__userNm'),
-    ).filter(
-        qry
-    ).order_by(
-        '-reqId',
-    ).values(
-        "reqId",
-        "reqDt",
-        "companyNm",
-        "companyTpNm",
-        "companyGradeNm",
-        "shopNm",
-        "addr1",
-        "useYn",
-        "telNo1",
-        "telNo2",
-        "telNo3",
-        "cellNo1",
-        "cellNo2",
-        "cellNo3",
-        "regNm",
-        "userId",
-        "userNm",
-        "email",
-        "reqStatus",
-        "reqStatusNm",
-        "reqStatusCss",
-    )
+        sysAppreq = SysAppreq.objects.annotate(
+            companyTpNm=F('companyTp__comNm'),
+            companyGradeNm=F('companyGrade__comNm'),
+#            telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
+#            cellNo=Concat(Concat('cellNo1',  Value('-'), 'cellNo2'), Value('-'), 'cellNo3'),
+            reqStatusNm=F('reqStatus__comNm'),
+            reqStatusCss=F('reqStatus__cdCss'),
+            regNm=F('regId__userNm'),
+            modNm=F('modId__userNm'),
+        ).filter(
+            qry
+        ).order_by(
+            '-reqId',
+        ).values(
+            "reqId",
+            "reqDt",
+            "appDt",
+            "companyNm",
+            "companyTpNm",
+            "companyGradeNm",
+            "shopNm",
+            "addr1",
+            "useYn",
+            "telNo1",
+            "telNo2",
+            "telNo3",
+            "cellNo1",
+            "cellNo2",
+            "cellNo3",
+            "regNm",
+            "userId",
+            "userNm",
+            "email",
+            "reqStatus",
+            "reqStatusNm",
+            "reqStatusCss",
+        )
 
-    return HttpResponse(
-        json.dumps(
-            makeJsonResult(
-                resultData=list(sysAppreq)
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    resultData=list(sysAppreq)
+                ),
+                default=jsonDefault
             ),
-            default=jsonDefault
-        ),
-        content_type="application/json"
-    )
+            content_type="application/json"
+        )
+    else:
+        raise Http404
 
 
 @login_required_ajax
@@ -213,6 +219,7 @@ def appreqmanJsonAppr(request):
             # 4. 진행상태 Update => 승인처리(F)
             ##################################
             appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
+            appreq.appDt = datetime.now()
             appreq.companyId = sysCompany
             appreq.save()
 
@@ -221,19 +228,21 @@ def appreqmanJsonAppr(request):
             # 1. 진행상태 Update => 요청취소(C)
             ##################################
             appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
+            appreq.appDt = datetime.now()
             appreq.save()
         elif reqStatus == 'A':  # 승인요청일 경우
             ##################################
-            # 1. 진행상태 Update => 승인요청(A)
+            # 1. 진행상태 및 Update => 승인요청(A)
             ##################################
             appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
+            appreq.appDt = None
             appreq.save()
         elif reqStatus == 'D':  # 삭제일 경우
             sysCompany = SysCompany.objects.get(
                 companyId__exact=appreq.companyId
             )
             sysCompany.delete()
-        
+
         # 적용된 데이터를 다시 획득
         appreq = SysAppreq.objects.annotate(
             companyTpNm=F('companyTp__comNm'),
@@ -283,8 +292,6 @@ def appreqmanJsonAppr(request):
 
     else:
         raise Http404
-
-
 
 
 @login_required_ajax
