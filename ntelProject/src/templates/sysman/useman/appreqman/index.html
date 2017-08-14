@@ -19,7 +19,7 @@ $(document).ready(function() {
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
-        	'요청번호', '요청일', '진행상태', '구분', '회사명', '대표매장',
+        	'요청번호', '요청일', '진행상태코드', '진행상태', '구분', '회사명', '대표매장',
         	'대표자', '아이디', '전화', '휴대폰', '이메일', 
         	'주소'
         ],
@@ -41,13 +41,23 @@ $(document).ready(function() {
                 }
             },
             {
+                name: 'reqStatus',
+                editable: false,
+                width: 80,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata) {
+                    return $.jqGridStatusCss(rowObject.reqStatusCss);
+                },
+                hidden: true,
+            },
+            {
                 name: 'reqStatusNm',
                 editable: false,
                 width: 80,
                 align: "center",
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
-                    return rowObject.reqStatusCss;
-                }
+                    return $.jqGridStatusCss(rowObject.reqStatusCss);
+                },
             },
             {
                 name: 'companyTpNm',

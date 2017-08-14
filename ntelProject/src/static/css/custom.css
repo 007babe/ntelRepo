@@ -256,6 +256,22 @@ td .fc-sat {
 	height: 30px;
 }
 
+/* 승인요청(A) */
+.jqgrid-cell-status-a {
+	background-color: #FFFEE7; color: #003399; font-weight:bold;
+}
+/* 요청취소(C) */
+.jqgrid-cell-status-c {
+}
+/* 승인완료(F) */
+.jqgrid-cell-status-f {
+	color: #FF5E00; font-weight: bold;"
+}
+/* 승인반려(R) */
+.jqgrid-cell-status-r {
+	color: #8C8C8C; font-weight: bold;"
+}
+
 /*
  * 상세/명세용 Table
  */

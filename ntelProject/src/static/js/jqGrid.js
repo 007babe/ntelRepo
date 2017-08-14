@@ -183,6 +183,14 @@ $.fn.jqGridInit = function(opts) {
     });
 };
 
+$.resizeJqGridWidth = function(grid_id, div_id, width){
+    $(window).bind('resize', function() {
+        $('#' + grid_id).setGridWidth(width, true); //Back to original width
+        $('#' + grid_id).setGridWidth($('#' + div_id).width(), true); //Resized to new width as per window
+    }).trigger('resize');
+}
+
+
 /*
  * 데이터에서 useYn(boolean)에 따른 사용여부 표기값
  */
@@ -258,20 +266,9 @@ $.jqGridTelNo = function(telNo1, telNo2, telNo3) {
 
 };
 
-$.jqGridStatus = function(code) {
-
-    var status = "";
-
-    switch(code) {
-        case "00":
-            status = "승인요청";
-            break;
-        case "90":
-            status = "승인요청";
-            break;
-        default:
-            break;
-    }
-
-    return status;
+/*
+ * Status Cell 속성 
+ */
+$.jqGridStatusCss = function(statusCss) {
+    return rtn = "style='" + statusCss + "'";
 };

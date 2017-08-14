@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import json
 
+from django.db.models.aggregates import Count
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
@@ -30,15 +31,15 @@ def getJsonSysMenu(request):
     qry &= Q(r_system_sysmenucompanytp_menu_id__useYn__exact=True)  # 사용여부
     qry &= Q(r_system_sysmenucompanytp_menu_id__companyTp__exact=request.user.shopId.companyId.companyTp)  # 사용자 권한
 
-    sysMenus = SysMenu.objects.filter(
+    sysMenus = SysMenu.objects.annotate(
+        upMenuNm=F('upMenuId__menuNm'),
+        upMenuCss=F('upMenuId__menuCss'),
+        topMenuNm=F('upMenuId__upMenuId__menuNm'),
+    ).filter(
         qry
     ).order_by(
         'upMenuId',
         'menuId',
-    ).annotate(
-        upMenuNm=F('upMenuId__menuNm'),
-        upMenuCss=F('upMenuId__menuCss'),
-        topMenuNm=F('upMenuId__upMenuId__menuNm'),
     ).values(
         'menuId',
         'menuNm',
@@ -68,10 +69,10 @@ def getJsonSysMsg(request):
     # Query 조합
     qry = Q()
 
-    sysMsgs = SysMsg.objects.filter(
-        qry
-    ).annotate(
+    sysMsgs = SysMsg.objects.annotate(
         msgType=F('msgTp__comNm'),
+    ).filter(
+        qry
     ).values(
         'msgCd',
         'msgType',
@@ -111,15 +112,15 @@ def getJsonSysCompany(request):
     qry &= Q(r_system_sysmenucompanytp_menu_id__useYn__exact=True)  # 사용여부
     qry &= Q(r_system_sysmenucompanytp_menu_id__companyTp__exact=request.user.shopId.companyId.companyTp)  # 사용자 권한
     '''
-    sysCompanys = SysCompany.objects.filter(
-        qry
-    ).order_by(
-        'companyId',
-    ).annotate(
+    sysCompanys = SysCompany.objects.annotate(
         companyTpNm=F('companyTp__comNm'),
         companyGradeNm=F('companyGrade__comNm'),
         regNm=F('regId__userNm'),
         modNm=F('modId__userNm'),
+    ).filter(
+        qry
+    ).order_by(
+        'companyId',
     ).values(
         'companyId',
         'companyNm',

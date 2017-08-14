@@ -261,6 +261,21 @@ class SysMenu(models.Model):
     def __str__(self):
         return self.menuId
 
+    def as_dict(self):
+        return {
+            "menuId": self.menuId,
+            "upMenuId": self.upMenuId,
+            "menuNm": self.menuNm,
+            "menuTmp": self.menuTmp,
+            "menuLvl": self.menuLvl,
+            "menuCss": self.menuCss,
+            "menuDesc": self.menuDesc,
+            "useYn": self.useYn,
+            "regId": self.regId,
+            "modId": self.modId,
+            "modDt": self.modDt,
+        }
+
     def upMenuNm(self):
         '''
         상위 메뉴명

@@ -3,10 +3,13 @@ from __future__ import absolute_import
 from datetime import date
 import datetime
 import json
+from pprint import pprint
 
+from django.core import serializers
 from django.db import transaction
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
+from django.forms.models import model_to_dict
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
@@ -63,11 +66,7 @@ def appreqmanJsonList(request):
     """
     qry = Q()
 
-    sysAppreq = SysAppreq.objects.filter(
-        qry
-    ).order_by(
-        '-modDt',
-    ).annotate(
+    sysAppreq = SysAppreq.objects.annotate(
         companyTpNm=F('companyTp__comNm'),
         companyGradeNm=F('companyGrade__comNm'),
 #        telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
@@ -76,6 +75,10 @@ def appreqmanJsonList(request):
         reqStatusCss=F('reqStatus__cdCss'),
         regNm=F('regId__userNm'),
         modNm=F('modId__userNm'),
+    ).filter(
+        qry
+    ).order_by(
+        '-reqId',
     ).values(
         "reqId",
         "reqDt",
@@ -226,20 +229,62 @@ def appreqmanJsonAppr(request):
             appreq.reqStatus_id = statusGrpCd + reqStatus  # 요청상태 업데이트
             appreq.save()
         elif reqStatus == 'D':  # 삭제일 경우
-            print("DDDDDDDDDDDDDDD");
             sysCompany = SysCompany.objects.get(
                 companyId__exact=appreq.companyId
             )
             sysCompany.delete()
+        
+        # 적용된 데이터를 다시 획득
+        appreq = SysAppreq.objects.annotate(
+            companyTpNm=F('companyTp__comNm'),
+            companyGradeNm=F('companyGrade__comNm'),
+#            telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
+#            cellNo=Concat(Concat('cellNo1',  Value('-'), 'cellNo2'), Value('-'), 'cellNo3'),
+            reqStatusNm=F('reqStatus__comNm'),
+            reqStatusCss=F('reqStatus__cdCss'),
+            regNm=F('regId__userNm'),
+            modNm=F('modId__userNm'),
+        ).filter(
+            reqId__exact=reqId
+        ).values(
+            "reqId",
+            "reqDt",
+            "companyNm",
+            "companyTpNm",
+            "companyGradeNm",
+            "shopNm",
+            "addr1",
+            "useYn",
+            "telNo1",
+            "telNo2",
+            "telNo3",
+            "cellNo1",
+            "cellNo2",
+            "cellNo3",
+            "regNm",
+            "userId",
+            "userNm",
+            "email",
+            "reqStatus",
+            "reqStatusNm",
+            "reqStatusCss",
+        ).first()
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    resultMessage="처리가완료되었습니다.",
+                    resultData=appreq,
+                ),
+                default=jsonDefault
+            ),
+            content_type="application/json"
+        )
+
     else:
         raise Http404
 
-    return HttpResponse(
-        json.dumps(
-            makeJsonResult(resultMessage="처리가완료되었습니다.")
-        ),
-        content_type="application/json"
-    )
+
 
 
 @login_required_ajax

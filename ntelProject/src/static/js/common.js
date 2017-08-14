@@ -301,8 +301,13 @@ $.gfCommonPopUp = function(opts) {
  */
 $.gfCommonPopUpClose = function(_target) {
     _target = $.isEmpty(_target) ? $('#divCommonModalPopup') : _target;
+    
+    console.log(_target);
+    
     _target.modal('hide');
 }
+
+
 /*
  * 에러발생시 모달 창
  */
@@ -2436,15 +2441,10 @@ $.gfHttpErrorPopup = function(opts) {
                 }
             });
 
-            $.gfCommonPopUp({
-                popUrl: "/common/error_popup",
-                width: "300",
-                params: {
-                    status: status,
-                    title: title,
-                    message: message
-                },
-                loginRequired: false
+            $.gfAlert({
+                title: title,
+                text: message,
+                type: "error",
             });
         }
     }
@@ -2481,6 +2481,61 @@ $.gfAjaxSetResult = function(data) {
     }
 
     return true
+};
+
+/*
+ * 공통 알럿 처리
+ * http://t4t5.github.io/sweetalert/ 참조
+ */
+$.gfAlert = function(opts) {
+    
+    if($.isEmpty(opts)) return false;
+
+    var title = $.isEmpty(opts.title) ? "확인" : opts.title;
+    var text = $.isEmpty(opts.text) ? "" : opts.text;
+
+    swal({
+        title: title,
+        text: text,
+        type: "info",
+        confirmButtonColor: "#1ab394", // 확인 버튼 색
+        confirmButtonText: "OK", // 확인 버튼 문구
+        closeOnConfirm: true,
+        imageUrl: null,
+    },
+    function(){
+        if(!$.isEmpty(opts.cbFunc)) opts.cbFunc();
+    });
+} 
+
+
+/*
+ * 공통 확인 처리
+ * http://t4t5.github.io/sweetalert/ 참조
+ */
+$.gfComfirm = function(opts) {
+
+    if($.isEmpty(opts)) return false;
+    
+    var title = $.isEmpty(opts.title) ? "확인" : opts.title;
+    var text = $.isEmpty(opts.text) ? "처리하시겠습니까?" : opts.text;
+    var confirmButtonText = $.isEmpty(opts.confirmButtonText) ? "확인" : opts.confirmButtonText;
+    
+    swal({
+        title: title,
+        text: text,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "취소",
+        confirmButtonColor: "#1ab394", // 확인 버튼 색
+        confirmButtonText: confirmButtonText, // 확인 버튼 문구
+        closeOnCancel: true,
+        closeOnConfirm: true,
+        imageUrl: null,
+    },
+    function(isConfirm){
+        if(!$.isEmpty(opts.cbFunc)) opts.cbFunc(isConfirm);
+    });
 };
 
 
