@@ -9,7 +9,7 @@ from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
-from appreq.forms import SysAppreqForm
+from appreq.forms import SysAppreqCreationForm
 from system.models import SysAppreq
 from system.models import SysPolicy
 from utils.data import getComCdList
@@ -77,8 +77,9 @@ def appreqJsonRegist(request):
 
     if request.method == 'POST':
         # 이용신청 폼
-        sysAppreqForm = SysAppreqForm(
+        sysAppreqForm = SysAppreqCreationForm(
             request.POST,
+            request=request,
         )
 
         # 데이터 검증 후 저장

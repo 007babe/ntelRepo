@@ -13,9 +13,9 @@ from utils.data import getSysSeqId
 from utils.data import isUsableId
 
 
-class SysAppreqForm(ModelForm):
+class SysAppreqCreationForm(ModelForm):
     '''
-    이용신청(SysAppreq) Form class
+    이용신청(SysAppreq) 생성 Form class
     '''
     # 신청ID
     reqId = forms.CharField(required=False)  # 신청ID는 신규생성이므로 Null=True
@@ -26,20 +26,19 @@ class SysAppreqForm(ModelForm):
     # 개인정보취급방침동의
     confirmPrivacyPolicy = forms.BooleanField(required=True)
     # 사용자ID
-    userId = forms.CharField(required=False, min_length=6, max_length=20)
+    userId = forms.CharField(required=True, min_length=6, max_length=20)
     # 비밀번호
-    password = forms.CharField(widget=forms.PasswordInput(), min_length=6, max_length=20)
+    password = forms.CharField(required=True, min_length=6, max_length=20)
     # 비밀번호확인
-    passwordChk = forms.CharField(widget=forms.PasswordInput(), min_length=6, max_length=20)
+    passwordChk = forms.CharField(required=True, min_length=6, max_length=20)
     # 이메일
     email = forms.EmailField(max_length=255)
     # 진행상태
     reqStatus = forms.CharField(required=False)  # 신청ID는 신규생성이므로 Null=True
 
     def __init__(self, *args, **kwargs):
-        # 로그인 사용자 정보 활용
-        # self.user = kwargs.pop('user', None)
-        super(SysAppreqForm, self).__init__(*args, **kwargs)
+        self.request = kwargs.pop('request')
+        super(SysAppreqCreationForm, self).__init__(*args, **kwargs)
 
         self.fields.keyOrder = [
             'confirmAccessTerms',
@@ -59,7 +58,8 @@ class SysAppreqForm(ModelForm):
         ]
 
     def clean(self):
-        cleaned_data = super(SysAppreqForm, self).clean()
+        cleaned_data = super(SysAppreqCreationForm, self).clean()
+
         # 사용가능한 ID인지 체크
         if not isUsableId(cleaned_data.get('userId')):
             self.add_error('userId', _('사용하실 수 없는 아이디입니다.'))
@@ -71,24 +71,25 @@ class SysAppreqForm(ModelForm):
             self.add_error('password', _('비밀번호확인과 일치하지 않습니다.'))
 
     def save(self, commit=True):
-        cleaned_data = super(SysAppreqForm, self).clean()
-        instance = super(SysAppreqForm, self).save(commit=False)
+        cleaned_data = super(SysAppreqCreationForm, self).clean()
+        sysAppreq = super(SysAppreqCreationForm, self).save(commit=False)
+
         # 신규 이용 신청 번호 획득 후 세팅
         self.reqId = getSysSeqId('APRQID')
-        instance.reqId = self.reqId
+        sysAppreq.reqId = self.reqId
 
         # 회사등급 ('S0006A')  일반등급으로 세팅(comCd.grpCd='S0006' 참조)
-        instance.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
+        sysAppreq.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
 
         # 진행상태 승인요청('S0008R')  세팅(comCd.grpCd='S0008' 참조)
-        instance.reqStatus = ComCd.objects.get(comCd__exact='S0008A')
+        sysAppreq.reqStatus = ComCd.objects.get(comCd__exact='S0008A')
 
         # 비밀번호 암호화
-        instance.password = make_password(cleaned_data.get('password'))
+        sysAppreq.password = make_password(cleaned_data.get('password'))
 
         if commit:
-            instance.save()
-        return instance
+            sysAppreq.save()
+        return sysAppreq
 
     class Meta:
         model = SysAppreq

@@ -324,9 +324,6 @@ $.gfCommonPopUp = function(opts) {
  */
 $.gfCommonPopUpClose = function(_target) {
     _target = $.isEmpty(_target) ? $('#divCommonModalPopup') : _target;
-    
-    console.log(_target);
-    
     _target.modal('hide');
 }
 
@@ -1004,8 +1001,6 @@ $.fn.gfSetUserId = function() {
     // Input Event
     _item.on("input", function(e, params) {
         var _this = $(this);
-
-        console.log("input------------->" + _this.val());
         
         // 숫자 영문자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9a-zA-Z]/g, ""));
@@ -1317,14 +1312,10 @@ $.fn.gfSetShop2ComboBox = function(opts) {
         triggerEvent = $.n2s(_this.attr("triggerEvent"));
     }
 
-    console.log(GD_SYS_SHOP)
-
     // 사용여부(useYn) 값에 의한 Filtering
     var gdShopF = $.grep(GD_SYS_SHOP, function(el, inx){
         return useYn ? el.useYn == "Y" : true;
     });
-
-    console.log(gdShopF)
 
     // 초기화
     _this.empty();

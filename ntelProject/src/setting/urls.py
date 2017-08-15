@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^staffman/json/list/$', views.staffmanJsonList, name='staffman__json__list'),
     # 직원 상세 화면
     url(r'^staffman/detail/$', views.staffmanDetailCV, name='staffman__detail'),
+    # 직원 등록 화면
+    url(r'^staffman/regist/$', views.staffmanRegistCV, name='staffman__regist'),
 
 
     # 이용신청관리 승인/취소 처리(Json)

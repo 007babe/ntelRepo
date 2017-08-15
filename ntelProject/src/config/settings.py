@@ -209,7 +209,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Session 만료 시간(5분)
-SESSION_COOKIE_AGE = 60 * 5
+SESSION_COOKIE_AGE = 60 * 60
 
 # Customized User
 AUTH_USER_MODEL = 'system.SysUser'

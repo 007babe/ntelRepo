@@ -125,6 +125,7 @@ $.fn.jqGridInit = function(opts) {
         loadBeforeSend    : opts.loadBeforeSend,
         loadComplete      : opts.loadComplete,
         loadError         : opts.loadError,
+        onCellSelect      : opts.onCellSelect, // 확인 필요
         ondblClickRow     : opts.ondblClickRow,
         onHeaderClick     : opts.onHeaderClick,
         onPaging          : opts.onPaging,
@@ -247,8 +248,8 @@ $.jqGridMoneyAttr = function(moneyVal){
 /*
  * 일반 하이라이트 컬럼 속성
  */
-$.jqGridHighlightColAttr = function(){
-    return "style='background-color: #FFFEE7; font-weight: bold;'";
+$.jqGridHighlightColAttr = function(isLink){
+    return "style='background-color: #FFFEE7; font-weight: bold;" + (isLink ? "cursor: pointer;": "") + "'";
 }
 
 
@@ -272,3 +273,38 @@ $.jqGridTelNo = function(telNo1, telNo2, telNo3) {
 $.jqGridStatusCss = function(statusCss) {
     return rtn = "style='" + statusCss + "'";
 };
+
+
+/*
+ * 접속제한 관련 속성
+ */
+$.jqGridConnLimit = function(connLimit) {
+    connLimit = $.n2s(connLimit);
+    console.log(connLimit);
+    var rtnData = ""
+    
+    if(connLimit.indexOf("P") > -1) rtnData += "PC차단";
+    if(connLimit.indexOf("M") > -1) rtnData += "모바일차단";
+    
+    return rtnData;    
+}; 
+ 
+/*
+ *
+ */
+$.jqGridSwich = function(cellvalue, options, rowObject) { 
+    var inputId = "ck" + options.colModel.name + options.rowId;
+
+    var rtnVal = '<div class="setings-item"><div class="switch">'
+               + '    <div class="onoffswitch">'
+               + '        <input id="' + inputId + '" type="checkbox" class="onoffswitch-checkbox">'
+               + '        <label class="onoffswitch-label" for="' + inputId + '">'
+               + '            <span class="onoffswitch-inner"></span>'
+               + '            <span class="onoffswitch-switch"></span>'
+               + '        </label>'
+               + '    </div>'
+               + '</div></div>'
+               ;
+    
+    return rtnVal
+};  

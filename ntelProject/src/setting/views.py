@@ -9,7 +9,7 @@ from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
 from system.models import SysUser
-from utils.ajax import login_required_ajax, login_required_ajax_post
+from utils.ajax import login_required_ajax_post
 from utils.data import is_empty
 from utils.date import getltdt
 from utils.json import makeJsonResult, jsonDefault
@@ -96,6 +96,7 @@ def staffmanJsonList(request):
             "cellNo2",
             "cellNo3",
             "addr1",
+            "connLimit",
             "lastLogin",
             "regDt",
             "companyNm",
@@ -117,6 +118,22 @@ def staffmanJsonList(request):
 
 
 @login_required_ajax_post
+def staffmanRegistCV(request):
+    '''
+    환경설정 > 직원관리 : 직원등록
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
+        return render(
+            request,
+            'setting/staffman/regist.html',
+            {},
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
 def staffmanDetailCV(request):
     '''
     환경설정 > 직원관리 : 상세
@@ -124,7 +141,6 @@ def staffmanDetailCV(request):
     userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
     if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
-
         # Query
         qry = Q()
         ####################
@@ -133,7 +149,7 @@ def staffmanDetailCV(request):
         # 동일회사조건
         qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
         # 점장일 경우는 소속매장 직원만 가능
-        if request.user.userAuth not in ["S0001A"]:
+        if userAuth in ["S0001T"]:
             qry &= Q(shopId__exact=request.user.shopId)
         # 해당 사용자 ID
         qry &= Q(
@@ -143,7 +159,7 @@ def staffmanDetailCV(request):
         ####################
         # 조회
         ####################
-        userInfo = SysUser.objects.annotate(
+        staffInfo = SysUser.objects.annotate(
             companyNm=F("shopId__companyId__companyNm"),
             shopNm=F("shopId__shopNm"),
         ).get(
@@ -154,7 +170,7 @@ def staffmanDetailCV(request):
             request,
             'setting/staffman/detail.html',
             {
-                "userInfo": userInfo
+                "staffInfo": staffInfo
             },
         )
     else:
