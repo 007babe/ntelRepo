@@ -125,3 +125,13 @@ def getShopList(companyId=None, shopId=None, shopOnly=True, useYn=True):
         "shopId",
     )
     return shopList
+
+
+def is_empty(value):
+    '''
+    값이 None or Null String 인지 확인
+    '''
+    if value is None or value == "":
+        return True
+    else:
+        return False

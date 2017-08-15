@@ -1157,9 +1157,8 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
 
         $.each(item, function(k, v) {
             _option.attr(k, v);
-            _option.attr("value", item.comCd)
         });
-
+        _option.attr("value", item.comCd);
         _this.append(_option.text(item.comNm));
     });
 
@@ -1344,6 +1343,7 @@ $.fn.gfSetShop2ComboBox = function(opts) {
         $.each(item, function(k, v) {
             _option.attr(k, v);
         });
+        _option.attr("value", item.shopId);
         _this.append(_option.text(item.shopNm));
     });
 
