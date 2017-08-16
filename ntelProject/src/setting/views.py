@@ -8,6 +8,7 @@ from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
+from setting.forms import StaffChangeForm
 from system.models import SysUser
 from utils.ajax import login_required_ajax_post
 from utils.data import is_empty
@@ -34,7 +35,7 @@ def staffmanJsonList(request):
         ####################
         # 기본 조건
         ####################
-        # 동일회사조건
+        # 동일회사조건(필수)
         qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
 
         # 팀장일 경우는 소속매장 직원만 조회
@@ -146,11 +147,13 @@ def staffmanDetailCV(request):
         ####################
         # 기본 조건
         ####################
-        # 동일회사조건
+        # 동일회사조건(필수)
         qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
+
         # 점장일 경우는 소속매장 직원만 가능
         if userAuth in ["S0001T"]:
             qry &= Q(shopId__exact=request.user.shopId)
+
         # 해당 사용자 ID
         qry &= Q(
             userId__exact=request.POST.get("userId")
@@ -175,3 +178,41 @@ def staffmanDetailCV(request):
         )
     else:
         raise PermissionDenied()
+
+
+@login_required_ajax_post
+def staffmanJsonModify(request):
+    '''
+    직원정보 수정 요청처리
+    '''
+    resultData = {}
+
+    # 수정할 데이터 획득
+    staffInfo = SysUser.objects.get(
+        userId=request.POST.get("userId")
+    )
+
+    print(staffInfo)
+
+    # 직원정보 수정 폼
+    staffChangeForm = StaffChangeForm(
+        request.POST,
+        instance=staffInfo,
+        request=request,
+    )
+
+    # 데이터 검증 후 저장
+    if(staffChangeForm.is_valid()):
+        staffChangeForm.save()
+
+    print(staffChangeForm.errors)
+
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                form=staffChangeForm,
+                resultData=resultData
+            )
+        ),
+        content_type="application/json"
+    )

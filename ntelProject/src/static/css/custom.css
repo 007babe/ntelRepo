@@ -417,7 +417,9 @@ td .fc-sat {
   text-align: center !important;
 }
 
-
+.pd-l-5 {
+	padding-left: 5px !important;
+}
 
 .t-div {
 }

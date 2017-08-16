@@ -54,25 +54,6 @@ class SysUserCreationForm(UserCreationForm):
     def clean(self):
         cleaned_data = super(SysUserCreationForm, self).clean()
 
-        userAuth = self.user.userAuth_id
-        shopId = self.user.shopId_id
-        companyId = self.user.shopId.companyId_id
-        
-        
-        
-        # 등록 권한 체크
-        if userAuth not in ["S0001M", "S0001C", "S0001A", "S0001T",]:  # 시스템관리자, 대표, 총괄, 팀장이 아닐 경우 등록 불가
-            self.non_field_error(_('등록권한이 없습니다.'))
-
-        if userAuth not in ["S0001M", "S0001C", "S0001A",]:  # 시스템관리자, 대표, 총괄이 아닐 경우 로그인 사용자의 매장ID로 세팅
-            self.shopId = self.request.shopId
-        else:
-            pass
-
-        # 사용가능한 ID인지 체크
-        if not isUsableId(cleaned_data.get('userId')):
-            self.add_error('userId', _('사용하실 수 없는 아이디입니다.'))
-
         # 비밀번호 & 비밀번호 확인 일치 여부 체크
         '''
         password = cleaned_data.get('password')
@@ -118,6 +99,12 @@ class SysUserChangeForm(UserChangeForm):
     # 유저 업데이트 폼
     # 모든 필드 포함, 비밀번호는 해시로 표시
     password = ReadOnlyPasswordHashField(label="비밀번호")
+
+    def __init__(self, *args, **kwargs):
+        super(SysUserChangeForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(SysUserChangeForm, self).clean()
 
     class Meta:
         model = SysUser
