@@ -556,9 +556,9 @@ $.fn.gfSetDatePicker = function() {
             weekStart: 0,
             currentText: "hahahah",
             enableOnReadonly: false, // default : true
-    //        datesDisabled: ['2017-04-06', '2017-04-21'],
+//            datesDisabled: ['2017-04-06', '2017-04-21'],
             onSelect: function() {
-                console.log("onSelect!!!");
+//                console.log("onSelect!!!");
             },
             beforeShowMonth: function (date){
             }

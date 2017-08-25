@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import json
+from pprint import pprint
 import re
 
 from django.contrib.auth import authenticate, login, logout
@@ -10,7 +11,7 @@ from django.shortcuts import render
 from django.urls.base import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from system.models import SysUser
+from system.models import SysUser, SysLoginHistory
 from utils.json import makeJsonResult
 
 
@@ -79,6 +80,28 @@ def loginCheckCV(request):
             jsonResult = makeJsonResult(
                 resultMessage="정상사용자"
             )
+
+            print("++++++++++++++++++++>>>>")
+            pprint(request.META)
+            print("----------------------------")
+            print("HTTP_USER_AGENT", request.META['HTTP_USER_AGENT'])
+            print("request.META['HTTP_USER_AGENT'] type", type(request.META['HTTP_USER_AGENT']))
+            print("REMOTE_ADDR", request.META['REMOTE_ADDR'])
+            print("REMOTE_HOST", request.META['REMOTE_HOST'])
+            print("++++++++++++++++++++<<<<")
+
+            # 사용자 접속 정보 기록
+            sysLoginHistory = SysLoginHistory(
+                userId=user,
+                httpUserAgent=request.META['HTTP_USER_AGENT'],
+                remoteAddr=request.META['REMOTE_ADDR'],
+                remoteHost=request.META['REMOTE_HOST'],
+            )
+            sysLoginHistory.save()
+
+            # 사용자 로그인 카운트 증가
+            user.loginCnt += 1
+            user.save()
         else:
             jsonResult = makeJsonResult(
                 False,

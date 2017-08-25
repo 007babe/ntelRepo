@@ -280,11 +280,10 @@ $.jqGridStatusCss = function(statusCss) {
  */
 $.jqGridConnLimit = function(connLimit) {
     connLimit = $.n2s(connLimit);
-    console.log(connLimit);
     var rtnData = ""
     
-    if(connLimit.indexOf("P") > -1) rtnData += "PC차단";
-    if(connLimit.indexOf("M") > -1) rtnData += "모바일차단";
+    if(connLimit.indexOf("P") > -1) rtnData += '<img style="padding-left: 2px; padding-right: 2px;" alt="PC차단" class="img-circle" src="/static/img/icon/icon_conn_limit_p.png">';
+    if(connLimit.indexOf("M") > -1) rtnData += '<img style="padding-left: 2px; padding-right: 2px;" alt="모바일차단" class="img-circle" src="/static/img/icon/icon_conn_limit_m.png">';
     
     return rtnData;    
 }; 

@@ -1,19 +1,24 @@
 from __future__ import absolute_import
 
 import json
+from pprint import pprint
 
+from django.core import serializers
 from django.core.exceptions import PermissionDenied
-from django.db.models.expressions import F
+from django.db import connection
+from django.db.models.expressions import F, Subquery
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
+from common.models import ComCd
 from setting.forms import StaffChangeForm
-from system.models import SysUser
+from system.models import SysUser, SysShop
+from utils import data
 from utils.ajax import login_required_ajax_post
-from utils.data import is_empty
+from utils.data import is_empty, getComCdList, dictfetchall
 from utils.date import getltdt
-from utils.json import makeJsonResult, jsonDefault
+from utils.json import makeJsonResult, jsonDefault, JSONSerializer
 
 
 @login_required_ajax_post
@@ -73,6 +78,7 @@ def staffmanJsonList(request):
             qryEx
         ).annotate(
             shopNm=F('shopId__shopNm'),  # 매장명
+#            shopNm=__shopNm,  # 매장명
             companyNm=F('shopId__companyId__companyNm'),  # 회사명
             userAuthNm=F('userAuth__comNm'),  # 권한명
             regNm=F('regId__userNm'),  # 등록자명
@@ -98,12 +104,70 @@ def staffmanJsonList(request):
             "cellNo3",
             "addr1",
             "connLimit",
+            "loginCnt",
             "lastLogin",
             "regDt",
             "companyNm",
             "email",
             "authSeq",
         )
+
+        ##########################################################
+        '''
+        sysShop = SysShop.objects.all()
+        sysStaff = SysUser.objects.annotate(
+            shopNm=Subquery(sysShop.values("shopNm"))
+        )
+        '''
+
+        sysStaff = SysUser.objects.select_related("shopId__companyId").filter(
+            useYn__exact=True,
+            shopId__useYn__exact=True,
+            shopId__companyId__exact="C0000001",
+        ).all()
+
+        '''
+        .select_related("userAuth")
+                
+       ''' 
+        
+#        sysShopRelated = SysShop.objects.all().values("r_system_sysuser_shop_id__userId")
+#        sysShopRelated = SysShop.objects.all()[0].r_system_sysuser_shop_id.all()
+        #_system_sysuser_shop_id
+        
+        qryString = """
+        select *
+        from  sys_user
+        """
+        cursor = connection.cursor()
+        res = cursor.execute(qryString)
+#        res = cursor.execute(qryString, [request.user.userId])
+#        result = cursor.fetchone()
+        
+        result = dictfetchall(cursor)
+        
+        
+        print("***********************************>>")
+        print(json.dumps(result, default=jsonDefault))
+        '''
+        print("result")
+        print(result)
+        print("sysStaff query")
+        print(sysStaff.query)
+        print("sysStaff")
+        pprint(sysStaff)
+        print("***********************************<<")
+#        print(staffTemp[0].shopNm)
+#        print(staffTemp[0].userId)
+        data = serializers.serialize('json', staffTemp,
+                                     fields=('userId__id', 'userNm', 'shopId', 'shopNm', 'email')
+                                     )
+        print(jsonData)
+        '''
+        ##########################################################
+
+
+
 
         return HttpResponse(
             json.dumps(
@@ -162,18 +226,22 @@ def staffmanDetailCV(request):
         ####################
         # 조회
         ####################
-        staffInfo = SysUser.objects.annotate(
-            companyNm=F("shopId__companyId__companyNm"),
-            shopNm=F("shopId__shopNm"),
-        ).get(
+        staffInfo = SysUser.objects.get(
             qry
+        )
+
+        # 권한리스트 데이터 획득
+        userAuths = getComCdList(
+            grpCd='S0001',
+            grpOpt=request.user.userAuth.srtCd
         )
 
         return render(
             request,
             'setting/staffman/detail.html',
             {
-                "staffInfo": staffInfo
+                "staffInfo": staffInfo,
+                "userAuths": userAuths,
             },
         )
     else:
@@ -191,8 +259,6 @@ def staffmanJsonModify(request):
     staffInfo = SysUser.objects.get(
         userId=request.POST.get("userId")
     )
-
-    print(staffInfo)
 
     # 직원정보 수정 폼
     staffChangeForm = StaffChangeForm(

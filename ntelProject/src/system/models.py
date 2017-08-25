@@ -1,6 +1,5 @@
 from __future__ import unicode_literals  # Python 2.x 지원용
 
-
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User, PermissionsMixin
 from django.db import models
@@ -21,6 +20,22 @@ class SysPolicy(models.Model):
 
     class Meta:
         db_table = "sys_policy"
+
+    def __str__(self):
+        return str(self.id)
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysLoginHistory(models.Model):
+    """사용자 로그인 이력
+    """
+    userId = models.ForeignKey('system.SysUser', on_delete=models.CASCADE, db_column='user_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_user_id', verbose_name='사용자ID')
+    loginDt = models.DateTimeField(db_column='login_dt', auto_now_add=True, null=False, blank=True, verbose_name='로그인일자')
+    httpUserAgent = models.TextField(db_column='http_user_agent', null=True, blank=True, default=None, verbose_name='UserAgent정보')
+    remoteAddr  = models.TextField(db_column='remote_addr', null=True, blank=True, default=None, verbose_name='접속 IP')
+    remoteHost  = models.TextField(db_column='remote_host', null=True, blank=True, default=None, verbose_name='접속 Host')
+
+    class Meta:
+        db_table = "sys_login_history"
 
     def __str__(self):
         return str(self.id)
@@ -75,6 +90,7 @@ class SysShop(models.Model):
     shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=12, blank=False, default=None, verbose_name='매장ID')
     companyId = models.ForeignKey('system.SysCompany', on_delete=models.CASCADE, db_column='company_id', blank=True, null=True, default=None, related_name='r_%(app_label)s_%(class)s_company_id')
     shopNm = models.CharField(db_column='shop_nm', max_length=100, blank=True, verbose_name='매장명')
+    isMain = models.BooleanField(db_column='is_main', default=False, verbose_name='기본매장여부')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화1')
     telNo2 = models.CharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화2')
     telNo3 = models.CharField(db_column='tel_no3', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화3')
@@ -166,6 +182,7 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     addr2 = models.TextField(db_column='addr2', max_length=200, null=True, blank=True, default=None, verbose_name='주소2')
     userAuth = models.ForeignKey('common.ComCd', db_column='user_auth', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_user_auth', verbose_name='사용자권한') # ComCd.grpCd = 'S0001'
     connLimit = models.CharField(db_column='conn_limit', max_length=10, null=True, blank=True, default=None, verbose_name='접속제한') # PC제한 : P, MOBILE제한 : M
+    loginCnt = models.IntegerField(db_column='login_cnt', default=0, verbose_name='로그인회수')
     useYn = models.BooleanField(db_column='use_yn', default=False, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
@@ -183,17 +200,22 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     # createsuperuser 커맨드로 유저를 생성할 때 나타날 필드 이름 목록
     REQUIRED_FIELDS = ['userNm', 'password', 'email']  # 필수 입력 필드 정의
 
+
+    @property
     def userAuthNm(self):
         '''
         사용자 권한 명(등급)
         '''
         return self.userAuth.comNm
 
+    @property
     def shopNm(self):
         '''
         사용자 소속 매장명
         '''
         return self.shopId.shopNm
+
+#    shopNm1 = property(_shopNm)
 
     def companyId(self):
         '''

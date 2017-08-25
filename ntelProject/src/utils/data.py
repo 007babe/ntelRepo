@@ -10,7 +10,7 @@ from system.models import SysUser, SysAppreq
 from utils.const import NTEL_EXCLUDE_IDS
 
 
-def getComCdList(grpCd=None, useYn=True, grpOpt=None, orderOpt=''):
+def getComCdList(grpCd=None, useYn=True, grpOpt=None, orderOpt=True):
     '''공통코드 조회 리스트
     '''
     # 조회 쿼리 조건
@@ -30,7 +30,7 @@ def getComCdList(grpCd=None, useYn=True, grpOpt=None, orderOpt=''):
     comCds = ComCd.objects.filter(
         qry
     ).order_by(
-        orderOpt + "ordSeq"
+        ("" if orderOpt else "-") + "ordSeq"
     )
 
     return comCds
@@ -135,3 +135,14 @@ def is_empty(value):
         return True
     else:
         return False
+
+
+def dictfetchall(cursor):
+    '''
+    Cursor to dictionary
+    '''
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
