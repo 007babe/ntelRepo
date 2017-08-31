@@ -3,6 +3,7 @@ from __future__ import unicode_literals  # Python 2.x 지원용
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User, PermissionsMixin
 from django.db import models
+from django.db.models.query_utils import Q
 from django.utils.encoding import python_2_unicode_compatible
 
 
@@ -162,6 +163,26 @@ class SysUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def for_company(self, companyId):
+        '''
+        동일회사 데이터
+        '''
+        qry = Q()
+        qry &= Q(shopId__companyId__exact=companyId)
+        return self.get_queryset().filter(
+            qry
+        )
+
+    def for_shop(self, shopId):
+        '''
+        동일매장 데이터
+        '''
+        qry = Q()
+        qry &= Q(shopId__exact=shopId)
+        return self.get_queryset().filter(
+            qry
+        )
+
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysUser(AbstractBaseUser, PermissionsMixin):
@@ -192,6 +213,7 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
 #    is_active = models.BooleanField(default=True)
 #    is_admin = models.BooleanField(default=False)
 
+    # Model Manager
     objects = SysUserManager()
 
     # 유저 모델에서 필드의 이름을 설명하는 string. 유니크 식별자로 사용

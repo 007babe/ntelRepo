@@ -39,16 +39,6 @@ def staffmanJsonList(request):
         # Query
         qry = Q()
         ####################
-        # 기본 조건
-        ####################
-        # 동일회사조건(필수)
-        qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
-
-        # 팀장일 경우는 소속매장 직원만 조회
-        if userAuth == "S0001T":
-            qry &= Q(shopId__exact=request.user.shopId)
-
-        ####################
         # 검색 조건
         ####################
         if not is_empty(sUseYn):  # 사용여부
@@ -77,7 +67,13 @@ def staffmanJsonList(request):
         ####################
         # 조회
         ####################
-        staffs = SysUser.objects.filter(
+        staffInfos = None
+        if userAuth == "S0001T":
+            staffInfos = SysUser.objects.for_shop(request.user.shopId)
+        else:
+            staffInfos = SysUser.objects.for_company(request.user.shopId.companyId)
+
+        staffInfos = staffInfos.filter(
             qry
         ).exclude(
             qryEx
@@ -120,7 +116,7 @@ def staffmanJsonList(request):
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
-                    resultData=list(staffs)
+                    resultData=list(staffInfos)
                 ),
                 default=jsonDefault
             ),
@@ -227,7 +223,12 @@ def staffmanJsonModify(request):
     resultData = {}
 
     # 수정할 데이터 획득
+    '''
     staffInfo = SysUser.objects.get(
+        userId=request.POST.get("userId")
+    )
+    '''
+    staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
         userId=request.POST.get("userId")
     )
 
