@@ -296,43 +296,54 @@ $(document).ready(function() {
 	// 이용신청 등록 요청
     $("#frmAppreq").submit(function(e, params) {
         event.preventDefault();
+        
+        var frmTarget = $(this);
 
-        var _this = $(this);
-
-        $.gfAjax({
-            url: "{% url 'appreq:regist' %}",
-            data: _this.serializeArray(),
-            async: true,
-            dataType: "json",
-            okFunc: function(data, cbFunc) {
-                $.gfCommonPopUp({
-                    popUrl: "{% url 'appreq:result' %}",
-                    width: "520",
-                    params: {
-                        reqId: data.resultData.reqId
-                    },
-                    attrs: {
-                        "data-keyboard": "false"        
-                    },
-                    loginRequired : false
-                });
-            },
-            failFunc: function(jqXHR, textStatus, errorThrown) {
-        		$.gfNotiMsg({
-        			msgCd : "",
-        			msgType : "warning",
-        		    title : "시스템 오류",
-        		    msg : "시스템 오류 입니다. 관리자에게 문의하세요.",
-        		    msgFrom : "S"
-        		});
-            },
-            spinTarget: $("#divAppreq"),
-        });
+        $.gfComfirm({
+            text: "이용신청을 등록하시겠습니까?",
+            cbFunc: function(isConfirm) {
+            	if(isConfirm){
+                    $.fnRegistAppreq(frmTarget);
+            	}
+            }
+        });        
     });
-
-
-
 });
+
+/*
+ * 사용신청 등록
+ */
+$.fnRegistAppreq = function(frmTarget) {
+     $.gfAjax({
+         url: "{% url 'appreq:regist' %}",
+         data: frmTarget.serializeArray(),
+         async: true,
+         dataType: "json",
+         okFunc: function(data, cbFunc) {
+             $.gfCommonPopUp({
+                 popUrl: "{% url 'appreq:result' %}",
+                 width: "520",
+                 params: {
+                     reqId: data.resultData.reqId
+                 },
+                 attrs: {
+                     "data-keyboard": "false"        
+                 },
+                 loginRequired : false
+             });
+         },
+         failFunc: function(jqXHR, textStatus, errorThrown) {
+             $.gfHttpErrorPopup({
+                 jqXHR : jqXHR,
+                 textStatus : textStatus,
+                 errorThrown : errorThrown,
+                 loginRequired : false,
+             });
+         },
+         spinTarget: $("#divAppreq"),
+     });
+};
+ 
 </script>
 {% endblock body_script_local %}
 

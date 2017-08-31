@@ -27,11 +27,18 @@
 <!-- Javascript Include(for Contenst) End -->
 {% endblock javascriptInc %}
 
+{% block javascriptLocCommon %}
+<script>
+$(document).ready(function() {
+    $.gfSetCsrfToken("{{ csrf_token }}");
+});
+</script>
+{% endblock javascriptLocCommon %}
+
 {% block javascriptLoc %}
 <!-- Javascript Local Code Start -->
 <script>
 $(document).ready(function() {
-
 });
 </script>
 <!-- Javascript Local Code End -->

@@ -209,7 +209,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Session 만료 시간(5분)
-SESSION_COOKIE_AGE = 60 * 60
+SESSION_COOKIE_AGE = 60 * 5
+
+# CSRF SESSION 사용(Default = False)
+CSRF_USE_SESSIONS = False
+
+# Request 요청시 세션 갱신
+SESSION_SAVE_EVERY_REQUEST = True
 
 # Customized User
 AUTH_USER_MODEL = 'system.SysUser'

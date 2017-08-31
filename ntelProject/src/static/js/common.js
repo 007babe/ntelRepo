@@ -175,9 +175,7 @@ $.gfLoadContentsData = function(opts) {
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
 
-    params = {
-        'menuId' : menuId
-    };
+    params.menuId = menuId;    
 
     $.gfAjax({
         type: "POST",
@@ -188,7 +186,6 @@ $.gfLoadContentsData = function(opts) {
             _maincontents.empty().append(data);
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
-            _maincontents.empty();
             // Http Error처리
             $.gfHttpErrorPopup({
                 jqXHR : jqXHR,
@@ -233,7 +230,6 @@ $.gfLoadInitPage = function () {
 /* 
  * 쿠키에 메뉴정보가 있는지 메뉴정보가 존재하는지 확인
  */
-
 $.gfIsValidMenu = function() {
     var isValidMenu = false;
     
@@ -2444,6 +2440,22 @@ $.gfAjaxSetup = function() {
 };
 
 /*
+ * 공통 frmCommon에 Csrf Token Set
+ */
+$.gfSetCsrfToken = function(token) {
+    $("#frmCommon [name='csrfmiddlewaretoken']").val(token);
+};
+
+
+/*
+ * 공통 frmCommon에서 Csrf Token Get
+ */
+$.gfGetCsrfToken = function() {
+    return $("#frmCommon [name='csrfmiddlewaretoken']").val();
+};
+
+
+/*
  * 공통 Ajax함수
  */
 $.gfAjax = function(opts) {
@@ -2452,7 +2464,7 @@ $.gfAjax = function(opts) {
     var type            = $.isEmpty(opts.type) ? "POST" : opts.type; // 사용할 HTTP 메서드
     var url             = opts.url; // 데이터 URL(필수)
     var dataType        = $.isEmpty(opts.dataType) ? "" : opts.dataType;
-    var data            = opts.data;
+    var data            = $.isEmpty(opts.data) ? type == "POST" ? {} : "" : opts.data;
     var async           = $.isEmpty(opts.async) ? true : opts.async;
     var cache           = $.isEmpty(opts.cache) ? false : opts.cache;
     var contentType     = $.isEmpty(opts.contentType) ? 'application/x-www-form-urlencoded; charset=UTF-8' : opts.contentType;
@@ -2464,6 +2476,9 @@ $.gfAjax = function(opts) {
     var failFunc        = opts.failFunc;       // Ajax 실패 시 처리할 함수
     var alwaysFunc      = opts.alwaysFunc;     // Ajax 항상실행 처리할 함수
     var _spinTarget     = opts.spinTarget;     // Ajax 실행시 spinner 처리 대상
+
+    // POST방식일 경우 
+    if(type == "POST") data.csrfmiddlewaretoken = $.gfGetCsrfToken();
 
     try {
         // http://api.jquery.com/jquery.ajax/ 참조
@@ -2500,6 +2515,7 @@ $.gfAjax = function(opts) {
                 $.gfToggleLoading(_spinTarget, false);
             }
             if(!$.isEmpty(alwaysFunc)) alwaysFunc(jqXHR, textStatus, errorThrown);
+            $.gfAjaxSetup();
         });
 
     } catch(err) {
@@ -2532,7 +2548,6 @@ $.gfHttpErrorPopup = function(opts) {
     var textStatus = opts.textStatus;
     var errorThrown = opts.errorThrown;
     var loginRequired = $.isEmpty(opts.loginRequired) ? false : opts.loginRequired;
-
 
     if(!$.isEmpty(jqXHR.status) && jqXHR.status != 200) {
         if(loginRequired && jqXHR.status == 401) { // Login Check 401일 경우 로그인 팝업

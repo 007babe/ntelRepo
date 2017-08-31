@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from django.contrib.auth.decorators import login_required
 from django.http.response import Http404
+from django.middleware import csrf
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
 from django.urls.base import reverse, reverse_lazy

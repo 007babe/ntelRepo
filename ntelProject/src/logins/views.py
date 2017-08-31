@@ -1,12 +1,10 @@
 from __future__ import absolute_import
 
 import json
-from pprint import pprint
-import re
 
 from django.contrib.auth import authenticate, login, logout
-from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse, HttpResponseRedirect
+from django.middleware import csrf
 from django.shortcuts import render
 from django.urls.base import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -81,15 +79,6 @@ def loginCheckCV(request):
                 resultMessage="정상사용자"
             )
 
-            print("++++++++++++++++++++>>>>")
-            pprint(request.META)
-            print("----------------------------")
-            print("HTTP_USER_AGENT", request.META['HTTP_USER_AGENT'])
-            print("request.META['HTTP_USER_AGENT'] type", type(request.META['HTTP_USER_AGENT']))
-            print("REMOTE_ADDR", request.META['REMOTE_ADDR'])
-            print("REMOTE_HOST", request.META['REMOTE_HOST'])
-            print("++++++++++++++++++++<<<<")
-
             # 사용자 접속 정보 기록
             sysLoginHistory = SysLoginHistory(
                 userId=user,
@@ -102,6 +91,10 @@ def loginCheckCV(request):
             # 사용자 로그인 카운트 증가
             user.loginCnt += 1
             user.save()
+
+            # (갱신된)csrf 값을 전달
+            jsonResult["csrfmiddlewaretoken"] = csrf.get_token(request)
+
         else:
             jsonResult = makeJsonResult(
                 False,
