@@ -320,7 +320,8 @@ $.gfCommonPopUp = function(opts) {
  */
 $.gfCommonPopUpClose = function(_target) {
     _target = $.isEmpty(_target) ? $('#divCommonModalPopup') : _target;
-    _target.modal('hide');
+//    _target.modal('hide');
+    _target.remove();
 }
 
 

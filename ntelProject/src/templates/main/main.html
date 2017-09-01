@@ -24,6 +24,7 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <input type="hidden" id="loginUserId" value="{{ user.userId }}">
                         <li><a href="#">ID/이름 : {{ user.userId }}/{{ user.userNm }}</a></li>
                         <li><a href="#">업체ID/매장ID : {{ user.companyId }}/{{ user.shopId }}</a></li>
                         <li><a href="#">회사/매장명 : {{ user.companyNm }}/{{ user.shopNm }}</a></li>

@@ -68,7 +68,7 @@ def staffmanJsonList(request):
         # 조회
         ####################
         staffInfos = None
-        if userAuth == "S0001T":
+        if userAuth == "S0001T":  # 점장일 경우
             staffInfos = SysUser.objects.for_shop(request.user.shopId)
         else:
             staffInfos = SysUser.objects.for_company(request.user.shopId.companyId)
@@ -132,11 +132,36 @@ def staffmanRegistCV(request):
     환경설정 > 직원관리 : 직원등록
     '''
     userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
     if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
+        # 권한리스트 데이터 획득
+        userAuths = getComCdList(
+            grpCd='S0001',
+            grpOpt=request.user.userAuth.srtCd,
+        ).filter(
+            # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
+            ordSeq__gt=request.user.userAuth.ordSeq
+        )
+
+        # 매장리스트 데이터 획득
+        qryShops = Q()
+        qryShops &= Q(useYn__exact=True) 
+        if userAuth in ["S0001M", "S0001C", "S0001A"]:
+            qryShops &= Q(companyId__exact=request.user.shopId.companyId)
+        else:
+            qryShops &= Q(shopId__exact=request.user.shopId)
+
+        userShops = SysShop.objects.filter(
+            qryShops
+        )
+
         return render(
             request,
             'setting/staffman/regist.html',
-            {},
+            {
+                "userAuths": userAuths,
+                "userShops": userShops,
+            },
         )
     else:
         raise PermissionDenied()  # 403에러
@@ -155,13 +180,6 @@ def staffmanDetailCV(request):
         ####################
         # 기본 조건
         ####################
-        # 동일회사조건(필수)
-        qry &= Q(shopId__companyId__exact=request.user.shopId.companyId)
-
-        # 점장일 경우는 소속매장 직원만 가능
-        if userAuth in ["S0001T"]:
-            qry &= Q(shopId__exact=request.user.shopId)
-
         # 해당 사용자 ID
         qry &= Q(
             userId__exact=request.POST.get("userId")
@@ -170,7 +188,14 @@ def staffmanDetailCV(request):
         ####################
         # 조회
         ####################
-        staffInfo = SysUser.objects.get(
+        # 직원 정보 데이터 획득
+        staffInfo = None
+        if userAuth == "S0001T":  # 점장일 경우
+            staffInfo = SysUser.objects.for_shop(request.user.shopId)
+        else:
+            staffInfo = SysUser.objects.for_company(request.user.shopId.companyId)
+
+        staffInfo = staffInfo.get(
             qry
         )
 
@@ -220,36 +245,77 @@ def staffmanJsonModify(request):
     '''
     직원정보 수정 요청처리
     '''
-    resultData = {}
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
-    # 수정할 데이터 획득
+    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
+        resultData = {}
+
+        # 수정할 데이터 획득
+        staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
+            userId=request.POST.get("userId")
+        )
+
+        # 직원정보 수정 폼
+        staffChangeForm = StaffChangeForm(
+            request.POST,
+            instance=staffInfo,
+            request=request,
+        )
+    
+        # 데이터 검증 후 저장
+        if(staffChangeForm.is_valid()):
+            staffChangeForm.save()
+    
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    form=staffChangeForm,
+                    resultMessage="수정되었습니다.",
+                    resultData=resultData
+                )
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
+def staffmanJsonRegist(request):
     '''
-    staffInfo = SysUser.objects.get(
-        userId=request.POST.get("userId")
-    )
+    직원정보 등록 요청처리
     '''
-    staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
-        userId=request.POST.get("userId")
-    )
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
-    # 직원정보 수정 폼
-    staffChangeForm = StaffChangeForm(
-        request.POST,
-        instance=staffInfo,
-        request=request,
-    )
+    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
+        resultData = {}
 
-    # 데이터 검증 후 저장
-    if(staffChangeForm.is_valid()):
-        staffChangeForm.save()
+        # 수정할 데이터 획득
+        staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
+            userId=request.POST.get("userId")
+        )
 
-    return HttpResponse(
-        json.dumps(
-            makeJsonResult(
-                form=staffChangeForm,
-                resultMessage="수정되었습니다.",
-                resultData=resultData
-            )
-        ),
-        content_type="application/json"
-    )
+        # 직원정보 수정 폼
+        staffChangeForm = StaffChangeForm(
+            request.POST,
+            instance=staffInfo,
+            request=request,
+        )
+
+        # 데이터 검증 후 저장
+        if(staffChangeForm.is_valid()):
+            staffChangeForm.save()
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    form=staffChangeForm,
+                    resultMessage="등록되었습니다.",
+                    resultData=resultData
+                )
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+        
