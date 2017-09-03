@@ -203,8 +203,8 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     addr2 = models.TextField(db_column='addr2', max_length=200, null=True, blank=True, default=None, verbose_name='주소2')
     userAuth = models.ForeignKey('common.ComCd', db_column='user_auth', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_user_auth', verbose_name='사용자권한') # ComCd.grpCd = 'S0001'
     connLimit = models.CharField(db_column='conn_limit', max_length=10, null=True, blank=True, default=None, verbose_name='접속제한') # PC제한 : P, MOBILE제한 : M
-    loginCnt = models.IntegerField(db_column='login_cnt', default=0, verbose_name='로그인회수')
-    useYn = models.BooleanField(db_column='use_yn', default=False, verbose_name='사용여부')
+    loginCnt = models.IntegerField(db_column='login_cnt', null=False, blank=True, default=0, verbose_name='로그인회수')
+    useYn = models.BooleanField(db_column='use_yn', null=False, blank=True, default=False, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')

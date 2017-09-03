@@ -72,24 +72,24 @@ class SysAppreqCreationForm(ModelForm):
 
     def save(self, commit=True):
         cleaned_data = super(SysAppreqCreationForm, self).clean()
-        sysAppreq = super(SysAppreqCreationForm, self).save(commit=False)
+        instanceSysAppreq = super(SysAppreqCreationForm, self).save(commit=False)
 
         # 신규 이용 신청 번호 획득 후 세팅
         self.reqId = getSysSeqId('APRQID')
-        sysAppreq.reqId = self.reqId
+        instanceSysAppreq.reqId = self.reqId
 
         # 회사등급 ('S0006A')  일반등급으로 세팅(comCd.grpCd='S0006' 참조)
-        sysAppreq.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
+        instanceSysAppreq.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
 
         # 진행상태 승인요청('S0008R')  세팅(comCd.grpCd='S0008' 참조)
-        sysAppreq.reqStatus = ComCd.objects.get(comCd__exact='S0008A')
+        instanceSysAppreq.reqStatus = ComCd.objects.get(comCd__exact='S0008A')
 
         # 비밀번호 암호화
-        sysAppreq.password = make_password(cleaned_data.get('password'))
+        instanceSysAppreq.password = make_password(cleaned_data.get('password'))
 
         if commit:
-            sysAppreq.save()
-        return sysAppreq
+            instanceSysAppreq.save()
+        return instanceSysAppreq
 
     class Meta:
         model = SysAppreq

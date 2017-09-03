@@ -12,7 +12,7 @@ from django.middleware import csrf
 from django.shortcuts import render
 
 from common.models import ComCd
-from setting.forms import StaffChangeForm
+from setting.forms import StaffChangeForm, StaffRegistForm
 from system.models import SysUser, SysShop
 from utils import data
 from utils.ajax import login_required_ajax_post
@@ -261,11 +261,11 @@ def staffmanJsonModify(request):
             instance=staffInfo,
             request=request,
         )
-    
+ 
         # 데이터 검증 후 저장
         if(staffChangeForm.is_valid()):
             staffChangeForm.save()
-    
+
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
@@ -290,26 +290,22 @@ def staffmanJsonRegist(request):
     if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
         resultData = {}
 
-        # 수정할 데이터 획득
-        staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
-            userId=request.POST.get("userId")
-        )
-
-        # 직원정보 수정 폼
-        staffChangeForm = StaffChangeForm(
+        # 직원정보 등록 폼
+        staffRegistForm = StaffRegistForm(
             request.POST,
-            instance=staffInfo,
             request=request,
         )
 
         # 데이터 검증 후 저장
-        if(staffChangeForm.is_valid()):
-            staffChangeForm.save()
+        if(staffRegistForm.is_valid()):
+            staffRegistForm.save()
+
+        print(staffRegistForm.errors)
 
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
-                    form=staffChangeForm,
+                    form=staffRegistForm,
                     resultMessage="등록되었습니다.",
                     resultData=resultData
                 )
@@ -318,4 +314,3 @@ def staffmanJsonRegist(request):
         )
     else:
         raise PermissionDenied()
-        

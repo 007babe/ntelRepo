@@ -293,9 +293,6 @@ $.gfCommonPopUp = function(opts) {
                 _divPop.children(".modal-dialog").css("width", width + "px");
             }
 
-            // 기존 모달 팝업 지우기
-//            _divPop.remove();
-
             // body에 추가
             $(document.body).append(_divPop);
 
