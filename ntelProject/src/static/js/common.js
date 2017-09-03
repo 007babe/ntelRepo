@@ -259,6 +259,7 @@ $.gfCommonPopUp = function(opts) {
 
     var popUrl = opts.popUrl; // 필수
     var modalId = $.isEmpty(opts.modalId) ? "divCommonModalPopup" : opts.modalId;
+    var _divModal = $(modalId);
     var width = opts.width;
     var attrs = $.isEmpty(opts.attrs) ? new Object() : opts.attrs; // modalId의 Popup Div의 속성에 추가 할 내용(key, value)
     var params = opts.params;
@@ -292,16 +293,20 @@ $.gfCommonPopUp = function(opts) {
                 _divPop.children(".modal-dialog").css("width", width + "px");
             }
 
-            var _modalDiv = $("#" + modalId);
-
             // 기존 모달 팝업 지우기
-            $(document.body).find("#" + modalId).remove();
+//            _divPop.remove();
 
             // body에 추가
             $(document.body).append(_divPop);
 
             // 팝업 보이기
-            $("#" + modalId).modal("show");
+            _divPop.modal("show");
+            
+            // 모달 Close시 이벤트
+            _divPop.on("hide.bs.modal", function() {
+                _divPop.remove(); // 기존 모달 팝업 지우기
+            });
+            
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
             // Http Error처리
@@ -320,8 +325,7 @@ $.gfCommonPopUp = function(opts) {
  */
 $.gfCommonPopUpClose = function(_target) {
     _target = $.isEmpty(_target) ? $('#divCommonModalPopup') : _target;
-//    _target.modal('hide');
-    _target.remove();
+    _target.modal('hide');
 }
 
 
