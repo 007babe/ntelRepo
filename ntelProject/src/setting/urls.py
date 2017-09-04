@@ -21,4 +21,19 @@ urlpatterns = [
     url(r'^staffman/detail/$', views.staffmanDetailCV, name='staffman__detail'),
     # 직원 등록 화면
     url(r'^staffman/regist/$', views.staffmanRegistCV, name='staffman__regist'),
+
+    #===============================>
+    # 매장관리
+    #===============================<
+    # 매장 리스트(Json)
+    url(r'^shopman/json/list/$', views.shopmanJsonList, name='shopman__json__list'),
+    # 매장 정보 수정(Json)
+    url(r'^shopman/json/modify/$', views.shopmanJsonModify, name='shopman__json__modify'),
+    # 매장 정보 등록(Json)
+    url(r'^shopman/json/regist/$', views.shopmanJsonRegist, name='shopman__json__regist'),
+    # 매장 상세 화면
+    url(r'^shopman/detail/$', views.shopmanDetailCV, name='shopman__detail'),
+    # 매장 등록 화면
+    url(r'^shopman/regist/$', views.shopmanRegistCV, name='shopman__regist'),
+
 ]

@@ -72,8 +72,6 @@ def appreqmanJsonList(request):
         sysAppreq = SysAppreq.objects.annotate(
             companyTpNm=F('companyTp__comNm'),
             companyGradeNm=F('companyGrade__comNm'),
-#            telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
-#            cellNo=Concat(Concat('cellNo1',  Value('-'), 'cellNo2'), Value('-'), 'cellNo3'),
             reqStatusNm=F('reqStatus__comNm'),
             reqStatusCss=F('reqStatus__cdCss'),
             regNm=F('regId__userNm'),
@@ -187,6 +185,7 @@ def appreqmanJsonAppr(request):
                 zipCd=appreq.zipCd,
                 addr1=appreq.addr1,
                 addr2=appreq.addr2,
+                isMain=True,
                 regId=SysUser.objects.get(userId__exact=request.user.userId),
                 modId=SysUser.objects.get(userId__exact=request.user.userId),
             )
@@ -247,8 +246,6 @@ def appreqmanJsonAppr(request):
         appreq = SysAppreq.objects.annotate(
             companyTpNm=F('companyTp__comNm'),
             companyGradeNm=F('companyGrade__comNm'),
-#            telNo=Concat(Concat('telNo1',  Value('-'), 'telNo2'), Value('-'), 'telNo3'),
-#            cellNo=Concat(Concat('cellNo1',  Value('-'), 'cellNo2'), Value('-'), 'cellNo3'),
             reqStatusNm=F('reqStatus__comNm'),
             reqStatusCss=F('reqStatus__cdCss'),
             regNm=F('regId__userNm'),

@@ -5,37 +5,41 @@ import json
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
 from django.db import connection
-from django.db.models.expressions import F, Subquery
+from django.db.models.aggregates import Count
+from django.db.models.expressions import F, Subquery, Case, When
+from django.db.models.fields import CharField, IntegerField
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.middleware import csrf
 from django.shortcuts import render
 
 from common.models import ComCd
-from setting.forms import StaffChangeForm, StaffRegistForm
+from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
+    ShopRegistForm
 from system.models import SysUser, SysShop
 from utils import data
 from utils.ajax import login_required_ajax_post
-from utils.data import is_empty, getComCdList, dictfetchall
+from utils.data import is_empty, getComCdList, dictfetchall, getSysShopId
 from utils.date import getltdt
 from utils.json import makeJsonResult, jsonDefault, JSONSerializer
 
 
 @login_required_ajax_post
 def staffmanJsonList(request):
-    """
+    '''
     환경설정 > 직원관리  : 리스트 데이터 Json
-    """
+    '''
     userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
-    # 검색조건
-    sUseYn = request.POST.get("sUseYn")
-    sShopId = request.POST.get("sShopId")
-    sUserNm = request.POST.get("sUserNm")
-    sUserId = request.POST.get("sUserId")
-    sUserAuth = request.POST.get("sUserAuth")
+    # 시스템관리자, 대표, 총괄, 점장만 가능
+    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:
+        # 검색조건(Parameter)
+        sUseYn = request.POST.get("sUseYn")
+        sShopId = request.POST.get("sShopId")
+        sUserNm = request.POST.get("sUserNm")
+        sUserId = request.POST.get("sUserId")
+        sUserAuth = request.POST.get("sUserAuth")
 
-    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:  # 시스템관리자, 대표, 총괄, 점장만 가능
         # Query
         qry = Q()
         ####################
@@ -256,20 +260,20 @@ def staffmanJsonModify(request):
         )
 
         # 직원정보 수정 폼
-        staffChangeForm = StaffChangeForm(
+        staffModifyForm = StaffModifyForm(
             request.POST,
             instance=staffInfo,
             request=request,
         )
  
         # 데이터 검증 후 저장
-        if(staffChangeForm.is_valid()):
-            staffChangeForm.save()
+        if(staffModifyForm.is_valid()):
+            staffModifyForm.save()
 
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
-                    form=staffChangeForm,
+                    form=staffModifyForm,
                     resultMessage="수정되었습니다.",
                     resultData=resultData
                 )
@@ -300,12 +304,225 @@ def staffmanJsonRegist(request):
         if(staffRegistForm.is_valid()):
             staffRegistForm.save()
 
-        print(staffRegistForm.errors)
-
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
                     form=staffRegistForm,
+                    resultMessage="등록되었습니다.",
+                    resultData=resultData
+                )
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
+def shopmanJsonList(request):
+    '''
+    환경설정 > 매장관리  : 리스트 데이터 Json
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        # 검색조건(Parameter)
+        sUseYn = request.POST.get("sUseYn")
+        sShopNm = request.POST.get("sShopNm")
+
+        # Query
+        qry = Q()
+        ####################
+        # 검색 조건
+        ####################
+        if not is_empty(sUseYn):  # 사용여부
+            qry &= Q(useYn__exact=sUseYn)
+
+        qry &= Q(shopNm__contains=sShopNm)  # 매장명
+
+        shopInfos = SysShop.objects.for_company(request.user.shopId.companyId)
+
+        shopInfos = shopInfos.filter(
+            qry
+        ).annotate(
+            staffCnt=Count("r_system_sysuser_shop_id"),
+            staffCntUseY=Count(
+                Case(
+                    When(r_system_sysuser_shop_id__useYn__exact=True, then=1),
+                    output_field=IntegerField(),
+                )
+            ),
+            staffCntUseN=Count(
+                Case(
+                    When(r_system_sysuser_shop_id__useYn__exact=False, then=1),
+                    output_field=IntegerField(),
+                )
+            )
+        ).order_by(
+            "-useYn",
+        ).values(
+            "shopId",
+            "shopNm",
+            "zipCd",
+            "addr1",
+            "addr2",
+            "useYn",
+            "cellNo1",
+            "cellNo2",
+            "cellNo3",
+            "telNo1",
+            "telNo2",
+            "telNo3",
+            "faxNo1",
+            "faxNo2",
+            "faxNo3",
+            "isMain",
+            "staffCnt",
+            "staffCntUseY",
+            "staffCntUseN",
+            "regDt",
+            "regId",
+            "modDt",
+            "modId",
+        )
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    resultData=list(shopInfos)
+                ),
+                default=jsonDefault
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
+def shopmanDetailCV(request):
+    '''
+    환경설정 > 매장관리 : 상세
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        # Query
+        qry = Q()
+        ####################
+        # 기본 조건
+        ####################
+        # 해당 사용자 ID
+        qry &= Q(
+            shopId__exact=request.POST.get("shopId")
+        )
+
+        ####################
+        # 조회
+        ####################
+        # 직원 정보 데이터 획득
+        shopInfo = SysShop.objects.for_company(
+            request.user.shopId.companyId
+        ).get(
+            qry
+        )
+
+        # Rendering
+        return render(
+            request,
+            'setting/shopman/detail.html',
+            {
+                "shopInfo": shopInfo,
+            },
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
+def shopmanJsonModify(request):
+    '''
+    매장정보 수정 요청처리
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        resultData = {}
+
+        # 수정할 데이터 획득
+        staffInfo = SysShop.objects.for_company(request.user.shopId.companyId).get(
+            shopId=request.POST.get("shopId")
+        )
+
+        # 매장정보 수정 폼
+        shopModifyForm = ShopModifyForm(
+            request.POST,
+            instance=staffInfo,
+            request=request,
+        )
+ 
+        # 데이터 검증 후 저장
+        if(shopModifyForm.is_valid()):
+            shopModifyForm.save()
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    form=shopModifyForm,
+                    resultMessage="수정되었습니다.",
+                    resultData=resultData
+                )
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
+def shopmanRegistCV(request):
+    '''
+    환경설정 > 직원관리 : 직원등록
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+
+        return render(
+            request,
+            'setting/shopman/regist.html',
+            {},
+        )
+    else:
+        raise PermissionDenied()  # 403에러
+
+
+@login_required_ajax_post
+def shopmanJsonRegist(request):
+    '''
+    직원정보 등록 요청처리
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        resultData = {}
+
+        # 매장정보 등록 폼
+        shopRegistForm = ShopRegistForm(
+            request.POST,
+            request=request,
+        )
+
+        # 데이터 검증 후 저장
+        if(shopRegistForm.is_valid()):
+            shopRegistForm.save()
+
+        print(shopRegistForm.errors)
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    form=shopRegistForm,
                     resultMessage="등록되었습니다.",
                     resultData=resultData
                 )

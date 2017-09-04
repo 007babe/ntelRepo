@@ -70,6 +70,18 @@ def getSysSeqId(seqCd):
     return returnCd
 
 
+def getSysShopId(companyId):
+    '''
+    신규 매장(SysShop) ID 코드 획득
+    '''
+    shops = SysShop.objects.for_company(companyId).all().last()
+    lastShopId = shops.shopId
+    companyId = lastShopId[:-4]
+    shopIdSeq = str(int(lastShopId[len(lastShopId) - 4:]) + 1).zfill(4)
+
+    return companyId + shopIdSeq
+
+
 def isUsableId(userId):
     '''
     사용가능한 사용자아이디 체크

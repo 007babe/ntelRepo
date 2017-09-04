@@ -13,7 +13,7 @@ from utils.data import getSysSeqId
 from utils.data import isUsableId
 
 
-class SysAppreqCreationForm(ModelForm):
+class SysAppreqRegistForm(ModelForm):
     '''
     이용신청(SysAppreq) 생성 Form class
     '''
@@ -38,7 +38,7 @@ class SysAppreqCreationForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
-        super(SysAppreqCreationForm, self).__init__(*args, **kwargs)
+        super(SysAppreqRegistForm, self).__init__(*args, **kwargs)
 
         self.fields.keyOrder = [
             'confirmAccessTerms',
@@ -58,7 +58,7 @@ class SysAppreqCreationForm(ModelForm):
         ]
 
     def clean(self):
-        cleaned_data = super(SysAppreqCreationForm, self).clean()
+        cleaned_data = super(SysAppreqRegistForm, self).clean()
 
         # 사용가능한 ID인지 체크
         if not isUsableId(cleaned_data.get('userId')):
@@ -71,8 +71,8 @@ class SysAppreqCreationForm(ModelForm):
             self.add_error('password', _('비밀번호확인과 일치하지 않습니다.'))
 
     def save(self, commit=True):
-        cleaned_data = super(SysAppreqCreationForm, self).clean()
-        instanceSysAppreq = super(SysAppreqCreationForm, self).save(commit=False)
+        cleaned_data = super(SysAppreqRegistForm, self).clean()
+        instanceSysAppreq = super(SysAppreqRegistForm, self).save(commit=False)
 
         # 신규 이용 신청 번호 획득 후 세팅
         self.reqId = getSysSeqId('APRQID')

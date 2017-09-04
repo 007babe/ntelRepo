@@ -82,13 +82,40 @@ class SysCompany(models.Model):
     def __str__(self):
         return self.companyId
 
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysShopManager(models.Manager):
+    '''
+    시스템 매장 매니저
+    '''
+    def for_company(self, companyId):
+        '''
+        동일회사 데이터
+        '''
+        qry = Q()
+        qry &= Q(companyId__exact=companyId)
+        return self.get_queryset().filter(
+            qry
+        ).order_by(
+            "shopId"
+        )
+
+    def for_shop(self, shopId):
+        '''
+        동일매장 데이터
+        '''
+        qry = Q()
+        qry &= Q(shopId__exact=shopId)
+        return self.get_queryset().filter(
+            qry
+        )
+
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysShop(models.Model):
     """엔텔 사용 매장 정보
     고유발생 Key로 PK 설정
     """
-    shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=12, blank=False, default=None, verbose_name='매장ID')
+    shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=14, blank=False, default=None, verbose_name='매장ID')
     companyId = models.ForeignKey('system.SysCompany', on_delete=models.CASCADE, db_column='company_id', blank=True, null=True, default=None, related_name='r_%(app_label)s_%(class)s_company_id')
     shopNm = models.CharField(db_column='shop_nm', max_length=100, blank=True, verbose_name='매장명')
     isMain = models.BooleanField(db_column='is_main', default=False, verbose_name='기본매장여부')
@@ -109,6 +136,9 @@ class SysShop(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Model Manager
+    objects = SysShopManager()
 
     class Meta:
         db_table = "sys_shop"
@@ -452,6 +482,9 @@ class SysAppreq(models.Model):
     cellNo1 = models.CharField(db_column='cell_no1', max_length=5, null=False, blank=False, default=None, verbose_name='대표자휴대폰1')
     cellNo2 = models.CharField(db_column='cell_no2', max_length=5, null=False, blank=False, default=None, verbose_name='대표자휴대폰2')
     cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=False, blank=False, default=None, verbose_name='대표자휴대폰3')
+    faxNo1 = models.CharField(db_column='fax_no1', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX1')
+    faxNo2 = models.CharField(db_column='fax_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX2')
+    faxNo3 = models.CharField(db_column='fax_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX3')
     bizTp = models.CharField(db_column='biz_tp', max_length=100, null=True, blank=True, verbose_name='업태')
     bizKind = models.CharField(db_column='biz_kind', max_length=100, null=True, blank=True, verbose_name='업종')
     zipCd = models.CharField(db_column='zip_cd', max_length=6, blank=True, verbose_name='회사우편번호') # 우편번호
