@@ -7,6 +7,16 @@ urlpatterns = [
     #===============================>
     # 거래처관리
     #===============================<
+    # 거래처 리스트(Json)
+    url(r'^accountman/json/list/$', views.accountmanJsonList, name='accountman__json__list'),
+    # 거래처 정보 수정(Json)
+    url(r'^accountman/json/modify/$', views.accountmanJsonModify, name='accountman__json__modify'),
+    # 거래처 정보 등록(Json)
+    url(r'^accountman/json/regist/$', views.accountmanJsonRegist, name='accountman__json__regist'),
+    # 거래처 상세 화면
+    url(r'^accountman/detail/$', views.accountmanDetailCV, name='accountman__detail'),
+    # 거래처 등록 화면
+    url(r'^accountman/regist/$', views.accountmanRegistCV, name='accountman__regist'),
 
     #===============================>
     # 직원관리

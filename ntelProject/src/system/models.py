@@ -51,7 +51,8 @@ class SysCompany(models.Model):
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=True, verbose_name='회사명') # 회사명
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
-    isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실회사구분')
+    isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실제회사구분')
+    telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=True, blank=True, default=None, verbose_name='통신사코드')
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
     bizLicNo2 = models.CharField(db_column='biz_lic_no2', max_length=2, null=True, blank=True, verbose_name='사업자번호2')
@@ -62,9 +63,10 @@ class SysCompany(models.Model):
     faxNo1 = models.CharField(db_column='fax_no1', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX1')
     faxNo2 = models.CharField(db_column='fax_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX2')
     faxNo3 = models.CharField(db_column='fax_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX3')
-    cellNo1 = models.CharField(db_column='cell_no1', max_length=5, null=True, blank=True, default=None, verbose_name='회사휴대폰1')
-    cellNo2 = models.CharField(db_column='cell_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사휴대폰2')
-    cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사휴대폰3')
+    cellNo1 = models.CharField(db_column='cell_no1', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰1')
+    cellNo2 = models.CharField(db_column='cell_no2', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰2')
+    cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰3')
+    chargerNm = models.CharField(db_column='charger_nm', max_length=30, null=True, blank=True, verbose_name='담당자 이름')
     bizTp = models.CharField(db_column='biz_tp', max_length=100, null=True, blank=True, verbose_name='업태')
     bizKind = models.CharField(db_column='biz_kind', max_length=100, null=True, blank=True, verbose_name='업종')
     zipCd = models.CharField(db_column='zip_cd', max_length=6, null=True, blank=True, verbose_name='회사우편번호') # 우편번호
@@ -81,6 +83,48 @@ class SysCompany(models.Model):
 
     def __str__(self):
         return self.companyId
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysCompanyAccountManager(models.Manager):
+    '''
+    시스템 거래처 매니저
+    '''
+    def for_company(self, companyId):
+        '''
+        동일회사 데이터
+        '''
+        qry = Q()
+        qry &= Q(companyId__exact=companyId)
+        return self.get_queryset().filter(
+            qry
+        ).order_by(
+            "shopId"
+        )
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysCompanyAccount(models.Model):
+    """거래처 정보
+    """
+    companyId = models.ForeignKey('system.SysCompany', db_column='company_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_company_id', verbose_name='회사ID')
+    accountId = models.ForeignKey('system.SysCompany', db_column='account_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_account_id', verbose_name='거래처ID')
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Model Manager
+    objects = SysCompanyAccountManager()
+
+    class Meta:
+        db_table = "sys_company_account"
+        unique_together = ('companyId', 'accountId',)
+
+    def __str__(self):
+        return self.id
+
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysShopManager(models.Manager):
@@ -450,7 +494,7 @@ class SysMsg(models.Model):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
-class PublishedManager(models.Manager):
+class SysAppreqManager(models.Manager):
     '''기본 매니저
     '''
     use_for_related_fields = True
@@ -464,13 +508,12 @@ class SysAppreq(models.Model):
     """이용신청정보
     고유발생 Key로 PK 설정
     """
-    objects = PublishedManager()
-
     reqId = models.CharField(db_column='req_id', primary_key=True, null=False, blank=False, max_length=10, verbose_name='요청ID') # 요청ID
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     companyId = models.ForeignKey('system.SysCompany', on_delete=models.CASCADE, db_column='company_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_cd', verbose_name='회사코드')
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명')
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
+    telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=True, blank=True, default=None, verbose_name='통신사코드')
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     shopNm = models.CharField(db_column='shop_nm', max_length=100, null=False, blank=False, verbose_name='대표매장명')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
@@ -502,6 +545,9 @@ class SysAppreq(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Manager
+    objects = SysAppreqManager()
 
     class Meta:
         db_table = "sys_appreq"

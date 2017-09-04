@@ -160,6 +160,7 @@ def appreqmanJsonAppr(request):
                 cellNo1=appreq.cellNo1,
                 cellNo2=appreq.cellNo2,
                 cellNo3=appreq.cellNo3,
+                chargerNm=appreq.userNm,
                 bizTp=appreq.bizTp,
                 bizKind=appreq.bizKind,
                 zipCd=appreq.zipCd,
