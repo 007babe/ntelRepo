@@ -28,9 +28,7 @@ def getJsonComCd(request):
         공통코드(com_cd) 데이터 획득(Json)
     """
     # 공통코드 데이터 획득
-    comCds = ComCd.objects.filter(
-        useYn=True,
-    ).values(
+    comCds = ComCd.objects.for_grp(useYn=True).values(
         'grpCd',
         'comCd',
         'comNm',

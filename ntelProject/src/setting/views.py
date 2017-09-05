@@ -713,57 +713,39 @@ def accountmanDetailCV(request):
         ####################
         # 해당 사용자 ID
         qry &= Q(
-            userId__exact=request.POST.get("userId")
+            id__exact=request.POST.get("id")
         )
 
         ####################
         # 조회
         ####################
-        # 직원 정보 데이터 획득
-        staffInfo = None
-        if userAuth == "S0001T":  # 점장일 경우
-            staffInfo = SysUser.objects.for_shop(request.user.shopId)
-        else:
-            staffInfo = SysUser.objects.for_company(request.user.shopId.companyId)
-
-        staffInfo = staffInfo.get(
+        # 거래처 정보 데이터 획득
+        accountInfo = SysCompanyAccount.objects.for_company(
+            request.user.shopId.companyId
+        ).get(
             qry
         )
 
-        # 권한리스트 데이터 획득
-        userAuths = getComCdList(
-            grpCd='S0001',
-            grpOpt=request.user.userAuth.srtCd,
-        ).filter(
-            # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
-            ordSeq__gt=request.user.userAuth.ordSeq
-        )
-
-        # 매장리스트 데이터 획득
-        qryShops = Q()
-        qryShops &= Q(useYn__exact=True) 
-        if userAuth in ["S0001M", "S0001C", "S0001A"]:
-            qryShops &= Q(companyId__exact=request.user.shopId.companyId)
-        else:
-            qryShops &= Q(shopId__exact=request.user.shopId)
-
-        userShops = SysShop.objects.filter(
-            qryShops
+        # 거래처(회사) 구분값 획득(공통코드)
+        companyTps = ComCd.objects.for_grp(
+            grpCd="S0004",
+            grpOpt="B"
+        ).exclude(
+            comCd__exact=request.user.shopId.companyId.companyTp
         )
 
         # 수정가능 여부 확인 후 세팅
         editable = True
-        if staffInfo.userId == request.user.userId or staffInfo.userAuth.ordSeq <= request.user.userAuth.ordSeq:
+        if accountInfo.accountId.isReal:  # 실매장일 경우 수정불가
             editable = False
 
         # Rendering
         return render(
             request,
-            'setting/staffman/detail.html',
+            'setting/accountman/detail.html',
             {
-                "staffInfo": staffInfo,
-                "userAuths": userAuths,
-                "userShops": userShops,
+                "accountInfo": accountInfo,
+                "companyTps": companyTps,
                 "editable": editable,
             },
         )

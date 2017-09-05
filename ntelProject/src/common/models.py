@@ -1,7 +1,32 @@
 from __future__ import unicode_literals  # Python 2.x 지원용
 
 from django.db import models
+from django.db.models.query_utils import Q
 from django.utils.encoding import python_2_unicode_compatible
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class ComCdManager(models.Manager):
+    '''
+    공통코드 매니저
+    '''
+    def for_grp(self, grpCd=None, grpOpt=None, useYn=None, orderOpt=True):
+        '''
+        그룹옵션 적용 데이터
+        '''
+        qry = Q()
+        if grpCd is not None:
+            qry &= Q(grpCd__exact=grpCd)
+        if grpOpt is not None:
+            qry &= Q(grpOpt__contains=grpOpt)
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
+        return self.get_queryset().filter(
+            qry
+        ).order_by(
+            ("" if orderOpt else "-") + "ordSeq"
+        )
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
@@ -22,6 +47,9 @@ class ComCd(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Manager
+    objects = ComCdManager()
 
     # 속성
     class Meta:

@@ -280,12 +280,12 @@ $.jqGridStatusCssAttr = function(statusCss) {
  */
 $.jqGridConnLimitFormat = function(connLimit) {
     connLimit = $.n2s(connLimit);
-    var rtnData = ""
+    var rtnValue = ""
     
-    if(connLimit.indexOf("P") > -1) rtnData += '<span data-toggle="tooltip" data-placement="top" data-original-title="PC차단" title="PC차단"><img style="padding-left: 2px; padding-right: 2px;" alt="PC차단" class="img-circle" src="/static/img/icon/icon_conn_limit_p.png"></span>';
-    if(connLimit.indexOf("M") > -1) rtnData += '<span data-toggle="tooltip" data-placement="top" data-original-title="모바일차단" title="모바일차단"><img style="padding-left: 2px; padding-right: 2px;" alt="모바일차단" class="img-circle" src="/static/img/icon/icon_conn_limit_m.png"></span>';
+    if(connLimit.indexOf("P") > -1) rtnValue += '<span data-toggle="tooltip" data-placement="top" data-original-title="PC차단" title="PC차단"><img style="padding-left: 2px; padding-right: 2px;" alt="PC차단" class="img-circle" src="/static/img/icon/icon_conn_limit_p.png"></span>';
+    if(connLimit.indexOf("M") > -1) rtnValue += '<span data-toggle="tooltip" data-placement="top" data-original-title="모바일차단" title="모바일차단"><img style="padding-left: 2px; padding-right: 2px;" alt="모바일차단" class="img-circle" src="/static/img/icon/icon_conn_limit_m.png"></span>';
     
-    return rtnData;    
+    return rtnValue;    
 }; 
  
 /*
@@ -326,10 +326,19 @@ $.jqGridTelecomCdFormat = function(telecomCd) {
             rtnValue += '</span>';
         }
     }
-//    console.log("telecomCd:[" + telecomCd + "], arrTelecomCd.length:[" + arrTelecomCd.length + "]");
-//    console.log("arrTelecomCd:[" + arrTelecomCd + "]");
-
     return rtnValue;    
 };
 
+
+/*
+ * 실거래처 연결 관련 포맷
+ */
+$.jqGridAccountChainFormat = function(isChained) {
+    
+    var rtnValue = "";
+    
+    if(isChained) rtnValue += '<span data-toggle="tooltip" data-placement="top" data-original-title="시스템연결" title="시스템연결"><img style="padding-left: 2px; padding-right: 2px;" alt="PC차단" class="img-circle" src="/static/img/icon/icon_account_chain.png"></span>';
+    
+    return rtnValue;
+};
  

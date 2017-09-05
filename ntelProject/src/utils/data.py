@@ -10,30 +10,10 @@ from system.models import SysUser, SysAppreq
 from utils.const import NTEL_EXCLUDE_IDS
 
 
-def getComCdList(grpCd=None, useYn=True, grpOpt=None, orderOpt=True):
+def getComCdList(grpCd=None, useYn=None, grpOpt=None, orderOpt=True):
     '''공통코드 조회 리스트
     '''
-    # 조회 쿼리 조건
-    qry = Q()
-
-    # 그룹코드
-    qry &= Q(grpCd__exact=grpCd)
-
-    # 사용여부
-    if useYn:
-        qry &= Q(useYn__exact=useYn)
-
-    # 그룹옵션
-    if grpOpt:
-        qry &= Q(grpOpt__contains=grpOpt)
-
-    comCds = ComCd.objects.filter(
-        qry
-    ).order_by(
-        ("" if orderOpt else "-") + "ordSeq"
-    )
-
-    return comCds
+    return ComCd.objects.for_grp(grpCd, grpOpt, useYn, orderOpt)
 
 
 def getSysSeqId(seqCd):

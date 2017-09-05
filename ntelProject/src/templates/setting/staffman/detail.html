@@ -18,7 +18,7 @@
             <div class="spinWrap">
                 <div class="ibox-content" style="padding:5px 5px 5px 5px;">
                     <form id="frmStaffInfo" name="frmStaffInfo" action="." method="post">
-                    <div id="divCompanyInfo" style="margin-bottom: 10px;">
+                    <div id="divStaffInfo" style="margin-bottom: 10px;">
                         <table class="t-table">
                             <colgroup>
                                 <col width="120">
@@ -113,7 +113,7 @@
                                             {% for userAuth in userAuths %}
                                             <div formType="iChecks" class="i-checks disp-ib" formOnly="POP">
                                                 <label class="radio">
-                                                    <input type="radio" id="userAuth{{ forloop.counter }}" name="userAuth" value="{{ userAuth.comCd }}" style="position: absolute; opacity: 0;" {% if userAuth.comCd == staffInfo.userAuth.comCd %} checked {% endif %} label="{{ userAuth.comNm }}">
+                                                    <input type="radio" id="userAuth{{ forloop.counter }}" name="userAuth" value="{{ userAuth.comCd }}" style="position: absolute; opacity: 0;" {% if userAuth.comCd == staffInfo.userAuth.comCd %}checked{% endif %} label="{{ userAuth.comNm }}">
                                                     <span>{{ userAuth.comNm }}</span>
                                                 </label>
                                             </div>

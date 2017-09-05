@@ -98,8 +98,6 @@ class SysCompanyAccountManager(models.Manager):
         qry &= Q(companyId__exact=companyId)
         return self.get_queryset().filter(
             qry
-        ).order_by(
-            "shopId"
         )
 
 

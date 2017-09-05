@@ -69,7 +69,7 @@ $(document).ready(function() {
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
-        	'ID', '상태', '거래처구분', '거래처구분ID', '거래처명', '거래처ID', '통신사', '담당자', '전화', 'Fax', '휴대폰',  '등록일'
+        	'ID', '연결', '상태', '거래처구분',  '거래처구분ID', '거래처명', '거래처ID', '통신사', '담당자', '전화', 'Fax', '휴대폰',  '등록일'
         ],
         align: "center",
         colModel:[
@@ -79,6 +79,14 @@ $(document).ready(function() {
                 align: "center",
                 hidden: true,
             },        	
+            {
+                name: 'isReal',
+                width: 30,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridAccountChainFormat(cellvalue);
+                },
+            },            
             {
                 name: 'useYn',
                 width: 70,
