@@ -31,6 +31,8 @@ class SysAppreqRegistForm(ModelForm):
     password = forms.CharField(required=True, min_length=6, max_length=20)
     # 비밀번호확인
     passwordChk = forms.CharField(required=True, min_length=6, max_length=20)
+    # 통신사코드
+    telecomCd = forms.CharField(required=False, max_length=100)
     # 이메일
     email = forms.EmailField(max_length=255)
     # 진행상태
@@ -86,6 +88,13 @@ class SysAppreqRegistForm(ModelForm):
 
         # 비밀번호 암호화
         instanceSysAppreq.password = make_password(cleaned_data.get('password'))
+
+        # 회사타입별 통신사 코드
+        companyTp = self.request.POST.get('companyTp')
+        if companyTp == 'S0004D':  # 딜러점일 경우
+            instanceSysAppreq.telecomCd = ",".join(self.request.POST.getlist("telecomCdD")) 
+        elif companyTp == 'S0004A':  # 대리점일 경우
+            instanceSysAppreq.telecomCd = self.request.POST.get("telecomCdA")
 
         if commit:
             instanceSysAppreq.save()

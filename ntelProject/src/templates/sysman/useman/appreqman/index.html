@@ -12,6 +12,11 @@
                     <select id="sReqStatus" name="sReqStatus" class="form-control form-box" formType="comSel" grpCd="S0008" isSetNF="true" textNF="전체" setValue="S0008A">
                     </select>
                 </div>
+                <label class="col-sm control-label search">회사구분</label>
+                <div class="col-sm">
+                    <select id="sCompanyTp" name="sCompanyTp" class="form-control form-box" formType="comSel" grpCd="S0004" isSetNF="true" textNF="전체" grpOpt="B" setValue="">
+                    </select>
+                </div>
                 <label class="col-sm control-label search">요청번호</label>
                 <div class="col-sm">
                     <input type="text" id="sReqId" name="sReqId" class="form-control form-box" size="15">
@@ -63,7 +68,6 @@ $(document).ready(function() {
         colModel:[
             {
                 name: 'reqStatus',
-                editable: false,
                 width: 80,
                 align: "center",
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
@@ -73,7 +77,6 @@ $(document).ready(function() {
             },
             {
                 name: 'reqStatusNm',
-                editable: false,
                 width: 80,
                 align: "center",
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
@@ -82,12 +85,14 @@ $(document).ready(function() {
             },
             {
                 name: 'reqId',
-                width: 100,
-                align: "center"
+                width: 120,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata) {
+                    return $.jqGridHighlightColAttr(true);
+                },                
             },
             {
                 name: 'reqDt',
-                editable: false,
                 width: 80,
                 align: "center",
                 formatter: "date",
@@ -98,7 +103,6 @@ $(document).ready(function() {
             },
             {
                 name: 'appDt',
-                editable: false,
                 width: 80,
                 align: "center",
                 formatter: "date",
@@ -109,37 +113,31 @@ $(document).ready(function() {
             },
             {
                 name: 'companyTpNm',
-                editable: false,
                 width: 70,
                 align: "center"
             },
             {
                 name: 'companyNm',
-                editable: false,
                 width: 150,
                 align: "left"
             },
             {
                 name: 'shopNm',
-                editable: false,
                 width: 150,
                 align: "left"
             },
             {
                 name: 'userNm',
-                editable: false,
                 width: 70,
-                align: "left"
+                align: "center"
             },
             {
                 name: 'userId',
-                editable: false,
                 width: 90,
                 align: "left"
             },
             {
                 name: 'telNo',
-                editable: false,
                 width: 120,
                 align: "center",
                 formatter: function(cellvalue, options, rowObject) {
@@ -148,7 +146,6 @@ $(document).ready(function() {
             },
             {
                 name: 'cellNo',
-                editable: false,
                 width: 120,
                 align: "center",
                 formatter: function(cellvalue, options, rowObject) {
@@ -157,45 +154,33 @@ $(document).ready(function() {
             },
             {
                 name: 'email',
-                editable: false,
                 width: 150,
                 align: "left"
             },
             {
                 name: 'addr1',
-                editable: false,
                 width: 200,
                 align: "left"
             }
         ],
         // 이벤트 처리
-        ondblClickRow: function(id) { // 더블클릭
-            // 상세 팝업
-            var reqId = $(this).jqGrid('getCell', id, 'reqId'); // 요청번호
-
-            $.gfCommonPopUp({
-                popUrl: "{% url 'sysman:useman__appreqman__detail' %}",
-                modalId: "divAppreqDetailPopup",
-                width: "700",
-                params: {
-                    reqId: reqId
-                },
-                loginCheck: true
-            });
+        onCellSelect: function (rowId, iCol, content, event) { // 셀 선택시
+            $.fnOnCellSelect($(this), rowId, iCol, content, event);
         },
+        
     });
 
     // 일반 form 객체 초기화
     $.gfInitFormField();
-
-    // 최초 전체 데이터 획득
-    $.getAppreqList();
     
+    // 검색
     $("#frmSearch").submit(function(e, params) {
         event.preventDefault();
         $.getAppreqList();
     });    
 
+    // 최초 전체 데이터 획득
+    $.getAppreqList();
 });
 
 /*
@@ -217,6 +202,29 @@ $.getAppreqList = function(){
             $("#dataGrid").trigger("reloadGrid");
         }
     });
+};
+
+/*
+ *  Cell 클릭시 이벤트
+ */
+$.fnOnCellSelect = function(_grid, rowId, iCol, content, event){
+
+    var colModel = _grid.jqGrid("getGridParam", "colModel"); // 컬럼 모델    
+    var reqId = _grid.jqGrid('getCell', rowId, 'reqId'); // 요청번호 아이디
+
+    // 거래처명 선택시
+    if(colModel[iCol].name == "reqId") {
+        // 상세 팝업
+        $.gfCommonPopUp({
+            popUrl: "{% url 'sysman:useman__appreqman__detail' %}",
+            modalId: "divAppreqDetailPopup",
+            width: "700",
+            params: {
+                reqId: reqId
+            },
+            loginCheck: true,
+        });
+    }
 };
 
 </script>

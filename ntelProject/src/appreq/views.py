@@ -77,15 +77,15 @@ def appreqJsonRegist(request):
 
     if request.method == 'POST':
         # 이용신청 폼
-        sysAppreqForm = SysAppreqRegistForm(
+        sysAppreqRegistForm = SysAppreqRegistForm(
             request.POST,
             request=request,
         )
 
         # 데이터 검증 후 저장
-        if(sysAppreqForm.is_valid()):
-            sysAppreqForm.save()
-            resultData["reqId"] = sysAppreqForm.reqId
+        if(sysAppreqRegistForm.is_valid()):
+            sysAppreqRegistForm.save()
+            resultData["reqId"] = sysAppreqRegistForm.reqId
 
             # 가입후 메일 보내기(함수, 클래스 화 => 쓰레드 처리) ===>
             try:
@@ -94,10 +94,10 @@ def appreqJsonRegist(request):
                     '엔텔에 가입해 주셔서 감사합니다.',
                     '엔텔 ',
                     'ntel5004@naver.com',
-                    [sysAppreqForm.cleaned_data.get("email")],
+                    [sysAppreqRegistForm.cleaned_data.get("email")],
                     fail_silently=False,
                 )
-                print(sysAppreqForm.cleaned_data.get("email"))
+                print(sysAppreqRegistForm.cleaned_data.get("email"))
                 print("sendmail --------------<")
             except SMTPDataError as smtpErr:
                 print("메일 발송 실패")
@@ -107,7 +107,7 @@ def appreqJsonRegist(request):
     return HttpResponse(
         json.dumps(
             makeJsonResult(
-                form=sysAppreqForm,
+                form=sysAppreqRegistForm,
                 resultData=resultData
             )
         ),

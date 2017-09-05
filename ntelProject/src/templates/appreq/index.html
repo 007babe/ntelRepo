@@ -77,22 +77,23 @@
                                         {% endfor %}
                                     </span>
                                 </td>
-                            </tr>
-                            {# 대리점 통신사 Start #}
+                             </tr>
+                             <!-- 대리점 통신사 -->
                              <tr id="trTelecomA" style="display: none;">
                                 <td class="t-label t-l-w">통신사</td>
                                 <td class="t-content t-c-w al" colspan="3">
                                     <span>
-                                        <select id="telecomCdA" name="telecomCdA" class="form-control form-box">
                                         {% for telecomCd in telecomCds %}
-                                            <option value="{{ telecomCd.comCd }}">{{ telecomCd.comNm}}</option>
-                                        {% endfor %}
-                                        </select>
+                                        <div formType="iChecks" class="i-checks disp-ib">
+                                            <label class="radio">
+                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.comCd }}"  srtCd="{{ telecomCd.srtCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="통신사">
+                                                <span>{{ telecomCd.comNm }}</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}                                    
                                     </span>
                                 </td>
                             </tr>
-                            {# 대리점 통신사 End #}
-                            {# 딜러점 통신사 Start #}
                             <tr id="trTelecomD" style="display: none;">
                                 <td class="t-label t-l-w">통신사</td>
                                 <td class="t-content t-c-w al" colspan="3">
@@ -109,7 +110,6 @@
                                     </span>
                                 </td>
                             </tr>
-                            {# 딜러점 통신사 End #}
                             <tr>
                                 <td class="t-label t-l-w">사업자상호</td>
                                 <td class="t-content t-c-w al">
