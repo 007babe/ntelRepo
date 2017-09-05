@@ -1,0 +1,294 @@
+﻿{#################################}
+{% load staticfiles %}
+{#################################}
+<div class="modal-dialog">
+    <div class="modal-content">
+        <!-- header Start -->
+        <div class="modal-header p-header">
+            <!-- 닫기(x) 버튼 Start -->
+            <button id="btnDialogClose" type="button" class="close" data-dismiss="modal">×</button>
+            <!-- 닫기(x) 버튼 End -->
+            <!-- header title Start -->
+            <h2 class="font-bold">이용신청 상세</h2>
+            <!-- header title End -->
+        </div>
+        <!-- header End -->        
+        <!-- body Start -->
+        <div id="divAppreq"  class="modal-body p-body">
+            <div class="spinWrap">
+                <div class="ibox-content" style="padding:5px 5px 5px 5px;">
+                    <form id="frmApproval" name="frmApproval" action="." method="post" class="form-horizontal">
+                    <input type="hidden" id="reqId" name="reqId" value="{{ appreq.reqId }}">
+                    <input type="hidden" id="reqStatus" name="reqStatus" value="">
+                    <div class="al">
+                        <h3 id="headTitle" class="mt5">
+                            <i class="fa fa-building"></i> 업체정보
+                        </h3>
+                    </div>
+                    <div id="divCompanyInfo" style="margin-bottom: 10px;">                    
+                        <table class="t-table">
+                            <colgroup>
+                                <col width="120">
+                                <col width="240">
+                                <col width="120">
+                                <col width="240">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td class="t-label t-l-w">요청ID</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.reqId }}
+                                        </span>
+                                    </td>
+                                    <td class="t-label t-l-w">사업자ID</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.companyId }}
+                                        </span>
+                                    </td>
+                                </tr>                                    
+                                <tr>
+                                    <td class="t-label t-l-w">진행상태</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.reqStatus.comNm }}
+                                        </span>
+                                    </td>
+                                    <td class="t-label t-l-w">사업자구분</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.companyTpNm }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">사업자상호</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.companyNm }}
+                                        </span>
+                                    </td>
+                                    <td class="t-label t-l-w">기본매장명</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.shopNm }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">사업자등록번호</td>
+                                    <td class="t-content t-c-w ac">
+                                        {{ appreq.bizLicNo1 }} - {{ appreq.bizLicNo1 }} - {{ appreq.bizLicNo1 }} 
+                                    </td>
+                                    <td class="t-label t-l-w">연락처</td>
+                                    <td class="t-content t-c-w ac">
+                                        {{ appreq.telNo1 }} - {{ appreq.telNo2 }} - {{ appreq.telNo3 }} 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">업태</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.bizTp }}
+                                        </span>
+                                    </td>
+                                    <td class="t-label t-l-w">업종</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.bizKind }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">주소</td>
+                                    <td class="t-content t-c-w al" colspan="3">
+                                        <span>
+                                            {{ appreq.addr1 }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>                    
+                    <div class="al">
+                        <h3 id="headTitle" class="mt5">
+                            <i class="fa fa-user-circle"></i> 대표자정보
+                        </h3>
+                    </div>
+                    <div id="divCompanyInfo" style="margin-bottom: 10px;">
+                        <table class="t-table">
+                            <colgroup>
+                                <col width="120">
+                                <col width="240">
+                                <col width="120">
+                                <col width="240">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td class="t-label t-l-w">대표자명</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.userNm }}
+                                        </span>
+                                    </td>
+                                    <td class="t-label t-l-w">휴대폰</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                        {{ appreq.cellNo1 }} - {{ appreq.cellNo2 }} - {{ appreq.cellNo3 }} 
+                                        </span>
+                                    </td>
+                                <tr>
+                                <tr>
+                                    <td class="t-label t-l-w">아이디</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.userId }}
+                                        </span>
+                                    </td>
+                                    <td class="t-label t-l-w">이메일</td>
+                                    <td class="t-content t-c-w ac">
+                                        <span>
+                                            {{ appreq.email }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="text-align: center;">
+                        {% if appreq.reqStatus.comCd == "S0008A" %}
+                        <span><button id="btnApproval" type="button" class="btn btn-primary" value="승인">승인</button></span>
+                        <span><button id="btnReqCancel" type="button" class="btn" value="요청취소">요청취소</button></span>
+                        {% endif %}
+                        {% if appreq.reqStatus.comCd == "S0008C" %}
+                        <span><button id="btnReask" type="button" class="btn btn-primary" value="승인요청">승인요청</button></span>
+                        {% endif %}
+                    </div>                    
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- body End -->
+        <!-- Footer Start -->
+        <div class="modal-footer p-footer">
+            <span>
+                <button type="button" class="form-btn form-btn-n" style="width: 60px;" data-dismiss="modal">닫기</button>
+            </span>
+        </div>
+        <!-- Footer End -->
+    </div>
+</div>
+        
+
+
+
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+	// 이용신청 승인 처리
+    $("#btnApproval").on("click", function(e, params) {
+        $.gfComfirm({
+            text: "승인하시겠습니까?",
+            cbFunc: function(isConfirm) {
+            	if(isConfirm){
+                    $("#reqStatus").val("F"); // 승인처리
+                    $.setApprovalStatus();
+            	}
+            }
+        });
+    });
+    
+	// 이용신청 요청취소 처리
+    $("#btnReqCancel").on("click", function(e, params) {
+        $.gfComfirm({
+            text: "요청취소하시겠습니까?",
+            cbFunc: function(isConfirm) {
+            	if(isConfirm){
+                    $("#reqStatus").val("C"); // 요청취소 처리
+                    $.setApprovalStatus();
+            	}
+            }
+        });
+    });    
+    
+	// 이용신청 승인요청 처리
+    $("#btnReask").on("click", function(e, params) {
+        $.gfComfirm({
+            text: "승인요청하시겠습니까?",
+            cbFunc: function(isConfirm) {
+            	if(isConfirm){
+                    $("#reqStatus").val("A"); // 승인요청 처리
+                    $.setApprovalStatus();
+            	}
+            }
+        });
+    });    
+    
+    $("#btnDelete").on("click", function(e, params) {
+        $.gfComfirm({
+            text: "삭제하시겠습니까?",
+            cbFunc: function(isConfirm) {
+            	if(isConfirm){
+                    $("#reqStatus").val("D"); // 요청삭제 처리
+                    $.setApprovalStatus();
+            	}
+            }
+        });
+    });    
+});
+
+/*
+ * 승인요청/승인/요청취소 처리
+ */ 
+$.setApprovalStatus = function(data) {
+
+    $.gfAjax({
+        type: "POST",
+        url: "{% url 'sysman:useman__appreqman__json_appr' %}",
+        data: $("#frmApproval").serializeArray(),
+        async: true,
+        okFunc: function(data, textStatus, jqXHR) {
+            
+            // 처리결과 Grid 반영
+            var _dataGrid = $("#dataGrid");
+            var selId = _dataGrid.jqGrid ('getGridParam', 'selrow');
+
+            _dataGrid.setCell(selId, "reqStatus", data.resultData.reqStatus);
+            _dataGrid.setCell(selId, "reqStatusNm", data.resultData.reqStatusNm, "", {style: data.resultData.reqStatusCss});
+            _dataGrid.setCell(selId, "reqStatusNm", data.resultData.reqStatusNm, {"text-align": "center"});
+
+        	$.gfAlert({
+        		title: "처리완료",
+        		text: data.resultMessage,
+        	});
+             
+            // 상세 팝업 닫기
+            $.gfCommonPopUpClose($("#divAppreqDetailPopup"));
+        },
+        ngFunc: function(data, cbFunc) {
+        	$.gfAlert({
+        		title: "처리실패",
+        		text: data.resultMessage,
+        	});
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            // Http Error처리
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : false
+            });
+        },
+    });
+};
+
+$.getCellCss = function() {
+    return "jqgrid-cell-status-a";   
+}
+
+
+</script>
+<!-- Javascript Local Code End -->
+</html>

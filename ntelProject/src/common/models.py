@@ -26,7 +26,7 @@ class ComCd(models.Model):
     # 속성
     class Meta:
         db_table = "com_cd"
-#        unique_together = (("grpCd", "comCd"),
+        unique_together = (("grpCd", "srtCd"),)
 
     def publish(self):
         self.save()

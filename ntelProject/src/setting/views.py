@@ -543,6 +543,7 @@ def accountmanJsonList(request):
     if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
         # 검색조건(Parameter)
         sUseYn = request.POST.get("sUseYn")
+        sCompanyTp = request.POST.get("sCompanyTp")
         sAccountNm = request.POST.get("sAccountNm")
 
         # Query
@@ -553,6 +554,8 @@ def accountmanJsonList(request):
         if not is_empty(sUseYn):  # 사용여부
             qry &= Q(useYn__exact=sUseYn)
 
+        qry &= Q(accountId__companyTp__comCd__contains=sCompanyTp)  # 거래처구분
+
         qry &= Q(accountId__companyNm__contains=sAccountNm)  # 거래처명
 
         accountInfos = SysCompanyAccount.objects.for_company(request.user.shopId.companyId)
@@ -561,6 +564,8 @@ def accountmanJsonList(request):
             qry
         ).annotate(
             accountNm=F('accountId__companyNm'),  # 거래처명
+            companyTp=F('accountId__companyTp'),  # 거래처구분
+            companyTpNm=F('accountId__companyTp__comNm'),  # 거래처구분명
             telNo1=F('accountId__telNo1'),  # 거래처전화1
             telNo2=F('accountId__telNo2'),  # 거래처전화2
             telNo3=F('accountId__telNo3'),  # 거래처전화3
@@ -583,6 +588,8 @@ def accountmanJsonList(request):
             "companyId",
             "accountId",
             "accountNm",
+            "companyTp",
+            "companyTpNm",
             "addr1",
             "addr2",
             "useYn",

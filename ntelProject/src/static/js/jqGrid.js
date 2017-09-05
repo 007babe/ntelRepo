@@ -195,7 +195,7 @@ $.resizeJqGridWidth = function(grid_id, div_id, width){
 /*
  * 데이터에서 useYn(boolean)에 따른 사용여부 표기값
  */
-$.jqGridUseYn = function(useYn){
+$.jqGridUseYnFormat = function(useYn){
 	var useYnNm = ""
 	if(useYn == true) useYnNm = "사용"
     else if(useYn == false) useYnNm = "미사용"
@@ -256,7 +256,7 @@ $.jqGridHighlightColAttr = function(isLink){
 /*
  * 전화번호 세팅
  */
-$.jqGridTelNo = function(telNo1, telNo2, telNo3) {
+$.jqGridTelNoFormat = function(telNo1, telNo2, telNo3) {
 
     var telNo = $.n2s(telNo1);
 
@@ -270,7 +270,7 @@ $.jqGridTelNo = function(telNo1, telNo2, telNo3) {
 /*
  * Status Cell 속성 
  */
-$.jqGridStatusCss = function(statusCss) {
+$.jqGridStatusCssAttr = function(statusCss) {
     return rtn = "style='" + statusCss + "'";
 };
 
@@ -278,32 +278,58 @@ $.jqGridStatusCss = function(statusCss) {
 /*
  * 접속제한 관련 속성
  */
-$.jqGridConnLimit = function(connLimit) {
+$.jqGridConnLimitFormat = function(connLimit) {
     connLimit = $.n2s(connLimit);
     var rtnData = ""
     
-    if(connLimit.indexOf("P") > -1) rtnData += '<img style="padding-left: 2px; padding-right: 2px;" alt="PC차단" class="img-circle" src="/static/img/icon/icon_conn_limit_p.png">';
-    if(connLimit.indexOf("M") > -1) rtnData += '<img style="padding-left: 2px; padding-right: 2px;" alt="모바일차단" class="img-circle" src="/static/img/icon/icon_conn_limit_m.png">';
+    if(connLimit.indexOf("P") > -1) rtnData += '<span data-toggle="tooltip" data-placement="top" data-original-title="PC차단" title="PC차단"><img style="padding-left: 2px; padding-right: 2px;" alt="PC차단" class="img-circle" src="/static/img/icon/icon_conn_limit_p.png"></span>';
+    if(connLimit.indexOf("M") > -1) rtnData += '<span data-toggle="tooltip" data-placement="top" data-original-title="모바일차단" title="모바일차단"><img style="padding-left: 2px; padding-right: 2px;" alt="모바일차단" class="img-circle" src="/static/img/icon/icon_conn_limit_m.png"></span>';
     
     return rtnData;    
 }; 
  
 /*
- *
+ * 회사구분(companyTp) 관련 속성
  */
-$.jqGridSwich = function(cellvalue, options, rowObject) { 
-    var inputId = "ck" + options.colModel.name + options.rowId;
+$.jqGridCompanyTpAttr = function(companyTp) {
+    var attr = "";
+	switch(companyTp) {
+	    case "S0004S": // 판매점
+	        attr = "style='background-color: #d6f7d9; font-weight: bold; color: #000000;'"
+	        break;
+	    case "S0004A": // 대리점    
+	        attr = "style='background-color: #d6f7d9; font-weight: bold; color: #233594;'"
+	        break;
+	    case "S0004D": // 딜러점    
+	        attr = "style='background-color: #d6f7d9; font-weight: bold; color: #084a08;'"
+	        break;
+	    default:
+	        attr = "style='background-color: #d6f7d9; font-weight: bold; color: #000000;'"
+	        break;
+	}
+    return attr;
+};
 
-    var rtnVal = '<div class="setings-item"><div class="switch">'
-               + '    <div class="onoffswitch">'
-               + '        <input id="' + inputId + '" type="checkbox" class="onoffswitch-checkbox">'
-               + '        <label class="onoffswitch-label" for="' + inputId + '">'
-               + '            <span class="onoffswitch-inner"></span>'
-               + '            <span class="onoffswitch-switch"></span>'
-               + '        </label>'
-               + '    </div>'
-               + '</div></div>'
-               ;
-    
-    return rtnVal
-};  
+
+/*
+ * 통신사 관련 포맷
+ */
+$.jqGridTelecomCdFormat = function(telecomCd) {
+    telecomCd = $.n2s(telecomCd);
+    var rtnValue = telecomCd
+
+    if(telecomCd != "") {
+        var arrTelecomCd = telecomCd.split(",");
+        if(arrTelecomCd.length > 1) {
+            rtnValue = '<span data-toggle="tooltip" data-placement="top" data-original-title="' + telecomCd + '" title="' + telecomCd + '">'
+            rtnValue += arrTelecomCd[0] + " 외 " + (arrTelecomCd.length - 1);
+            rtnValue += '</span>';
+        }
+    }
+//    console.log("telecomCd:[" + telecomCd + "], arrTelecomCd.length:[" + arrTelecomCd.length + "]");
+//    console.log("arrTelecomCd:[" + arrTelecomCd + "]");
+
+    return rtnValue;    
+};
+
+ 

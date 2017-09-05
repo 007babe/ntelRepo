@@ -1,0 +1,258 @@
+{#################################}
+{% extends "extends/contents.html" %}
+{% load staticfiles %}0
+{#################################}
+
+{% block mainContents %}
+<div id="divMainContentArea" class="wrapper wrapper-content animated fadeInRight pt5 pb50">
+    <!-- 검색조건 Start -->
+    <form id="frmSearch" method="post" class="form-horizontal search">
+    <div class="iboxloat-e-margins" style="margin-bottom: 10px;">
+        <div class="ibox-content search">
+            <div class="form-group search">
+                <label class="col-sm control-label search">사용여부</label>
+                <div class="col-sm">
+                    <select id="sUseYn" name="sUseYn" class="form-control form-box">
+                        <option value="">전체</option>
+                        <option value="1" selected>사용</option>
+                        <option value="0">미사용</option>
+                    </select>
+                </div>
+                <label class="col-sm control-label search">매장</label>
+                <div class="col-sm">
+                    <select id="sShopId" name="sShopId" class="form-control form-box" formType="shopSel" isSetNF="true" textNF="전체">
+                    </select>
+                </div>
+                <label class="col-sm control-label search">권한</label>
+                <div class="col-sm">
+                    <select id="sUserAuth" name="sUserAuth" class="form-control form-box" formType="comSel" grpCd="S0001" isSetNF="true" textNF="전체" grpOpt="{{ request.user.userAuth.srtCd }}">
+                    </select>
+                </div>
+                <label class="col-sm control-label search">직원명</label>
+                <div class="col-sm">
+                    <input type="text" id="sUserNm" name="sUserNm" class="form-control form-box" size="20">
+                </div>
+                <label class="col-sm control-label search">아이디</label>
+                <div class="col-sm">
+                    <input type="text" id="sUserId" name="sUserId" class="form-control form-box" size="20">
+                </div>
+            </div>
+            <div class="hr-line-dashed search"></div>
+            <!-- 버튼 Start -->
+            <div style="text-align:center;">
+                <div class="">
+                    <span><button id="btnSearch" type="submit" class="btn btn-primary" value="검색">검색</button></span>
+                    <span><button id="btnRegistStaff" type="button" class="btn btn-info" value="직원등록">직원등록</button></span>
+                </div>
+            </div>
+            <!-- 버튼 End -->
+        </div>
+    </div>
+    </form>
+    <!-- 검색조건 End -->
+    <div class="row">
+        <div class="col-lg-12">
+            {# Contents Start #}
+            {# Search End #}
+            {# DataGrid Start #}
+            <div id="divContents">
+                <div class="spinWrap">
+                    <div class="jqGrid_wrapper">
+                        <table id="dataGrid"></table>
+                        <div id="pagerList"></div>
+                    </div>
+                </div>
+            </div>
+            {# DataGrid End #}
+            {# Contents End #}
+        </div>
+    </div>
+</div>
+{% endblock mainContents %}
+
+{% block javascriptLoc %}
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+	// 1. JQGrid 객체 생성(초기화)
+    $("#dataGrid").jqGridInit({
+        pager: "#pagerList",
+        colNames:[
+        	'상태', '매장', '권한', '직원명', '아이디', '휴대폰',
+        	'주소', '접속제한', '로그인회수', '마지막 접속일시', '등록일'
+        ],
+        colModel:[
+            {
+                name: 'useYn',
+                width: 50,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridUseYnAttr(rowObject.useYn);
+                },
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridUseYnFormat(rowObject.useYn);
+                }
+            },
+            {
+                name: 'shopNm',
+                width: 120,
+                align: "center"
+            },
+            {
+                name: 'userAuthNm',
+                width: 100,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridUserAuthAttr(rowObject.userAuth);
+                },
+            },
+            {
+                name: 'userNm',
+                width: 100,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridHighlightColAttr(true);
+                },
+            },
+            {
+                name: 'userId',
+                width: 100,
+                align: "center"
+            },
+            {
+                name: 'cellNo',
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);
+                }
+            },
+            {
+                name: 'addr1',
+                width: 250,
+                align: "left"
+            },
+            {
+                name: 'connLimit',
+                width: 100,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    // 접속제한 관련 세팅
+                    return $.jqGridConnLimitFormat(cellvalue);
+                },
+            },
+            {
+                name: 'loginCnt',
+                width: 80,
+                align: "right"
+            },
+            {
+                name: 'lastLogin',
+                width: 140,
+                align: "center",
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d H:i:s'
+                }
+            },
+            {
+                name: 'regDt',
+                width: 80,
+                align: "center",
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d'
+                }
+            }
+        ],
+        // 이벤트 처리
+        onCellSelect: function (rowId, iCol, content, event) { // 셀 선택시
+            $.fnOnCellSelect($(this), rowId, iCol, content, event);
+        },
+
+    });
+
+    // 일반 form 객체 초기화
+    $.gfInitFormField();
+
+	// 검색
+    $("#frmSearch").submit(function(e, params) {
+        event.preventDefault();
+        $.fnGetStaffList();
+    });
+
+    // 등록
+    $("#btnRegistStaff").on("click", function(e, params) {
+        $.gfCommonPopUp({
+            popUrl: "{% url 'setting:staffman__regist' %}",
+            modalId: "divStaffRegistPopup",
+            width: "600",
+            loginCheck: true,
+        });
+    });
+
+    // 최초 전체 데이터 획득
+    $.fnGetStaffList();
+
+});
+
+/*
+ * 직원 리스트 검색 데이터 획득(Ajax-Json)
+ */
+$.fnGetStaffList = function(){
+    var _data = $("#frmSearch");
+    
+    $.gfAjax({
+        type: "POST",
+        url: "{% url 'setting:staffman__json__list' %}",
+        async: true,
+        data: _data.serializeArray(),
+        successFunc: function(data, textStatus, jqXHR) {
+            var resultData = data.resultData;
+
+            $("#dataGrid").jqGrid("clearGridData");
+            $("#dataGrid").jqGrid("setGridParam", {data: data.resultData});
+            $("#dataGrid").trigger("reloadGrid");
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            // Http Error처리
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : true,
+                loginCompletedFunc: function() {
+                    // 로그인 후 처리 이벤트
+                }
+            });
+        },
+    });
+};
+
+/*
+ *  Cell 클릭시 이벤트
+ */
+$.fnOnCellSelect = function(_grid, rowId, iCol, content, event){
+
+    var colModel = _grid.jqGrid("getGridParam", "colModel"); // 컬럼 모델    
+    var userId = _grid.jqGrid('getCell', rowId, 'userId'); // 사용자 아이디
+
+    // 사용자명 선택시
+    if(colModel[iCol].name == "userNm") {
+        // 상세 팝업
+        $.gfCommonPopUp({
+            popUrl: "{% url 'setting:staffman__detail' %}",
+            modalId: "divStaffDetailPopup",
+            width: "600",
+            params: {
+                userId: userId
+            },
+            loginCheck: true,
+        });
+    }
+};
+</script>
+<!-- Javascript Local Code End -->
+{% endblock javascriptLoc %}

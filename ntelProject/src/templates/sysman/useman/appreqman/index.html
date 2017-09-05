@@ -71,7 +71,7 @@ $(document).ready(function() {
                 width: 80,
                 align: "center",
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
-                    return $.jqGridStatusCss(rowObject.reqStatusCss);
+                    return $.jqGridStatusCssAttr(rowObject.reqStatusCss);
                 },
                 hidden: true,
             },
@@ -80,7 +80,7 @@ $(document).ready(function() {
                 width: 80,
                 align: "center",
                 cellattr: function(rowId, val, rowObject, cm, rdata) {
-                    return $.jqGridStatusCss(rowObject.reqStatusCss);
+                    return $.jqGridStatusCssAttr(rowObject.reqStatusCss);
                 },
             },
             {
@@ -141,7 +141,7 @@ $(document).ready(function() {
                 width: 120,
                 align: "center",
                 formatter: function(cellvalue, options, rowObject) {
-                    return $.jqGridTelNo(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);                    
+                    return $.jqGridTelNoFormat(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);                    
                 }
             },
             {
@@ -149,7 +149,7 @@ $(document).ready(function() {
                 width: 120,
                 align: "center",
                 formatter: function(cellvalue, options, rowObject) {
-                    return $.jqGridTelNo(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);                    
+                    return $.jqGridTelNoFormat(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);                    
                 }
             },
             {

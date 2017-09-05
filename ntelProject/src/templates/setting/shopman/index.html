@@ -1,0 +1,247 @@
+{#################################}
+{% extends "extends/contents.html" %}
+{% load staticfiles %}0
+{#################################}
+
+{% block mainContents %}
+<div id="divMainContentArea" class="wrapper wrapper-content animated fadeInRight pt5 pb50">
+    <!-- 검색조건 Start -->
+    <form id="frmSearch" method="post" class="form-horizontal search">
+    <div class="iboxloat-e-margins" style="margin-bottom: 10px;">
+        <div class="ibox-content search">
+            <div class="form-group search">
+                <label class="col-sm control-label search">사용여부</label>
+                <div class="col-sm">
+                    <select id="sUseYn" name="sUseYn" class="form-control form-box">
+                        <option value="">전체</option>
+                        <option value="1" selected>사용</option>
+                        <option value="0">미사용</option>
+                    </select>
+                </div>
+                <label class="col-sm control-label search">매장명</label>
+                <div class="col-sm">
+                    <input type="text" id="sShopNm" name="sShopNm" class="form-control form-box" size="20">
+                </div>
+            </div>
+            <div class="hr-line-dashed search"></div>
+            <!-- 버튼 Start -->
+            <div style="text-align:center;">
+                <div class="">
+                    <span><button id="btnSearch" type="submit" class="btn btn-primary" value="검색">검색</button></span>
+                    <span><button id="btnRegistShop" type="button" class="btn btn-info" value="매장등록">매장등록</button></span>
+                </div>
+            </div>
+            <!-- 버튼 End -->
+        </div>
+    </div>
+    </form>
+    <!-- 검색조건 End -->
+    <div class="row">
+        <div class="col-lg-12">
+            {# Contents Start #}
+            {# Search End #}
+            {# DataGrid Start #}
+            <div id="divContents">
+                <div class="spinWrap">
+                    <div class="jqGrid_wrapper">
+                        <table id="dataGrid"></table>
+                        <div id="pagerList"></div>
+                    </div>
+                </div>
+            </div>
+            {# DataGrid End #}
+            {# Contents End #}
+        </div>
+    </div>
+</div>
+{% endblock mainContents %}
+
+{% block javascriptLoc %}
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+	// 1. JQGrid 객체 생성(초기화)
+    $("#dataGrid").jqGridInit({
+        pager: "#pagerList",
+        colNames:[
+        	'상태', '매장', '매장ID', '전체', '사용중', '미사용', '전화', 'Fax', '휴대폰', '주소', '등록일'
+        ],
+        align: "center",
+        colModel:[
+            {
+                name: 'useYn',
+                width: 70,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridUseYnAttr(rowObject.useYn);
+                },
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridUseYnFormat(rowObject.useYn);
+                }
+            },
+            {
+                name: 'shopNm',
+                width: 120,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridHighlightColAttr(true);
+                },                
+            },
+            {
+                name: 'shopId',
+                width: 50,
+                align: "center",
+                hidden: true,
+            },
+            {
+                name: 'staffCnt',
+                width: 50,
+                align: "right"
+            },
+            {
+                name: 'staffCntUseY',
+                width: 50,
+                align: "right"
+            },
+            {
+                name: 'staffCntUseN',
+                width: 50,
+                align: "right"
+            },
+            {
+                name: 'telNo',
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);
+                }
+            },
+            {
+                name: 'faxNo',
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.faxNo1, rowObject.faxNo2, rowObject.faxNo3);
+                }
+            },
+            {
+                name: 'cellNo',
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);
+                }
+            },
+            {
+                name: 'addr1',
+                width: 250,
+                align: "left"
+            },
+            {
+                name: 'regDt',
+                width: 80,
+                align: "center",
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d'
+                }
+            },
+            
+        ],
+        // 이벤트 처리
+        onCellSelect: function (rowId, iCol, content, event) { // 셀 선택시
+            $.fnOnCellSelect($(this), rowId, iCol, content, event);
+        },
+
+    });
+
+    $("#dataGrid").jqGrid("setGroupHeaders", {
+        useColSpanStyle: true,
+        groupHeaders:[
+            {startColumnName: "staffCnt", numberOfColumns: 3, titleText: "<span style='width:100%; display:inline-block; text-align: center'>직원수</span>"}
+        ],
+    });
+
+    // 일반 form 객체 초기화
+    $.gfInitFormField();
+
+	// 검색
+    $("#frmSearch").submit(function(e, params) {
+        event.preventDefault();
+        $.fnGetShopList();
+    });
+
+    // 등록
+    $("#btnRegistShop").on("click", function(e, params) {
+        $.gfCommonPopUp({
+            popUrl: "{% url 'setting:shopman__regist' %}",
+            modalId: "divShopRegistPopup",
+            width: "600",
+            loginCheck: true,
+        });
+    });
+
+    // 최초 전체 데이터 획득
+    $.fnGetShopList();
+
+});
+
+/*
+ * 매장 리스트 검색 데이터 획득(Ajax-Json)
+ */
+$.fnGetShopList = function(){
+    var _data = $("#frmSearch");
+    
+    $.gfAjax({
+        type: "POST",
+        url: "{% url 'setting:shopman__json__list' %}",
+        async: true,
+        data: _data.serializeArray(),
+        successFunc: function(data, textStatus, jqXHR) {
+            var resultData = data.resultData;
+
+            $("#dataGrid").jqGrid("clearGridData");
+            $("#dataGrid").jqGrid("setGridParam", {data: data.resultData});
+            $("#dataGrid").trigger("reloadGrid");
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            // Http Error처리
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : true,
+                loginCompletedFunc: function() {
+                    // 로그인 후 처리 이벤트
+                }
+            });
+        },
+    });
+};
+
+/*
+ *  Cell 클릭시 이벤트
+ */
+$.fnOnCellSelect = function(_grid, rowId, iCol, content, event){
+
+    var colModel = _grid.jqGrid("getGridParam", "colModel"); // 컬럼 모델    
+    var shopId = _grid.jqGrid('getCell', rowId, 'shopId'); // 매장 아이디
+    
+    // 매장명 선택시
+    if(colModel[iCol].name == "shopNm") {
+        // 상세 팝업
+        $.gfCommonPopUp({
+            popUrl: "{% url 'setting:shopman__detail' %}",
+            modalId: "divShopDetailPopup",
+            width: "600",
+            params: {
+                shopId: shopId
+            },
+            loginCheck: true,
+        });
+    }
+};
+</script>
+<!-- Javascript Local Code End -->
+{% endblock javascriptLoc %}

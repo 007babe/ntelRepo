@@ -86,7 +86,7 @@
                                         {% for telecomCd in telecomCds %}
                                         <div formType="iChecks" class="i-checks disp-ib">
                                             <label class="radio">
-                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.comCd }}"  srtCd="{{ telecomCd.srtCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="통신사">
+                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.srtCd }}"  telecomCd="{{ telecomCd.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="통신사">
                                                 <span>{{ telecomCd.comNm }}</span>
                                             </label>
                                         </div>
@@ -101,7 +101,7 @@
                                         {% for telecomCd in telecomCds %}
                                         <label class="ckbox">
                                             <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
-                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.comCd }}"" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
+                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.srtCd }}"" telecomCd="{{ telecomCd.comCd }}" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
                                                 <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
                                             </div>
                                             <span style="width: 30px;">{{ telecomCd.comNm }}</span>

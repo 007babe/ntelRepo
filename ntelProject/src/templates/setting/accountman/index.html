@@ -1,0 +1,258 @@
+{#################################}
+{% extends "extends/contents.html" %}
+{% load staticfiles %}0
+{#################################}
+
+{% block mainContents %}
+<div id="divMainContentArea" class="wrapper wrapper-content animated fadeInRight pt5 pb50">
+    <!-- 검색조건 Start -->
+    <form id="frmSearch" method="post" class="form-horizontal search">
+    <div class="iboxloat-e-margins" style="margin-bottom: 10px;">
+        <div class="ibox-content search">
+            <div class="form-group search">
+                <label class="col-sm control-label search">사용여부</label>
+                <div class="col-sm">
+                    <select id="sUseYn" name="sUseYn" class="form-control form-box">
+                        <option value="">전체</option>
+                        <option value="1" selected>사용</option>
+                        <option value="0">미사용</option>
+                    </select>
+                </div>
+                <label class="col-sm control-label search">거래처구분</label>
+                <div class="col-sm">
+                    <select id="sCompanyTp" name="sCompanyTp" class="form-control form-box" formType="comSel" grpCd="S0004" isSetNF="true" textNF="전체" grpOpt="B" setValue="">
+                    </select>
+                </div>
+                <label class="col-sm control-label search">거래처명</label>
+                <div class="col-sm">
+                    <input type="text" id="sAccountNm" name="sAccountNm" class="form-control form-box" size="20">
+                </div>
+            </div>
+            <div class="hr-line-dashed search"></div>
+            <!-- 버튼 Start -->
+            <div style="text-align:center;">
+                <div class="">
+                    <span><button id="btnSearch" type="submit" class="btn btn-primary" value="검색">검색</button></span>
+                    <span><button id="btnRegistAccount" type="button" class="btn btn-info" value="거래처등록">거래처등록</button></span>
+                </div>
+            </div>
+            <!-- 버튼 End -->
+        </div>
+    </div>
+    </form>
+    <!-- 검색조건 End -->
+    <div class="row">
+        <div class="col-lg-12">
+            {# Contents Start #}
+            {# Search End #}
+            {# DataGrid Start #}
+            <div id="divContents">
+                <div class="spinWrap">
+                    <div class="jqGrid_wrapper">
+                        <table id="dataGrid"></table>
+                        <div id="pagerList"></div>
+                    </div>
+                </div>
+            </div>
+            {# DataGrid End #}
+            {# Contents End #}
+        </div>
+    </div>
+</div>
+{% endblock mainContents %}
+
+{% block javascriptLoc %}
+<!-- Javascript Local Code Start -->
+<script>
+$(document).ready(function() {
+	// 1. JQGrid 객체 생성(초기화)
+    $("#dataGrid").jqGridInit({
+        pager: "#pagerList",
+        colNames:[
+        	'ID', '상태', '거래처구분', '거래처구분ID', '거래처명', '거래처ID', '통신사', '담당자', '전화', 'Fax', '휴대폰',  '등록일'
+        ],
+        align: "center",
+        colModel:[
+            {
+                name: 'id',
+                width: 50,
+                align: "center",
+                hidden: true,
+            },        	
+            {
+                name: 'useYn',
+                width: 70,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridUseYnAttr(rowObject.useYn);
+                },
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridUseYnFormat(rowObject.useYn);
+                },
+            },
+            {
+                name: 'companyTpNm',
+                width: 50,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridCompanyTpAttr(rowObject.companyTp);
+                },
+            },
+            {
+                name: 'companyTp',
+                width: 50,
+                align: "center",
+                hidden: true,
+            },
+            {
+                name: 'accountNm',
+                width: 120,
+                align: "center",
+                cellattr: function(rowId, val, rowObject, cm, rdata)  {
+                    return $.jqGridHighlightColAttr(true);
+                },                
+            },
+            {
+                name: 'accountId',
+                width: 50,
+                align: "center",
+                hidden: true,
+            },
+            {
+                name: 'telecomCd',
+                editable: false,
+                width: 50,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelecomCdFormat(rowObject.telecomCd);
+                },
+            },
+            {
+                name: 'chargerNm',
+                width: 100,
+                align: "center"
+            },
+            {
+                name: 'telNo',
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);
+                }
+            },
+            {
+                name: 'faxNo',
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.faxNo1, rowObject.faxNo2, rowObject.faxNo3);
+                }
+            },
+            {
+                name: 'cellNo',
+                width: 120,
+                align: "center",
+                formatter: function(cellvalue, options, rowObject) {
+                    return $.jqGridTelNoFormat(rowObject.cellNo1, rowObject.cellNo2, rowObject.cellNo3);
+                }
+            },
+            {
+                name: 'regDt',
+                width: 80,
+                align: "center",
+                formatter: "date",
+                formatoptions: {
+                   srcformat: 'Y-m-d H:i:s',
+                   newformat: 'y-m-d'
+                }
+            },
+            
+        ],
+        // 이벤트 처리
+        onCellSelect: function (rowId, iCol, content, event) { // 셀 선택시
+            $.fnOnCellSelect($(this), rowId, iCol, content, event);
+        },
+
+    });
+
+    // 일반 form 객체 초기화
+    $.gfInitFormField();
+
+	// 검색
+    $("#frmSearch").submit(function(e, params) {
+        event.preventDefault();
+        $.fnGetAccountList();
+    });
+
+    // 등록
+    $("#btnRegistAccount").on("click", function(e, params) {
+        $.gfCommonPopUp({
+            popUrl: "{% url 'setting:accountman__regist' %}",
+            modalId: "divAccountRegistPopup",
+            width: "600",
+            loginCheck: true,
+        });
+    });
+
+    // 최초 전체 데이터 획득
+    $.fnGetAccountList();
+
+});
+
+/*
+ * 거래처 리스트 검색 데이터 획득(Ajax-Json)
+ */
+$.fnGetAccountList = function(){
+    var _data = $("#frmSearch");
+    
+    $.gfAjax({
+        type: "POST",
+        url: "{% url 'setting:accountman__json__list' %}",
+        async: true,
+        data: _data.serializeArray(),
+        successFunc: function(data, textStatus, jqXHR) {
+            var resultData = data.resultData;
+
+            $("#dataGrid").jqGrid("clearGridData");
+            $("#dataGrid").jqGrid("setGridParam", {data: data.resultData});
+            $("#dataGrid").trigger("reloadGrid");
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            // Http Error처리
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : true,
+                loginCompletedFunc: function() {
+                    // 로그인 후 처리 이벤트
+                }
+            });
+        },
+    });
+};
+
+/*
+ *  Cell 클릭시 이벤트
+ */
+$.fnOnCellSelect = function(_grid, rowId, iCol, content, event){
+
+    var colModel = _grid.jqGrid("getGridParam", "colModel"); // 컬럼 모델    
+    var id = _grid.jqGrid('getCell', rowId, 'id'); // 거래처데이터 아이디
+
+    // 거래처명 선택시
+    if(colModel[iCol].name == "accountNm") {
+        // 상세 팝업
+        $.gfCommonPopUp({
+            popUrl: "{% url 'setting:accountman__detail' %}",
+            modalId: "divAccountDetailPopup",
+            width: "600",
+            params: {
+                id: id
+            },
+            loginCheck: true,
+        });
+    }
+};
+</script>
+<!-- Javascript Local Code End -->
+{% endblock javascriptLoc %}
