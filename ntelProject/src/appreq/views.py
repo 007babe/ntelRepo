@@ -24,18 +24,17 @@ def appreqIndexCV(request):
     # 운영정책, 개인보호 정책 데이터 획득
     qry = Q()  # 쿼리조건
     qry &= Q(useYn__exact=True)  # 사용여부
-
     sysPolicy = SysPolicy.objects.filter(
         qry
     ).order_by(
         '-id'
     ).first()
 
-    for query in connection.queries:
-        print(query)
-
     # 업체구분 데이터 획득
     companyTps = getComCdList(grpCd='S0004', grpOpt='B')
+
+    # 통신사코드 데이터 획득
+    telecomCds = getComCdList(grpCd='G0002')
 
     # 템플릿 렌더링 및 데이터 전달
     return render(
@@ -44,6 +43,7 @@ def appreqIndexCV(request):
         {
             "sysPolicy": sysPolicy,
             "companyTps": companyTps,
+            "telecomCds": telecomCds,
         },
     )
 

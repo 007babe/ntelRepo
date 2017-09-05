@@ -22,7 +22,7 @@
                     {{ sysPolicy.accessTerms|safe }}
                 </div>
                 <div class="ac" style="margin-bottom: 10px;">
-                    <label class="">
+                    <label>
                         <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
                             <input id="confirmAccessTerms" name="confirmAccessTerms" value="confirmAccessTerms" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="이용약관">
                             <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
@@ -39,7 +39,7 @@
                     {{ sysPolicy.privacyPolicy|safe }}
                 </div>
                 <div class="ac" style="margin-bottom: 10px;">
-                    <label class="">
+                    <label>
                         <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
                             <input id="confirmPrivacyPolicy" name="confirmPrivacyPolicy" value="confirmPrivacyPolicy" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="개인정보취급방침">
                             <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
@@ -70,7 +70,7 @@
                                         {% for companyTp in companyTps %}
                                         <div formType="iChecks" class="i-checks disp-ib">
                                             <label class="radio">
-                                                <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="사업자구분">
+                                                <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}"  srtCd="{{ companyTp.srtCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="사업자구분">
                                                 <span>{{ companyTp.comNm }}</span>
                                             </label>
                                         </div>
@@ -78,6 +78,38 @@
                                     </span>
                                 </td>
                             </tr>
+                            {# 대리점 통신사 Start #}
+                             <tr id="trTelecomA" style="display: none;">
+                                <td class="t-label t-l-w">통신사</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span>
+                                        <select id="telecomCdA" name="telecomCdA" class="form-control form-box">
+                                        {% for telecomCd in telecomCds %}
+                                            <option value="{{ telecomCd.comCd }}">{{ telecomCd.comNm}}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </span>
+                                </td>
+                            </tr>
+                            {# 대리점 통신사 End #}
+                            {# 딜러점 통신사 Start #}
+                            <tr id="trTelecomD" style="display: none;">
+                                <td class="t-label t-l-w">통신사</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span>
+                                        {% for telecomCd in telecomCds %}
+                                        <label class="ckbox">
+                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
+                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.comCd }}"" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
+                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                            </div>
+                                            <span style="width: 30px;">{{ telecomCd.comNm }}</span>
+                                        </label>
+                                        {% endfor %}
+                                    </span>
+                                </td>
+                            </tr>
+                            {# 딜러점 통신사 End #}
                             <tr>
                                 <td class="t-label t-l-w">사업자상호</td>
                                 <td class="t-content t-c-w al">
@@ -105,7 +137,7 @@
                                         <input type="text" id="bizLicNo3" name="bizLicNo3" formType="bizLic3" tabNext="telNo1" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="5" value="" label="사업자번호">
                                     </span>
                                 </td>
-                                <td class="t-label t-l-w">연락처</td>
+                                <td class="t-label t-l-w">전화</td>
                                 <td class="t-content t-c-w al">
                                     <span>
                                         <input type="text" id="telNo1" name="telNo1" formType="tel1" tabNext="telNo2" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="" label="연락처">
@@ -253,7 +285,25 @@ $(document).ready(function() {
     // 일반 form 객체 초기화
     $.gfInitFormField();
 
-
+    // 사업자 구분 클릭 이벤트
+	$("input:radio[name='companyTp']").on("ifClicked", function(){
+		var _this = $(this)
+		var srtCd = _this.attr("srtCd");
+		var _trTelecomA = $("#trTelecomA"); // 대리점 통신사 선택 영역
+		var _trTelecomD = $("#trTelecomD"); // 딜러점 통신사 선택 영역
+		
+		if (srtCd == "A"){ // 대리점일 경우
+			_trTelecomA.show();				
+			_trTelecomD.hide();				
+		} else if (srtCd == "D"){ // 대리점일 경우
+			_trTelecomA.hide();				
+			_trTelecomD.show();				
+		} else { // 판매점 포함 기타
+			_trTelecomA.hide();				
+			_trTelecomD.hide();				
+		}		
+	});
+    
 	// 사용가능 아이디 확인 이벤트 처리
     $("#userId").on("change", function(e, params) {
 	    var _this = $(this);
