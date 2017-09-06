@@ -25,6 +25,7 @@ class SysPolicy(models.Model):
     def __str__(self):
         return str(self.id)
 
+
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysLoginHistory(models.Model):
     """사용자 로그인 이력
@@ -83,6 +84,9 @@ class SysCompany(models.Model):
 
     def __str__(self):
         return self.companyId
+
+    def telecomCd_as_list(self):
+        return self.telecomCd.split(',')
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용

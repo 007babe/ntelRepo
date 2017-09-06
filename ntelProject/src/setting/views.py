@@ -729,9 +729,14 @@ def accountmanDetailCV(request):
         # 거래처(회사) 구분값 획득(공통코드)
         companyTps = ComCd.objects.for_grp(
             grpCd="S0004",
-            grpOpt="B"
+            grpOpt="B",
         ).exclude(
             comCd__exact=request.user.shopId.companyId.companyTp
+        )
+
+        # 통신사 구분값 획득(공통코드)
+        telecomCds = ComCd.objects.for_grp(
+            grpCd="G0002",
         )
 
         # 수정가능 여부 확인 후 세팅
@@ -746,6 +751,7 @@ def accountmanDetailCV(request):
             {
                 "accountInfo": accountInfo,
                 "companyTps": companyTps,
+                "telecomCds": telecomCds,
                 "editable": editable,
             },
         )
