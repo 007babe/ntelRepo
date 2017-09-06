@@ -196,7 +196,7 @@ $(document).ready(function() {
         $.gfCommonPopUp({
             popUrl: "{% url 'setting:accountman__regist' %}",
             modalId: "divAccountRegistPopup",
-            width: "600",
+            width: "700",
             loginCheck: true,
         });
     });
@@ -253,7 +253,7 @@ $.fnOnCellSelect = function(_grid, rowId, iCol, content, event){
         $.gfCommonPopUp({
             popUrl: "{% url 'setting:accountman__detail' %}",
             modalId: "divAccountDetailPopup",
-            width: "600",
+            width: "700",
             params: {
                 id: id
             },

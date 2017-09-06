@@ -767,33 +767,26 @@ def accountmanRegistCV(request):
     userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
     if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
-        # 권한리스트 데이터 획득
-        userAuths = getComCdList(
-            grpCd='S0001',
-            grpOpt=request.user.userAuth.srtCd,
-        ).filter(
-            # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
-            ordSeq__gt=request.user.userAuth.ordSeq
+
+        # 거래처(회사) 구분값 획득(공통코드)
+        companyTps = ComCd.objects.for_grp(
+            grpCd="S0004",
+            grpOpt="B",
+        ).exclude(
+            comCd__exact=request.user.shopId.companyId.companyTp
         )
 
-        # 매장리스트 데이터 획득
-        qryShops = Q()
-        qryShops &= Q(useYn__exact=True) 
-        if userAuth in ["S0001M", "S0001C", "S0001A"]:
-            qryShops &= Q(companyId__exact=request.user.shopId.companyId)
-        else:
-            qryShops &= Q(shopId__exact=request.user.shopId)
-
-        userShops = SysShop.objects.filter(
-            qryShops
+        # 통신사 구분값 획득(공통코드)
+        telecomCds = ComCd.objects.for_grp(
+            grpCd="G0002",
         )
 
         return render(
             request,
-            'setting/staffman/regist.html',
+            'setting/accountman/regist.html',
             {
-                "userAuths": userAuths,
-                "userShops": userShops,
+                "companyTps": companyTps,
+                "telecomCds": telecomCds,
             },
         )
     else:

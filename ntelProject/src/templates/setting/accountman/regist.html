@@ -9,35 +9,77 @@
             <button id="btnDialogClose" type="button" class="close" data-dismiss="modal">×</button>
             <!-- 닫기(x) 버튼 End -->
             <!-- header title Start -->
-            <h2 class="font-bold">매장 등록</h2>
+            <h2 class="font-bold">거래처 등록</h2>
             <!-- header title End -->
         </div>
         <!-- header End -->
         <!-- body Start -->
-        <div id="divShopRegist"  class="modal-body p-body">
+        <div id="divAccountRegist"  class="modal-body p-body">
             <div class="spinWrap">
                 <div class="ibox-content" style="padding:5px 5px 5px 5px;">
-                    <form id="frmShopInfo" name="frmShopInfo" action="." method="post">
+                    <form id="frmAccountInfo" name="frmAccountInfo" action="." method="post">
                     <div style="margin-bottom: 10px;">
                         <table class="t-table">
                             <colgroup>
                                 <col width="120">
-                                <col width="437">
+                                <col width="537">
                             </colgroup>
                             <tbody>
                                 <tr>
-                                    <td class="t-label t-l-w">회사</td>
-                                    <td class="t-content t-c-w al pd-l-5">
+                                    <td class="t-label t-l-w" style="background-clip:border-box;">거래처명</td>
+                                    <td class="t-content t-c-w al">
                                         <span>
-                                            {{ user.shopId.companyId.companyNm }}
+                                            <input type="text" id="companyNm" name="companyNm" class="form-control form-box" value="" label="거래처명">
                                         </span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="t-label t-l-w">매장명</td>
+                                    <td class="t-label t-l-w">거래처구분</td>
                                     <td class="t-content t-c-w al">
                                         <span>
-                                            <input type="text" id="shopNm" name="shopNm" tabNext="telNo1" class="form-control form-box" style="width: 150px; text-align: left;" maxlength="30" value="" label="매장명">
+                                            {% for companyTp in companyTps %}
+                                            <div formType="iChecks" class="i-checks disp-ib" formOnly="POP">
+                                                <label class="radio">
+                                                    <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}"  srtCd="{{ companyTp.srtCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="사업자구분">
+                                                    <span>{{ companyTp.comNm }}</span>
+                                                </label>
+                                            </div>
+                                            {% endfor %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr id="trTelecomA">
+                                    <td class="t-label t-l-w">통신사</td>
+                                    <td class="t-content t-c-w al">
+                                        {% for telecomCd in telecomCds %}
+                                        <div formType="iChecks" class="i-checks disp-ib" formOnly="POP">
+                                            <label class="radio">
+                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %}checked{% endif %} label="통신사">
+                                                <span>{{ telecomCd.comNm }}</span>
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr id="trTelecomD" style="display:none;">
+                                    <td class="t-label t-l-w">통신사</td>
+                                    <td class="t-content t-c-w al">
+                                        {% for telecomCd in telecomCds %}
+                                        <label class="ckbox">
+                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
+                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
+                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                            </div>
+                                            <span style="width: 30px;">{{ telecomCd.comNm }}</span>
+                                        </label>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">담당자</td>
+                                    <td class="t-content t-c-w al">
+                                        <span>
+                                            <input type="text" id="chargerNm" name="chargerNm" class="form-control form-box" value="" label="담당자">
                                         </span>
                                     </td>
                                 </tr>
@@ -59,7 +101,7 @@
                                     <td class="t-label t-l-w">Fax</td>
                                     <td class="t-content t-c-w al">
                                         <span>
-                                            <input type="text" id="faxNo1" name="faxNo1" formType="tel1" tabNext="faxNo2" formOnly="POP" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="" label="Fax">
+                                            <input type="text" id="faxNo1" name="faxNo1" formType="tel1" tabNext="faxNo2" formOnly="POP" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="4" value="" label="Fax"}>
                                         </span>
                                         <span>
                                             <input type="text" id="faxNo2" name="faxNo2" formType="tel2" tabNext="faxNo3" formOnly="POP" class="form-control form-box" style="width: 70px; text-align: center;" maxlength="4" value="" label="Fax">
@@ -69,7 +111,6 @@
                                         </span>
                                     </td>
                                 </tr>
-                                
                                 <tr>
                                     <td class="t-label t-l-w">휴대폰</td>
                                     <td class="t-content t-c-w al">
@@ -88,7 +129,37 @@
                                     <td class="t-label t-l-w">주소</td>
                                     <td class="t-content t-c-w al">
                                         <span>
-                                            <input type="text" id="addr1" name="addr1" class="form-control form-box" value="" label="주소">
+                                            <input type="text" id="addr1" name="addr1" class="form-control form-box" value="{{ accountInfo.accountId.addr1|default_if_none:'' }}" label="주소">
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">사업자등록번호</td>
+                                    <td class="t-content t-c-w al">
+                                        <span>
+                                            <input type="text" id="bizLicNo1" name="bizLicNo1" formType="bizLic1" tabNext="bizLicNo2" formOnly="POP" class="form-control form-box" style="width: 30px; text-align: center;" maxlength="3" value="" label="사업자번호">
+                                        </span>
+                                        <span>
+                                            <input type="text" id="bizLicNo2" name="bizLicNo2" formType="bizLic2" tabNext="bizLicNo3" formOnly="POP" class="form-control form-box" style="width: 20px; text-align: center;" maxlength="2" value="" label="사업자번호">
+                                        </span>
+                                        <span>
+                                            <input type="text" id="bizLicNo3" name="bizLicNo3" formType="bizLic3" tabNext="bizTp" formOnly="POP" class="form-control form-box" style="width: 50px; text-align: center;" maxlength="5" value="" label="사업자번호">
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">업태</td>
+                                    <td class="t-content t-c-w al">
+                                        <span>
+                                            <input type="text" id="bizTp" name="bizTp" class="form-control form-box" value="" label="업태">
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="t-label t-l-w">업종</td>
+                                    <td class="t-content t-c-w al">
+                                        <span>
+                                            <input type="text" id="bizKind" name="bizKind" class="form-control form-box" value="" label="업종">
                                         </span>
                                     </td>
                                 </tr>
@@ -137,7 +208,6 @@
 <!-- Javascript Local Code Start -->
 <script>
 $(document).ready(function() {
-    $("#frmShopInfo input[id='shopNm']").focus();
     
     // 일반 form 객체 초기화
     $.gfInitFormField("POP");
@@ -148,22 +218,23 @@ $(document).ready(function() {
             text: "등록하시겠습니까?",
             cbFunc: function(isConfirm) {
             	if(isConfirm){
-                    $.fnRegistShop();
+                    $.fnRegistAccount();
             	}
             }
         });
     });
-    
+    $("#frmAccountInfo input[id='companyNm']").trigger("select");
+
 });
 
 /*
- * 매장 등록
+ * 거래처 등록
  */
-$.fnRegistShop = function() {
+$.fnRegistAccount = function() {
 
     $.gfAjax({
-        url: "{% url 'setting:shopman__json__regist' %}",
-        data: $("#frmShopInfo").serializeArray(),
+        url: "{% url 'setting:accountman__json__regist' %}",
+        data: $("#frmAccountInfo").serializeArray(),
         async: true,
         dataType: "json",
         okFunc: function(data, cbFunc){

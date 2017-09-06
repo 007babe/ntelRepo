@@ -47,13 +47,13 @@
                         위 개인정보취급방침에 동의합니다.
                     </label>
                 </div>
-    
+
                 <div class="al">
                     <h3 id="headTitle" class="mt5">
                         <i class="fa fa-building"></i> 업체정보
                     </h3>
                 </div>
-    
+
                 <div id="divCompanyInfo" style="margin-bottom: 10px;">
                     <table class="t-table">
                         <colgroup>
@@ -86,11 +86,11 @@
                                         {% for telecomCd in telecomCds %}
                                         <div formType="iChecks" class="i-checks disp-ib">
                                             <label class="radio">
-                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.srtCd }}"  telecomCd="{{ telecomCd.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="통신사">
+                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %}checked{% endif %} label="통신사">
                                                 <span>{{ telecomCd.comNm }}</span>
                                             </label>
                                         </div>
-                                        {% endfor %}                                    
+                                        {% endfor %}
                                     </span>
                                 </td>
                             </tr>
@@ -101,7 +101,7 @@
                                         {% for telecomCd in telecomCds %}
                                         <label class="ckbox">
                                             <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
-                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.srtCd }}"" telecomCd="{{ telecomCd.comCd }}" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
+                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
                                                 <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
                                             </div>
                                             <span style="width: 30px;">{{ telecomCd.comNm }}</span>
@@ -274,7 +274,7 @@
                 </div>
             </div>
         </div>
-    </div>        
+    </div>
     </form>
 {% endblock body_content %}
 
@@ -291,19 +291,19 @@ $(document).ready(function() {
 		var srtCd = _this.attr("srtCd");
 		var _trTelecomA = $("#trTelecomA"); // 대리점 통신사 선택 영역
 		var _trTelecomD = $("#trTelecomD"); // 딜러점 통신사 선택 영역
-		
+
 		if (srtCd == "A"){ // 대리점일 경우
-			_trTelecomA.show();				
-			_trTelecomD.hide();				
+			_trTelecomA.show();
+			_trTelecomD.hide();
 		} else if (srtCd == "D"){ // 대리점일 경우
-			_trTelecomA.hide();				
-			_trTelecomD.show();				
+			_trTelecomA.hide();
+			_trTelecomD.show();
 		} else { // 판매점 포함 기타
-			_trTelecomA.hide();				
-			_trTelecomD.hide();				
-		}		
+			_trTelecomA.hide();
+			_trTelecomD.hide();
+		}
 	});
-    
+
 	// 사용가능 아이디 확인 이벤트 처리
     $("#userId").on("change", function(e, params) {
 	    var _this = $(this);
@@ -346,7 +346,7 @@ $(document).ready(function() {
 	// 이용신청 등록 요청
     $("#frmAppreq").submit(function(e, params) {
         event.preventDefault();
-        
+
         var frmTarget = $(this);
 
         $.gfComfirm({
@@ -356,7 +356,7 @@ $(document).ready(function() {
                     $.fnRegistAppreq(frmTarget);
             	}
             }
-        });        
+        });
     });
 });
 
@@ -377,7 +377,7 @@ $.fnRegistAppreq = function(frmTarget) {
                      reqId: data.resultData.reqId
                  },
                  attrs: {
-                     "data-keyboard": "false"        
+                     "data-keyboard": "false"
                  },
                  loginRequired : false
              });
@@ -393,7 +393,7 @@ $.fnRegistAppreq = function(frmTarget) {
          spinTarget: $("#divAppreq"),
      });
 };
- 
+
 </script>
 {% endblock body_script_local %}
 

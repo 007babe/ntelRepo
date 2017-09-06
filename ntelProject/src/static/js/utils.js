@@ -46,3 +46,15 @@ $.num2cur = function(num) {
 $.cur2num = function(cur) {
     return cur.replace(/[^0-9\-]/g, "");
 };
+
+/*
+ *  다음 Tab 객체로 이동
+ */
+$.moveTabNext = function(id) {
+    var _itemNext = $.isEmpty(id) ? null : $("#" + id);
+
+    if(!$.isEmpty(_itemNext)) {
+        _itemNext.trigger("focus");
+        _itemNext.trigger("select");
+    }
+};
