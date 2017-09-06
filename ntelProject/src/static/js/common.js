@@ -264,6 +264,7 @@ $.gfCommonPopUp = function(opts) {
     var attrs = $.isEmpty(opts.attrs) ? new Object() : opts.attrs; // modalId의 Popup Div의 속성에 추가 할 내용(key, value)
     var params = opts.params;
     var loginRequired = $.isEmpty(opts.loginRequired) ? true : opts.loginRequired;
+    var animate = $.isEmpty(opts.animate) ? "fadeIn" : opts.animate;
 
     $.gfAjax({
         type: "POST",
@@ -276,8 +277,8 @@ $.gfCommonPopUp = function(opts) {
                                      .attr("tabindex", "-1")
                                      .attr("role", "dialog")
                                      .attr("aria-hidden", "true")
-                                     .addClass("modal inmodal fade");
-
+                                     .addClass("modal inmodal")
+                                     ;
             // attrs의 값을 div 속성으로 추가
             if($.type(attrs) === "object") {
                 $.each(attrs, function(key, value) {
@@ -288,21 +289,45 @@ $.gfCommonPopUp = function(opts) {
             // divPop에 html 추가
             _divPop.empty().append(data)
 
+            var _modalDialog = _divPop.children(".modal-dialog");
+
             // div 너비 지정
             if(!$.isEmpty(width)){
-                _divPop.children(".modal-dialog").css("width", width + "px");
+                _modalDialog.css("width", width + "px");
+            }
+
+            // animate 설정
+            if(!$.isEmpty(animate)){
+                _modalDialog.children(".modal-content").addClass("animated").addClass(animate);
             }
 
             // body에 추가
             $(document.body).append(_divPop);
+            
+            // 모달 Show 이벤트
+            _divPop.on("show.bs.modal", function(e) {
+            });
+
+            // 모달 Show 완료 이벤트
+            _divPop.on("shown.bs.modal", function(e) {
+                // 모달 노출 후 초기화 실행
+                if(!$.isEmpty($.fnInitPop)){
+                    $.fnInitPop();
+                }
+            });
+            
+            // 모달 Hide 이벤트
+            _divPop.on("hide.bs.modal", function(e) {
+            });
+
+            // 모달 Hide 완료 이벤트
+            _divPop.on("hidden.bs.modal", function(e) {
+                _divPop.off("shown.bs.modal");
+                _divPop.remove(); // 기존 모달 팝업 지우기
+            });
 
             // 팝업 보이기
             _divPop.modal("show");
-            
-            // 모달 Close시 이벤트
-            _divPop.on("hide.bs.modal", function() {
-                _divPop.remove(); // 기존 모달 팝업 지우기
-            });
             
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
@@ -794,7 +819,6 @@ $.gfInitCurrency = function(formOnly) {
  */
 $.fn.gfSetTelNo1 = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
     _item.on("input", function(e, params) {
@@ -804,8 +828,7 @@ $.fn.gfSetTelNo1 = function() {
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
         if(_this.val().length >= 4 || $.inArray(_this.val(), gArrFirstTelNo) > -1) {
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
         }
     });
 };
@@ -815,7 +838,6 @@ $.fn.gfSetTelNo1 = function() {
  */
 $.fn.gfSetTelNo2 = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
     _item.on("input", function(e, params) {
@@ -825,8 +847,7 @@ $.fn.gfSetTelNo2 = function() {
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
         if(_this.val().length >= 4) {
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
         }
     });
 };
@@ -836,7 +857,6 @@ $.fn.gfSetTelNo2 = function() {
  */
 $.fn.gfSetTelNo3 = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
     _item.on("input", function(e, params) {
@@ -846,8 +866,7 @@ $.fn.gfSetTelNo3 = function() {
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
         if(_this.val().length >= 4) {
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
         }
     });
 };
@@ -893,7 +912,6 @@ $.gfInitTelNo = function(formOnly) {
  */
 $.fn.gfSetBizLicNo1 = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
@@ -903,8 +921,7 @@ $.fn.gfSetBizLicNo1 = function() {
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
         if(_this.val().length >= 3) {
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
         }
     });
 };
@@ -914,7 +931,6 @@ $.fn.gfSetBizLicNo1 = function() {
  */
 $.fn.gfSetBizLicNo2 = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
@@ -924,8 +940,7 @@ $.fn.gfSetBizLicNo2 = function() {
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
         if(_this.val().length >= 2) {
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
         }
     });
 };
@@ -935,7 +950,6 @@ $.fn.gfSetBizLicNo2 = function() {
  */
 $.fn.gfSetBizLicNo3 = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
 
     // Key Up Event
     _item.on("keyup", function(e, params) {
@@ -945,8 +959,7 @@ $.fn.gfSetBizLicNo3 = function() {
         _this.val(_this.val().replace(/[^0-9]/g, ""));
 
         if(_this.val().length >= 5) {
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
         }
     });
 };
@@ -992,7 +1005,6 @@ $.gfInitBizLicNo = function(formOnly) {
  */
 $.fn.gfSetUserId = function() {
     var _item = this;
-    var _itemNext = $("#" + _item.attr("tabNext"));
     var _noti = $("#" + _item.attr("noti")); // 알림필드
     var _idChk = $("#idChk"); // ID Check Value
 
@@ -1015,8 +1027,7 @@ $.fn.gfSetUserId = function() {
         if(len >= 6) _this.trigger("change");
 
         if(_this.val().length >= 20) { // 20자 이상일 경우 처리
-            _itemNext.trigger("focus");
-            _itemNext.trigger("select");
+            $.moveTabNext(_item.attr("tabNext"));
             _this.trigger("change");
         }
     });

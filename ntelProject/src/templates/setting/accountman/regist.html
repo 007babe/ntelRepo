@@ -211,6 +211,25 @@ $(document).ready(function() {
     
     // 일반 form 객체 초기화
     $.gfInitFormField("POP");
+    
+    // 사업자 구분 클릭 이벤트
+    $("input:radio[name='companyTp']").on("ifClicked", function(){
+        var _this = $(this)
+        var srtCd = _this.attr("srtCd");
+        var _trTelecomA = $("#trTelecomA"); // 대리점 통신사 선택 영역
+        var _trTelecomD = $("#trTelecomD"); // 딜러점 통신사 선택 영역
+
+        if (srtCd == "A"){ // 대리점일 경우
+            _trTelecomA.show();
+            _trTelecomD.hide();
+        } else if (srtCd == "D"){ // 대리점일 경우
+            _trTelecomA.hide();
+            _trTelecomD.show();
+        } else { // 판매점 포함 기타
+            _trTelecomA.hide();
+            _trTelecomD.hide();
+        }
+    });    
 
 	// 등록 처리
     $("#btnRegist").on("click", function(e, params) {
@@ -223,9 +242,16 @@ $(document).ready(function() {
             }
         });
     });
-    $("#frmAccountInfo input[id='companyNm']").trigger("select");
-
 });
+
+
+/*
+ * 팝업 노출 후 초기화
+ */
+$.fnInitPop = function() {
+	$("#frmAccountInfo input[id='companyNm']").focus();
+};
+
 
 /*
  * 거래처 등록

@@ -137,8 +137,6 @@
 <!-- Javascript Local Code Start -->
 <script>
 $(document).ready(function() {
-    $("#frmShopInfo input[id='shopNm']").focus();
-    
     // 일반 form 객체 초기화
     $.gfInitFormField("POP");
 
@@ -155,6 +153,15 @@ $(document).ready(function() {
     });
     
 });
+
+
+/*
+ * 팝업 노출 후 초기화
+ */
+$.fnInitPop = function() {
+	$("#frmShopInfo input[id='shopNm']").focus();
+};
+
 
 /*
  * 매장 등록

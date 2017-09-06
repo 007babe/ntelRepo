@@ -225,6 +225,15 @@ $(document).ready(function() {
     $.gfInitFormField("POP");
 });
 
+
+/*
+ * 팝업 노출 후 초기화
+ */
+$.fnInitPop = function() {
+    $("#frmAccountInfo input[id='companyNm']").focus();
+};
+
+
 /*
  * 거래처 정보 수정
  */
