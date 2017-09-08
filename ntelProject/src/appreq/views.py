@@ -10,9 +10,9 @@ from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
 from appreq.forms import SysAppreqRegistForm
-from system.models import SysAppreq
+from system.models import SysAppreq, SysNetworkTelecom
 from system.models import SysPolicy
-from utils.data import getComCdList
+from utils.data import getComCdList, getNetworkTelecomByNetworkGroupList
 from utils.data import isUsableId
 from utils.json import makeJsonResult
 
@@ -35,6 +35,10 @@ def appreqIndexCV(request):
 
     # 통신사코드 데이터 획득
     telecomCds = getComCdList(grpCd='G0002')
+
+    networkTelecomCds = getNetworkTelecomByNetworkGroupList()
+
+    print(networkTelecomCds)
 
     # 템플릿 렌더링 및 데이터 전달
     return render(

@@ -34,6 +34,8 @@ class ProductPhone(models.Model):
     telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=False, blank=False, verbose_name='통신사코드')
     modelCd = models.CharField(db_column='model_cd', max_length=100, null=False, blank=False, verbose_name='제품모델코드')
     modelNm = models.CharField(db_column='model_nm', max_length=100, null=False, blank=False, verbose_name='제품모델명')
+    phoneNm = models.CharField(db_column='phone_nm', max_length=100, null=False, blank=False, verbose_name='단말기명')
+    netTp = models.CharField(db_column='net_tp', max_length=100, null=False, blank=False, verbose_name='단말기명')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
