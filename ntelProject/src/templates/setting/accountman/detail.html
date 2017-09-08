@@ -18,6 +18,8 @@
             <div class="spinWrap">
                 <div class="ibox-content" style="padding:5px 5px 5px 5px;">
                     <form id="frmAccountInfo" name="frmAccountInfo" action="." method="post">
+                    <input type="hidden" id="id" name="id" value="{{ accountInfo.id }}">
+                    <input type="hidden" id="accountId" name="accountId" value="{{ accountInfo.accountId }}">
                     <div id="divAccountInfo" style="margin-bottom: 10px;">
                         <table class="t-table">
                             <colgroup>
@@ -37,14 +39,12 @@
                                     <td class="t-label t-l-w">거래처구분</td>
                                     <td class="t-content t-c-w al">
                                         <span>
-                                            {% for companyTp in companyTps %}
                                             <div formType="iChecks" class="i-checks disp-ib" formOnly="POP">
                                                 <label class="radio">
-                                                    <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}"  srtCd="{{ companyTp.srtCd }}" style="position: absolute; opacity: 0;" {% if accountInfo.accountId.companyTp.comCd == companyTp.comCd %} checked {% endif %} label="사업자구분" {% if not editable %}disabled{% endif %}>
-                                                    <span>{{ companyTp.comNm }}</span>
+                                                    <input type="radio" id="companyTp" name="companyTp" value="{{ accountInfo.accountId.compnanyTp.comCd }}" srtCd="{{ accountInfo.accountId.compnanyTp.srtCd }}" style="position: absolute; opacity: 0;" checked label="거래처구분" disabled>
+                                                    <span>{{ accountInfo.accountId.companyTp.comNm }}</span>
                                                 </label>
                                             </div>
-                                            {% endfor %}
                                         </span>
                                     </td>
                                 </tr>

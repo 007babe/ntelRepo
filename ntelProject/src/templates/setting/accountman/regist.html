@@ -40,7 +40,7 @@
                                             {% for companyTp in companyTps %}
                                             <div formType="iChecks" class="i-checks disp-ib" formOnly="POP">
                                                 <label class="radio">
-                                                    <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}"  srtCd="{{ companyTp.srtCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="사업자구분">
+                                                    <input type="radio" id="companyTp{{ forloop.counter }}" name="companyTp" value="{{ companyTp.comCd }}" srtCd="{{ companyTp.srtCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %} checked {% endif %} label="거래처구분">
                                                     <span>{{ companyTp.comNm }}</span>
                                                 </label>
                                             </div>
@@ -208,10 +208,10 @@
 <!-- Javascript Local Code Start -->
 <script>
 $(document).ready(function() {
-    
+
     // 일반 form 객체 초기화
     $.gfInitFormField("POP");
-    
+
     // 사업자 구분 클릭 이벤트
     $("input:radio[name='companyTp']").on("ifClicked", function(){
         var _this = $(this)
@@ -229,7 +229,7 @@ $(document).ready(function() {
             _trTelecomA.hide();
             _trTelecomD.hide();
         }
-    });    
+    });
 
 	// 등록 처리
     $("#btnRegist").on("click", function(e, params) {
@@ -271,7 +271,7 @@ $.fnRegistAccount = function() {
 
             // 등록 팝업 닫기
             $("#btnDialogClose").trigger("click");
-            
+
             // 검색 재실행
             $("#btnSearch").trigger("click");
         },

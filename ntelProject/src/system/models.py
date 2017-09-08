@@ -595,11 +595,12 @@ class SysAppreq(models.Model):
 
 
 class SysSeq(models.Model):
-    """시스템 코드 or Sequence 용
     """
-    seqCd = models.CharField(primary_key=True, db_column='seq_cd', max_length=6, verbose_name='SEQ코드')
+    시스템 코드 or Sequence 용
+    """
+    seqCd = models.CharField(db_column='seq_cd', primary_key=True, max_length=6, verbose_name='SEQ코드')
     seq = models.IntegerField(db_column='seq', null=False, blank=False, default=0, verbose_name='순차번호')
-    seqLen =models.IntegerField(db_column='seq_len', null=False, blank=False, default=10, verbose_name='SEQ 길이')
+    seqLen = models.IntegerField(db_column='seq_len', null=False, blank=False, default=10, verbose_name='SEQ 길이')
     seqPrefix = models.CharField(db_column='seq_prefix', null=True, blank=True, default=None, max_length=3,  verbose_name='SEQ Prefix')
     useYm = models.BooleanField(db_column='use_ym', null=False, blank=True, default=False,  verbose_name='SEQ 년월사용여부')
     seqDesc = models.CharField(db_column='seq_desc', null=True, blank=True, default=None, max_length=100,  verbose_name='SEQ 설명')
@@ -613,4 +614,68 @@ class SysSeq(models.Model):
         db_table = "sys_seq"
 
     def __str__(self):
-        return self.id
+        return self.seqCd
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysNetwork(models.Model):
+    """
+    통신망 ModelClass
+    """
+    networkCd = models.CharField(db_column='network_cd', primary_key=True, max_length=2, verbose_name='통신망 코드')
+    networkNm = models.CharField(db_column='network_nm', max_length=100, null=True, blank=True, verbose_name='통신망 명')
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    class Meta:
+        db_table = "sys_network"
+
+    def __str__(self):
+        return self.networkCd
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysTelecom(models.Model):
+    """
+    통신사 ModelClass
+    """
+    telecomCd = models.CharField(db_column='telecom_cd', primary_key=True, max_length=3, verbose_name='통신사 코드')
+    telecomNm = models.CharField(db_column='telecom_nm', max_length=100, null=True, blank=True, verbose_name='통신사 명')
+    isMvno = models.BooleanField(db_column='is_mvno', null=False, blank=False, default=False, verbose_name='MVNO구분')
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    class Meta:
+        db_table = "sys_telecom"
+
+    def __str__(self):
+        return self.telecomCd
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysNetworkTelecom(models.Model):
+    """
+    통신망 통신사 ModelClass
+    """
+    networkTelecomCd = models.CharField(db_column='network_telecom_cd', primary_key=True, max_length=6, verbose_name='통신망 통신사 코드')
+    networkCd = models.ForeignKey('system.SysNetwork', db_column='network_cd', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_network_cd', verbose_name='통신망코드')
+    telecomCd = models.ForeignKey('system.SysTelecom', db_column='telecom_cd', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_telecom_cd', verbose_name='통신사코드')
+    networkTelecomNm = models.CharField(db_column='network_telecom_nm', max_length=100, null=True, blank=True, verbose_name='망통신사 명')
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    class Meta:
+        db_table = "sys_network_telecom"
+
+    def __str__(self):
+        return self.networkTelecomCd
+
