@@ -44,13 +44,45 @@ class SysLoginHistory(models.Model):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
+class SysCompanyManager(models.Manager):
+    '''
+    시스템 회사 매니저
+    '''
+    def for_company(self, companyId):
+        '''
+        동일회사 데이터
+        '''
+        qry = Q()
+        qry &= Q(companyId__exact=companyId)
+        return self.get_queryset().filter(
+            qry
+        ).order_by(
+            "shopId"
+        )
+
+    def for_account(self, companyId, isReal=True):
+        '''
+        자사 거래처 데이터
+        '''
+        # 거래처 리스트(SysCompanyAccount)
+        companyAccounts = SysCompanyAccount.objects.for_company(companyId)
+
+        qry = Q()
+        qry &= Q(companyId__in=[companyAccount.accountId for companyAccount in companyAccounts])
+        qry &= Q(isReal__exact=isReal)
+        return self.get_queryset().filter(
+            qry
+        )
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysCompany(models.Model):
     """엔텔 사용 회사 정보
     고유발생 Key로 PK 설정
     """
     companyId = models.CharField(db_column='company_id', primary_key=True, max_length=10, blank=False, default=None, verbose_name='회사ID') # 회사ID
-    companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=True, verbose_name='회사명') # 회사명
-    companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
+    companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명') # 회사명
+    companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실제회사구분')
     telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=True, blank=True, default=None, verbose_name='통신사코드')
@@ -79,6 +111,9 @@ class SysCompany(models.Model):
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
 
+    # Manager
+    objects = SysCompanyManager()
+
     class Meta:
         db_table = "sys_company"
 
@@ -96,7 +131,7 @@ class SysCompanyAccountManager(models.Manager):
     '''
     def for_company(self, companyId):
         '''
-        동일회사 데이터
+        자사 거래처 데이터
         '''
         qry = Q()
         qry &= Q(companyId__exact=companyId)
@@ -125,7 +160,7 @@ class SysCompanyAccount(models.Model):
         unique_together = ('companyId', 'accountId',)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용

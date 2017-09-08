@@ -9,8 +9,9 @@ from django.forms.forms import Form
 from django.forms.models import ModelForm
 from django.utils.translation import gettext as _
 
+from common.models import ComCd
 from system.forms import SysUserCreationForm, SysUserChangeForm
-from system.models import SysUser, SysCompany, SysShop
+from system.models import SysUser, SysCompany, SysShop, SysCompanyAccount
 from utils.data import getSysSeqId, isUsableId, is_empty, getSysShopId
 
 
@@ -32,11 +33,12 @@ class StaffModifyForm(ModelForm):
         instanceStaffModify = super(StaffModifyForm, self).save(commit=False)
 
         instanceStaffModify.connLimit = "".join(self.request.POST.getlist("connLimit"))  # 접속제한
-        instanceStaffModify.modId = SysUser.objects.get(userId__exact=self.request.user.userId)  # 수정자ID
 
         # 비밀번호가 입력되었을 경우
         if not is_empty(self.request.POST.get("password")):
             instanceStaffModify.password = make_password(self.request.POST.get("password"))
+
+        instanceStaffModify.modId = self.request.user  # 수정자ID
 
         if commit:
             instanceStaffModify.save()
@@ -139,7 +141,7 @@ class StaffRegistForm(ModelForm):
 
 class ShopModifyForm(ModelForm):
     '''
-    직원정보 변경 Form
+    매장정보 변경 Form
     '''
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)  # request 객체
@@ -152,7 +154,7 @@ class ShopModifyForm(ModelForm):
         cleaned_data = super(ShopModifyForm, self).clean()
         instanceShopModify = super(ShopModifyForm, self).save(commit=False)
 
-        instanceShopModify.modId = SysUser.objects.get(userId__exact=self.request.user.userId)  # 수정자ID
+        instanceShopModify.modId = self.request.user  # 수정자ID
 
         if commit:
             instanceShopModify.save()
@@ -228,4 +230,198 @@ class ShopRegistForm(ModelForm):
         fields = "__all__"
 
 
+class CompanyAccountRegistForm(ModelForm):
+    '''
+    거래처 회사 연결 등록 Form
+    '''
+    companyId = forms.CharField(required=False)  # 회사 ID
+    accountId = forms.CharField(required=False)  # 거래처 ID
 
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super(CompanyAccountRegistForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(CompanyAccountRegistForm, self).clean()
+
+    def save(self, commit=True):
+        cleaned_data = super(CompanyAccountRegistForm, self).clean()
+        instanceCompanyAccountRegist = super(CompanyAccountRegistForm, self).save(commit=False)
+
+        if commit:
+            instanceCompanyAccountRegist.save()
+        return instanceCompanyAccountRegist
+
+    class Meta:
+        model = SysCompanyAccount
+        fields = "__all__"
+
+
+class AccountRegistForm(ModelForm):
+    '''
+    거래처 등록 Form
+    '''
+    # 회사ID
+    companyId = forms.CharField(required=False)  # 회사등록은 신규생성이므로 Null=True
+
+    # 담당자명
+    chargerNm = forms.CharField(required=True)
+
+    # 사용여부
+    useYn = forms.BooleanField(required=False)
+
+    # 통신사코드
+    telecomCd = forms.CharField(required=False, max_length=100)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super(AccountRegistForm, self).__init__(*args, **kwargs)
+
+        self.fields.keyOrder = [
+            'companyNm',
+            'companyTp',
+            'telecomCd',
+            'chargerNm',
+            'telNo1',
+            'telNo2',
+            'telNo3',
+            'faxNo1',
+            'faxNo2',
+            'faxNo3',
+            'cellNo1',
+            'cellNo2',
+            'cellNo3',
+            'addr1',
+            'bizLicNo1',
+            'bizLicNo2',
+            'bizLicNo3',
+            'bizTp',
+            'bizKind',
+            'useYn',
+        ]
+
+    def clean(self):
+        cleaned_data = super(AccountRegistForm, self).clean()
+
+    def save(self, commit=True):
+        cleaned_data = super(AccountRegistForm, self).clean()
+        instanceAccountRegist = super(AccountRegistForm, self).save(commit=False)
+
+        # 회사코드 획득 후 세팅(거래처 "S0004T")
+        instanceAccountRegist.companyId = getSysSeqId("S0004T")
+
+        # 회사등급 ('S0006A')  일반등급으로 세팅(comCd.grpCd='S0006' 참조)
+        instanceAccountRegist.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
+
+        # 회사타입별 통신사 코드
+        companyTp = self.request.POST.get('companyTp')
+        if companyTp == 'S0004D':  # 딜러점일 경우
+            instanceAccountRegist.telecomCd = ",".join(self.request.POST.getlist("telecomCdD")) 
+        elif companyTp == 'S0004A':  # 대리점일 경우
+            instanceAccountRegist.telecomCd = self.request.POST.get("telecomCdA")
+
+        # 실제 회사가 아님
+        instanceAccountRegist.isReal = False
+
+        # SysCompany 등록시는 사용 = True
+        instanceAccountRegist.useYn = True
+
+        # 등록자 ID
+        instanceAccountRegist.regId = self.request.user
+
+        # 수정자 ID
+        instanceAccountRegist.modId = self.request.user
+
+        if commit:
+            instanceAccountRegist.save()
+        return instanceAccountRegist
+
+    class Meta:
+        model = SysCompany
+        fields = "__all__"
+
+
+class AccountModifyForm(ModelForm):
+    '''
+    거래처 수정 Form
+    '''
+    # 담당자명
+    chargerNm = forms.CharField(required=True)
+
+    # 통신사코드
+    telecomCd = forms.CharField(required=False, max_length=100)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # request 객체
+        super(AccountModifyForm, self).__init__(*args, **kwargs)
+
+        self.fields.keyOrder = [
+            'companyNm',
+            'companyTp',
+            'telecomCd',
+            'chargerNm',
+            'telNo1',
+            'telNo2',
+            'telNo3',
+            'faxNo1',
+            'faxNo2',
+            'faxNo3',
+            'cellNo1',
+            'cellNo2',
+            'cellNo3',
+            'addr1',
+            'bizLicNo1',
+            'bizLicNo2',
+            'bizLicNo3',
+            'bizTp',
+            'bizKind',
+            'useYn',
+        ]
+
+    def clean(self):
+        cleaned_data = super(AccountModifyForm, self).clean()
+
+    def save(self, commit=True):
+        cleaned_data = super(AccountModifyForm, self).clean()
+        instanceAccountModify = super(AccountModifyForm, self).save(commit=False)
+
+        # 회사타입별 통신사 코드
+        companyTpSrtCd = instanceAccountModify.companyTp.srtCd
+        if companyTpSrtCd == 'D':  # 딜러점일 경우
+            instanceAccountModify.telecomCd = ",".join(self.request.POST.getlist("telecomCdD"))
+        elif companyTpSrtCd == 'A':  # 대리점일 경우
+            instanceAccountModify.telecomCd = self.request.POST.get("telecomCdA")
+
+        # 수정자 ID
+        instanceAccountModify.modId = self.request.user  # 수정자ID
+
+        if commit:
+            instanceAccountModify.save()
+
+        return instanceAccountModify
+
+    class Meta:
+        model = SysCompany
+        fields = [
+            "companyNm",
+            "telecomCd",
+            "chargerNm",
+            "telNo1",
+            "telNo2",
+            "telNo3",
+            "faxNo1",
+            "faxNo2",
+            "faxNo3",
+            "cellNo2",
+            "cellNo3",
+            "cellNo1",
+            "cellNo2",
+            "cellNo3",
+            "bizLicNo1",
+            "bizLicNo2",
+            "bizLicNo3",
+            "addr1",
+            "bizTp",
+            "bizKind",
+            "modId",
+        ]

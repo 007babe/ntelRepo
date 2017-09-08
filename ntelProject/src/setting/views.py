@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 
 import json
+import pprint
 
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
-from django.db import connection
+from django.db import connection, transaction
 from django.db.models.aggregates import Count
 from django.db.models.expressions import F, Subquery, Case, When
 from django.db.models.fields import CharField, IntegerField
@@ -15,119 +16,14 @@ from django.shortcuts import render
 
 from common.models import ComCd
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
-    ShopRegistForm
-from system.models import SysUser, SysShop, SysCompanyAccount
+    ShopRegistForm, CompanyAccountRegistForm, \
+    AccountRegistForm, AccountModifyForm
+from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany
 from utils import data
 from utils.ajax import login_required_ajax_post
 from utils.data import is_empty, getComCdList, dictfetchall, getSysShopId
 from utils.date import getltdt
 from utils.json import makeJsonResult, jsonDefault, JSONSerializer
-
-
-@login_required_ajax_post
-def staffmanJsonList(request):
-    '''
-    환경설정 > 직원관리  : 리스트 데이터 Json
-    '''
-    userAuth = request.user.userAuth_id  # 사용자 권한 코드
-
-    # 시스템관리자, 대표, 총괄, 점장만 가능
-    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:
-        # 검색조건(Parameter)
-        sUseYn = request.POST.get("sUseYn")
-        sShopId = request.POST.get("sShopId")
-        sUserNm = request.POST.get("sUserNm")
-        sUserId = request.POST.get("sUserId")
-        sUserAuth = request.POST.get("sUserAuth")
-
-        # Query
-        qry = Q()
-        ####################
-        # 검색 조건
-        ####################
-        if not is_empty(sUseYn):  # 사용여부
-            qry &= Q(useYn__exact=sUseYn)
-
-        if not is_empty(sShopId):  # 검색 매장아이디가 있을 경우
-            qry &= Q(shopId__exact=sShopId)
-
-        qry &= Q(userNm__contains=sUserNm)  # 직원명
-        qry &= Q(userId__contains=sUserId)  # 직원아이디
-        qry &= Q(userAuth__comCd__contains=sUserAuth)  # 직원권한
-
-        ####################
-        # 제외 조건
-        ####################
-        # Exclude Query
-        qryEx = Q()
-
-        if userAuth not in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄이 아닐 경우 팀장 이하만 조회
-            qryEx &= Q(userAuth__in=["S0001M", "S0001C", "S0001A"])
-        elif userAuth not in ["S0001M", "S0001C"]:  # 시스템관리자, 대표가 아닐 경우 총괄 이하만 조회
-            qryEx &= Q(userAuth__in=["S0001M", "S0001C"])
-        elif userAuth not in ["S0001M"]:  # 시스템관리자 아닐 경우 대표 이하만 조회
-            qryEx &= Q(userAuth__in=["S0001M"])
-
-        ####################
-        # 조회
-        ####################
-        staffInfos = None
-        if userAuth == "S0001T":  # 점장일 경우
-            staffInfos = SysUser.objects.for_shop(request.user.shopId)
-        else:
-            staffInfos = SysUser.objects.for_company(request.user.shopId.companyId)
-
-        staffInfos = staffInfos.filter(
-            qry
-        ).exclude(
-            qryEx
-        ).annotate(
-            shopNm=F('shopId__shopNm'),  # 매장명
-            companyNm=F('shopId__companyId__companyNm'),  # 회사명
-            userAuthNm=F('userAuth__comNm'),  # 권한명
-            regNm=F('regId__userNm'),  # 등록자명
-            modNm=F('modId__userNm'),  # 수정자명
-            lastLogin=F('last_login'),  # 마지막 로그인 일시
-            authSeq=F('userAuth__ordSeq'),  # 권한정렬순서
-        ).order_by(
-            "-useYn",
-            "shopId",
-            "authSeq",
-            "userNm",
-        ).values(
-            "useYn",
-            "shopNm",
-            "userAuth",
-            "userAuthNm",
-            "userNm",
-            "userId",
-            "telNo1",
-            "telNo2",
-            "telNo3",
-            "cellNo1",
-            "cellNo2",
-            "cellNo3",
-            "addr1",
-            "connLimit",
-            "loginCnt",
-            "lastLogin",
-            "regDt",
-            "companyNm",
-            "email",
-            "authSeq",
-        )
-
-        return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    resultData=list(staffInfos)
-                ),
-                default=jsonDefault
-            ),
-            content_type="application/json"
-        )
-    else:
-        raise PermissionDenied()
 
 
 @login_required_ajax_post
@@ -245,6 +141,112 @@ def staffmanDetailCV(request):
 
 
 @login_required_ajax_post
+def staffmanJsonList(request):
+    '''
+    환경설정 > 직원관리  : 리스트 데이터 Json
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    # 시스템관리자, 대표, 총괄, 점장만 가능
+    if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:
+        # 검색조건(Parameter)
+        sUseYn = request.POST.get("sUseYn")
+        sShopId = request.POST.get("sShopId")
+        sUserNm = request.POST.get("sUserNm")
+        sUserId = request.POST.get("sUserId")
+        sUserAuth = request.POST.get("sUserAuth")
+
+        # Query
+        qry = Q()
+        ####################
+        # 검색 조건
+        ####################
+        if not is_empty(sUseYn):  # 사용여부
+            qry &= Q(useYn__exact=sUseYn)
+
+        if not is_empty(sShopId):  # 검색 매장아이디가 있을 경우
+            qry &= Q(shopId__exact=sShopId)
+
+        qry &= Q(userNm__contains=sUserNm)  # 직원명
+        qry &= Q(userId__contains=sUserId)  # 직원아이디
+        qry &= Q(userAuth__comCd__contains=sUserAuth)  # 직원권한
+
+        ####################
+        # 제외 조건
+        ####################
+        # Exclude Query
+        qryEx = Q()
+
+        if userAuth not in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄이 아닐 경우 팀장 이하만 조회
+            qryEx &= Q(userAuth__in=["S0001M", "S0001C", "S0001A"])
+        elif userAuth not in ["S0001M", "S0001C"]:  # 시스템관리자, 대표가 아닐 경우 총괄 이하만 조회
+            qryEx &= Q(userAuth__in=["S0001M", "S0001C"])
+        elif userAuth not in ["S0001M"]:  # 시스템관리자 아닐 경우 대표 이하만 조회
+            qryEx &= Q(userAuth__in=["S0001M"])
+
+        ####################
+        # 조회
+        ####################
+        staffInfos = None
+        if userAuth == "S0001T":  # 점장일 경우
+            staffInfos = SysUser.objects.for_shop(request.user.shopId)
+        else:
+            staffInfos = SysUser.objects.for_company(request.user.shopId.companyId)
+
+        staffInfos = staffInfos.filter(
+            qry
+        ).exclude(
+            qryEx
+        ).annotate(
+            shopNm=F('shopId__shopNm'),  # 매장명
+            companyNm=F('shopId__companyId__companyNm'),  # 회사명
+            userAuthNm=F('userAuth__comNm'),  # 권한명
+            regNm=F('regId__userNm'),  # 등록자명
+            modNm=F('modId__userNm'),  # 수정자명
+            lastLogin=F('last_login'),  # 마지막 로그인 일시
+            authSeq=F('userAuth__ordSeq'),  # 권한정렬순서
+        ).order_by(
+            "-useYn",
+            "shopId",
+            "authSeq",
+            "userNm",
+        ).values(
+            "useYn",
+            "shopNm",
+            "userAuth",
+            "userAuthNm",
+            "userNm",
+            "userId",
+            "telNo1",
+            "telNo2",
+            "telNo3",
+            "cellNo1",
+            "cellNo2",
+            "cellNo3",
+            "addr1",
+            "connLimit",
+            "loginCnt",
+            "lastLogin",
+            "regDt",
+            "companyNm",
+            "email",
+            "authSeq",
+        )
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    resultData=list(staffInfos)
+                ),
+                default=jsonDefault
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
 def staffmanJsonModify(request):
     '''
     직원정보 수정 요청처리
@@ -265,9 +267,9 @@ def staffmanJsonModify(request):
             instance=staffInfo,
             request=request,
         )
- 
+
         # 데이터 검증 후 저장
-        if(staffModifyForm.is_valid()):
+        if staffModifyForm.is_valid():
             staffModifyForm.save()
 
         return HttpResponse(
@@ -301,7 +303,7 @@ def staffmanJsonRegist(request):
         )
 
         # 데이터 검증 후 저장
-        if(staffRegistForm.is_valid()):
+        if staffRegistForm.is_valid():
             staffRegistForm.save()
 
         return HttpResponse(
@@ -313,6 +315,64 @@ def staffmanJsonRegist(request):
                 )
             ),
             content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+@login_required_ajax_post
+def shopmanRegistCV(request):
+    '''
+    환경설정 > 직원관리 : 직원등록
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+
+        return render(
+            request,
+            'setting/shopman/regist.html',
+            {},
+        )
+    else:
+        raise PermissionDenied()  # 403에러
+
+
+@login_required_ajax_post
+def shopmanDetailCV(request):
+    '''
+    환경설정 > 매장관리 : 상세
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        # Query
+        qry = Q()
+        ####################
+        # 기본 조건
+        ####################
+        # 해당 사용자 ID
+        qry &= Q(
+            shopId__exact=request.POST.get("shopId")
+        )
+
+        ####################
+        # 조회
+        ####################
+        # 직원 정보 데이터 획득
+        shopInfo = SysShop.objects.for_company(
+            request.user.shopId.companyId
+        ).get(
+            qry
+        )
+
+        # Rendering
+        return render(
+            request,
+            'setting/shopman/detail.html',
+            {
+                "shopInfo": shopInfo,
+            },
         )
     else:
         raise PermissionDenied()
@@ -400,46 +460,6 @@ def shopmanJsonList(request):
 
 
 @login_required_ajax_post
-def shopmanDetailCV(request):
-    '''
-    환경설정 > 매장관리 : 상세
-    '''
-    userAuth = request.user.userAuth_id  # 사용자 권한 코드
-
-    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
-        # Query
-        qry = Q()
-        ####################
-        # 기본 조건
-        ####################
-        # 해당 사용자 ID
-        qry &= Q(
-            shopId__exact=request.POST.get("shopId")
-        )
-
-        ####################
-        # 조회
-        ####################
-        # 직원 정보 데이터 획득
-        shopInfo = SysShop.objects.for_company(
-            request.user.shopId.companyId
-        ).get(
-            qry
-        )
-
-        # Rendering
-        return render(
-            request,
-            'setting/shopman/detail.html',
-            {
-                "shopInfo": shopInfo,
-            },
-        )
-    else:
-        raise PermissionDenied()
-
-
-@login_required_ajax_post
 def shopmanJsonModify(request):
     '''
     매장정보 수정 요청처리
@@ -450,19 +470,19 @@ def shopmanJsonModify(request):
         resultData = {}
 
         # 수정할 데이터 획득
-        staffInfo = SysShop.objects.for_company(request.user.shopId.companyId).get(
+        shopInfo = SysShop.objects.for_company(request.user.shopId.companyId).get(
             shopId=request.POST.get("shopId")
         )
 
         # 매장정보 수정 폼
         shopModifyForm = ShopModifyForm(
             request.POST,
-            instance=staffInfo,
+            instance=shopInfo,
             request=request,
         )
- 
+
         # 데이터 검증 후 저장
-        if(shopModifyForm.is_valid()):
+        if shopModifyForm.is_valid():
             shopModifyForm.save()
 
         return HttpResponse(
@@ -477,24 +497,6 @@ def shopmanJsonModify(request):
         )
     else:
         raise PermissionDenied()
-
-
-@login_required_ajax_post
-def shopmanRegistCV(request):
-    '''
-    환경설정 > 직원관리 : 직원등록
-    '''
-    userAuth = request.user.userAuth_id  # 사용자 권한 코드
-
-    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
-
-        return render(
-            request,
-            'setting/shopman/regist.html',
-            {},
-        )
-    else:
-        raise PermissionDenied()  # 403에러
 
 
 @login_required_ajax_post
@@ -514,10 +516,8 @@ def shopmanJsonRegist(request):
         )
 
         # 데이터 검증 후 저장
-        if(shopRegistForm.is_valid()):
+        if shopRegistForm.is_valid():
             shopRegistForm.save()
-
-        print(shopRegistForm.errors)
 
         return HttpResponse(
             json.dumps(
@@ -528,6 +528,102 @@ def shopmanJsonRegist(request):
                 )
             ),
             content_type="application/json"
+        )
+    else:
+        raise PermissionDenied()
+
+
+
+@login_required_ajax_post
+def accountmanRegistCV(request):
+    '''
+    환경설정 > 직원관리 : 직원등록
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+
+        # 거래처(회사) 구분값 획득(공통코드)
+        companyTps = ComCd.objects.for_grp(
+            grpCd="S0004",
+            grpOpt="B",
+        ).exclude(
+            comCd__exact=request.user.shopId.companyId.companyTp
+        )
+
+        # 통신사 구분값 획득(공통코드)
+        telecomCds = ComCd.objects.for_grp(
+            grpCd="G0002",
+        )
+
+        return render(
+            request,
+            'setting/accountman/regist.html',
+            {
+                "companyTps": companyTps,
+                "telecomCds": telecomCds,
+            },
+        )
+    else:
+        raise PermissionDenied()  # 403에러
+
+
+@login_required_ajax_post
+def accountmanDetailCV(request):
+    '''
+    환경설정 > 거래처관리 : 상세
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        # Query
+        qry = Q()
+        ####################
+        # 기본 조건
+        ####################
+        # 해당 사용자 ID
+        qry &= Q(
+            id__exact=request.POST.get("id")
+        )
+
+        ####################
+        # 조회
+        ####################
+        # 거래처 정보 데이터 획득
+        accountInfo = SysCompanyAccount.objects.for_company(
+            request.user.shopId.companyId
+        ).get(
+            qry
+        )
+
+        # 거래처(회사) 구분값 획득(공통코드)
+        companyTps = ComCd.objects.for_grp(
+            grpCd="S0004",
+            grpOpt="B",
+        ).exclude(
+            comCd__exact=request.user.shopId.companyId.companyTp
+        )
+
+        # 통신사 구분값 획득(공통코드)
+        telecomCds = ComCd.objects.for_grp(
+            grpCd="G0002",
+        )
+
+        # 수정가능 여부 확인 후 세팅
+        editable = True
+        if accountInfo.accountId.isReal:  # 실매장일 경우 수정불가
+            editable = False
+
+        # Rendering
+        return render(
+            request,
+            'setting/accountman/detail.html',
+            {
+                "accountInfo": accountInfo,
+                "companyTps": companyTps,
+                "telecomCds": telecomCds,
+                "editable": editable,
+            },
         )
     else:
         raise PermissionDenied()
@@ -635,27 +731,40 @@ def accountmanJsonModify(request):
         resultData = {}
 
         # 수정할 데이터 획득
-        staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
-            userId=request.POST.get("userId")
+        accountInfo = SysCompany.objects.for_account(
+            companyId=request.user.shopId.companyId,
+            isReal=False,  # 실제 매장은 수정대상이 아님
+        ).get(
+            companyId__exact=request.POST.get("accountId")
         )
 
         # 거래처정보 수정 폼
-        staffModifyForm = StaffModifyForm(
+        accountModifyForm = AccountModifyForm(
             request.POST,
-            instance=staffInfo,
+            instance=accountInfo,
             request=request,
         )
 
         # 데이터 검증 후 저장
-        if(staffModifyForm.is_valid()):
-            staffModifyForm.save()
+        if accountModifyForm.is_valid():
+            accountModifyForm.save()
+
+            # 거래처 연결 사용여부 저장
+            comapnyAccount = SysCompanyAccount.objects.for_company(
+                request.user.shopId.companyId
+            ).get(
+                accountId=accountInfo.companyId,
+            )
+            comapnyAccount.useYn = not is_empty(request.POST.get("useYn"))
+            comapnyAccount.modId = request.user
+            comapnyAccount.save()
 
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
-                    form=staffModifyForm,
+                    form=accountModifyForm,
                     resultMessage="수정되었습니다.",
-                    resultData=resultData
+                    resultData=resultData,
                 )
             ),
             content_type="application/json"
@@ -665,6 +774,7 @@ def accountmanJsonModify(request):
 
 
 @login_required_ajax_post
+@transaction.atomic
 def accountmanJsonRegist(request):
     '''
     거래처정보 등록 요청처리
@@ -672,22 +782,33 @@ def accountmanJsonRegist(request):
     userAuth = request.user.userAuth_id  # 사용자 권한 코드
 
     if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+
         resultData = {}
 
         # 거래처정보 등록 폼
-        staffRegistForm = StaffRegistForm(
+        accountRegistForm = AccountRegistForm(
             request.POST,
             request=request,
         )
 
-        # 데이터 검증 후 저장
-        if(staffRegistForm.is_valid()):
-            staffRegistForm.save()
+        # 거래처 정보 등록
+        if accountRegistForm.is_valid():
+            # 거래처 회사 등록
+            accountCompany = accountRegistForm.save()
+
+            # 거래처 연결 등록
+            SysCompanyAccount.objects.create(
+                companyId=request.user.shopId.companyId,
+                accountId=accountCompany,
+                useYn=not is_empty(request.POST.get("useYn")),
+                regId=request.user,
+                modId=request.user,
+            )
 
         return HttpResponse(
             json.dumps(
                 makeJsonResult(
-                    form=staffRegistForm,
+                    form=accountRegistForm,
                     resultMessage="등록되었습니다.",
                     resultData=resultData
                 )
@@ -696,98 +817,3 @@ def accountmanJsonRegist(request):
         )
     else:
         raise PermissionDenied()
-
-
-@login_required_ajax_post
-def accountmanDetailCV(request):
-    '''
-    환경설정 > 거래처관리 : 상세
-    '''
-    userAuth = request.user.userAuth_id  # 사용자 권한 코드
-
-    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
-        # Query
-        qry = Q()
-        ####################
-        # 기본 조건
-        ####################
-        # 해당 사용자 ID
-        qry &= Q(
-            id__exact=request.POST.get("id")
-        )
-
-        ####################
-        # 조회
-        ####################
-        # 거래처 정보 데이터 획득
-        accountInfo = SysCompanyAccount.objects.for_company(
-            request.user.shopId.companyId
-        ).get(
-            qry
-        )
-
-        # 거래처(회사) 구분값 획득(공통코드)
-        companyTps = ComCd.objects.for_grp(
-            grpCd="S0004",
-            grpOpt="B",
-        ).exclude(
-            comCd__exact=request.user.shopId.companyId.companyTp
-        )
-
-        # 통신사 구분값 획득(공통코드)
-        telecomCds = ComCd.objects.for_grp(
-            grpCd="G0002",
-        )
-
-        # 수정가능 여부 확인 후 세팅
-        editable = True
-        if accountInfo.accountId.isReal:  # 실매장일 경우 수정불가
-            editable = False
-
-        # Rendering
-        return render(
-            request,
-            'setting/accountman/detail.html',
-            {
-                "accountInfo": accountInfo,
-                "companyTps": companyTps,
-                "telecomCds": telecomCds,
-                "editable": editable,
-            },
-        )
-    else:
-        raise PermissionDenied()
-
-
-@login_required_ajax_post
-def accountmanRegistCV(request):
-    '''
-    환경설정 > 직원관리 : 직원등록
-    '''
-    userAuth = request.user.userAuth_id  # 사용자 권한 코드
-
-    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
-
-        # 거래처(회사) 구분값 획득(공통코드)
-        companyTps = ComCd.objects.for_grp(
-            grpCd="S0004",
-            grpOpt="B",
-        ).exclude(
-            comCd__exact=request.user.shopId.companyId.companyTp
-        )
-
-        # 통신사 구분값 획득(공통코드)
-        telecomCds = ComCd.objects.for_grp(
-            grpCd="G0002",
-        )
-
-        return render(
-            request,
-            'setting/accountman/regist.html',
-            {
-                "companyTps": companyTps,
-                "telecomCds": telecomCds,
-            },
-        )
-    else:
-        raise PermissionDenied()  # 403에러

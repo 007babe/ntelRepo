@@ -83,7 +83,7 @@ def appreqJsonRegist(request):
         )
 
         # 데이터 검증 후 저장
-        if(sysAppreqRegistForm.is_valid()):
+        if sysAppreqRegistForm.is_valid():
             sysAppreqRegistForm.save()
             resultData["reqId"] = sysAppreqRegistForm.reqId
 
