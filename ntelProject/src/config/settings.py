@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'receipt.apps.ReceiptConfig',  # 수납/장부 App
     'report.apps.ReportConfig',  # 통계리포트 App
     'setting.apps.SettingConfig',  # 환경설정 App
+    'telecom.apps.TelecomConfig',  # 통신사관련 App
 
     # 시스템관리자 Apps
     'sysman.apps.SysmanConfig',  # 시스템관리자 App

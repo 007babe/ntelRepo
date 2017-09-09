@@ -312,18 +312,29 @@ $.jqGridCompanyTpAttr = function(companyTp) {
 
 
 /*
- * 통신사 관련 포맷
+ * 망별통신사 관련 포맷
  */
 $.jqGridNetwordTelecomCdFormat = function(networkTelecomCd) {
     networkTelecomCd = $.n2s(networkTelecomCd);
-    var rtnValue = networkTelecomCd
+    var rtnValue = "";
 
     if(networkTelecomCd != "") {
         var arrNetworkTelecomCd = networkTelecomCd.split(",");
+        var networkTelecomNm = "";
+
+        // 첫번째 망통신사 정보 가져오기
+        var networkTelecomInfo = $.grep(GD_SYS_NETWORK_TELECOM, function(el, inx){
+            return (el.networkTelecomCd == arrNetworkTelecomCd[0]);
+        });
+
+        $.each(networkTelecomInfo, function(i, item) {
+            networkTelecomNm = item.networkTelecomNm;
+        });
+
+
+        rtnValue += networkTelecomNm;
         if(arrNetworkTelecomCd.length > 1) {
-            rtnValue = '<span data-toggle="tooltip" data-placement="top" data-original-title="' + networkTelecomCd + '" title="' + networkTelecomCd + '">'
-            rtnValue += arrNetworkTelecomCd[0] + " 외 " + (arrNetworkTelecomCd.length - 1);
-            rtnValue += '</span>';
+            rtnValue += " 외 " + (arrNetworkTelecomCd.length - 1);
         }
     }
     return rtnValue;    
