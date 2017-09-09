@@ -149,7 +149,7 @@ def appreqmanJsonAppr(request):
             companyNm=appreq.companyNm,
             companyTp=appreq.companyTp,
             companyGrade=appreq.companyGrade,
-            telecomCd=appreq.telecomCd,
+            networkTelecomCd=appreq.networkTelecomCd,
             isReal=True,
             policyId=appreq.policyId,
             bizLicNo1=appreq.bizLicNo1,

@@ -86,7 +86,7 @@ class SysCompany(models.Model):
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실제회사구분')
-    telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=True, blank=True, default=None, verbose_name='통신사코드')
+    networkTelecomCd = models.CharField(db_column='network_telecom_cd', max_length=200, null=True, blank=True, default=None, verbose_name='통신사코드')
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
     bizLicNo2 = models.CharField(db_column='biz_lic_no2', max_length=2, null=True, blank=True, verbose_name='사업자번호2')
@@ -121,8 +121,8 @@ class SysCompany(models.Model):
     def __str__(self):
         return self.companyId
 
-    def telecomCd_as_list(self):
-        return self.telecomCd.split(',')
+    def networkTelecomCd_as_list(self):
+        return self.networkTelecomCd.split(',')
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
@@ -551,7 +551,7 @@ class SysAppreq(models.Model):
     companyId = models.ForeignKey('system.SysCompany', on_delete=models.CASCADE, db_column='company_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_cd', verbose_name='회사코드')
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명')
     companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
-    telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=True, blank=True, default=None, verbose_name='통신사코드')
+    networkTelecomCd = models.CharField(db_column='network_Telecom_cd', max_length=200, null=True, blank=True, default=None, verbose_name='통신사코드')
     companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     shopNm = models.CharField(db_column='shop_nm', max_length=100, null=False, blank=False, verbose_name='대표매장명')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')

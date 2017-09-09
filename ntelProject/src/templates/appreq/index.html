@@ -1,6 +1,7 @@
 {#################################}
 {% extends "extends/site.html" %}
 {% load staticfiles %}
+{% load appreq_extras %}
 {#################################}
 {% block body_attribute %}class="gray-bg"{% endblock body_attribute %}
 {% block body_content %}
@@ -57,10 +58,10 @@
                 <div id="divCompanyInfo" style="margin-bottom: 10px;">
                     <table class="t-table">
                         <colgroup>
-                            <col width="120">
-                            <col width="240">
-                            <col width="120">
-                            <col width="240">
+                            <col width="100">
+                            <col width="260">
+                            <col width="100">
+                            <col width="260">
                         </colgroup>
                         <tbody>
                             <tr>
@@ -82,31 +83,92 @@
                              <tr id="trTelecomA" style="display: none;">
                                 <td class="t-label t-l-w">통신사</td>
                                 <td class="t-content t-c-w al" colspan="3">
-                                    <span>
-                                        {% for telecomCd in telecomCds %}
-                                        <div formType="iChecks" class="i-checks disp-ib">
-                                            <label class="radio">
-                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" style="position: absolute; opacity: 0;" {% if forloop.counter == 1 %}checked{% endif %} label="통신사">
-                                                <span>{{ telecomCd.comNm }}</span>
-                                            </label>
-                                        </div>
-                                        {% endfor %}
+                                    <span style="width: 100%;">
+                                        <table style="border:1px solid #ccc; width: 100%;">
+                                            <colgroup>
+                                                <col width="20%">
+                                                <col width="80%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">이통사</th>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">MVNO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for networkTelecom in networkTelecoms %}
+                                                <tr>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:False %}
+                                                        <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;">
+                                                            <label class="radio">
+                                                                <input type="radio" id="networkTelecomCd_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdA" value="{{ data.networkTelecomCd }}"  style="position: absolute; opacity: 0;" {% if data.networkOrdSeq == 1 and data.telecomOrdSeq == 1 %}checked{% endif %} label="{{ data.networkTelecomNm}}">
+                                                                <span>{{ data.networkTelecomNm }}</span>
+                                                            </label>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:True %}
+                                                        <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;">
+                                                            <label class="radio">
+                                                                <input type="radio" id="networkTelecomCd_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdA" value="{{ data.networkTelecomCd }}"  style="position: absolute; opacity: 0;" {% if data.networkOrdSeq == 1 and data.telecomOrdSeq == 1  %}checked{% endif %} label="{{ data.networkTelecomNm}}">
+                                                                <span>{{ data.networkTelecomNm }}</span>
+                                                            </label>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </span>
                                 </td>
                             </tr>
                             <tr id="trTelecomD" style="display: none;">
                                 <td class="t-label t-l-w">통신사</td>
                                 <td class="t-content t-c-w al" colspan="3">
-                                    <span>
-                                        {% for telecomCd in telecomCds %}
-                                        <label class="ckbox">
-                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
-                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ telecomCd.comNm }}" checked>
-                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                                            </div>
-                                            <span style="width: 30px;">{{ telecomCd.comNm }}</span>
-                                        </label>
-                                        {% endfor %}
+                                    <span style="width: 100%;">
+                                        <table style="border:1px solid #ccc; width: 100%;">
+                                            <colgroup>
+                                                <col width="20%">
+                                                <col width="80%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">이통사</th>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">MVNO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for networkTelecom in networkTelecoms %}
+                                                <tr>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:False %}
+                                                        <label class="ckbox" style="display:block; padding: 2px 8px;">
+                                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
+                                                                <input id="networkTelecomCd_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdD" value="{{ data.networkTelecomCd }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkTelecomNm }}" checked>
+                                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div>
+                                                            <span style="width: 30px;">{{ data.networkTelecomNm }}</span>
+                                                        </label>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:True %}
+                                                        <label class="ckbox" style="display:block; padding: 2px 8px;">
+                                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
+                                                                <input id="networkTelecomCd_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdD" value="{{ data.networkTelecomCd }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkTelecomNm }}" checked>
+                                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div>
+                                                            <span style="width: 30px;">{{ data.networkTelecomNm }}</span>
+                                                        </label>
+                                                        {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </span>
                                 </td>
                             </tr>
@@ -183,10 +245,10 @@
                 <div id="divCompanyInfo" style="margin-bottom: 10px;">
                     <table class="t-table">
                         <colgroup>
-                            <col width="120">
-                            <col width="240">
-                            <col width="120">
-                            <col width="240">
+                            <col width="100">
+                            <col width="260">
+                            <col width="100">
+                            <col width="260">
                         </colgroup>
                         <tbody>
                             <tr>

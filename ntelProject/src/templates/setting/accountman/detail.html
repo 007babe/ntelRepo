@@ -1,5 +1,6 @@
 ﻿{#################################}
 {% load staticfiles %}
+{% load appreq_extras %}
 {#################################}
 <div class="modal-dialog">
     <div class="modal-content">
@@ -51,28 +52,89 @@
                                 <tr id="trTelecomA" style="{% if accountInfo.accountId.companyTp.srtCd != "A" %}display:none;{% endif %}">
                                     <td class="t-label t-l-w">통신사</td>
                                     <td class="t-content t-c-w al">
-                                        {% for telecomCd in telecomCds %}
-                                        <div formType="iChecks" class="i-checks disp-ib" formOnly="POP">
-                                            <label class="radio">
-                                                <input type="radio" id="telecomCd{{ forloop.counter }}" name="telecomCdA" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" style="position: absolute; opacity: 0;" {% if telecomCd.srtCd in accountInfo.accountId.telecomCd_as_list %}checked{% endif %} label="통신사" {% if not editable %}disabled{% endif %}>
-                                                <span>{{ telecomCd.comNm }}</span>
-                                            </label>
-                                        </div>
-                                        {% endfor %}
+                                        <table style="border:1px solid #ccc; width: 100%;">
+                                            <colgroup>
+                                                <col width="30%">
+                                                <col width="70%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">이통사</th>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">MVNO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for networkTelecom in networkTelecoms %}
+                                                <tr>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:False %}
+                                                        <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;" formOnly="POP">
+                                                            <label class="radio">
+                                                                <input type="radio" id="networkTelecomCd_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdA" value="{{ data.networkTelecomCd }}"  style="position: absolute; opacity: 0;" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} label="{{ data.networkTelecomNm}}" {% if not editable %}disabled{% endif %}>
+                                                                <span>{{ data.networkTelecomNm }}</span>
+                                                            </label>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:True %}
+                                                        <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;" formOnly="POP">
+                                                            <label class="radio">
+                                                                <input type="radio" id="networkTelecomCd_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdA" value="{{ data.networkTelecomCd }}"  style="position: absolute; opacity: 0;" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} label="{{ data.networkTelecomNm}}" {% if not editable %}disabled{% endif %}>
+                                                                <span>{{ data.networkTelecomNm }}</span>
+                                                            </label>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </td>
                                 </tr>
                                 <tr id="trTelecomD" style="{% if accountInfo.accountId.companyTp.srtCd != "D" %}display:none;{% endif %}">
                                     <td class="t-label t-l-w">통신사</td>
                                     <td class="t-content t-c-w al">
-                                        {% for telecomCd in telecomCds %}
-                                        <label class="ckbox">
-                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
-                                                <input id="telecomCdD{{ forloop.counter }}" name="telecomCdD" value="{{ telecomCd.srtCd }}" telecomCd="{{ telecomCd.comCd }}" type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" {% if telecomCd.srtCd in accountInfo.accountId.telecomCd_as_list %}checked{% endif %} label="{{ telecomCd.comNm }}" {% if not editable %}disabled{% endif %}>
-                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                                            </div>
-                                            <span style="width: 30px;">{{ telecomCd.comNm }}</span>
-                                        </label>
-                                        {% endfor %}
+                                        <table style="border:1px solid #ccc; width: 100%;">
+                                            <colgroup>
+                                                <col width="30%">
+                                                <col width="70%">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">이통사</th>
+                                                    <th style="text-align: center; height: 28px; background-color: #eeefef; border:1px solid #ccc;">MVNO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for networkTelecom in networkTelecoms %}
+                                                <tr>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:False %}
+                                                        <label class="ckbox" style="display:block; padding: 2px 8px;">
+                                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
+                                                                <input id="networkTelecomCd_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdD" value="{{ data.networkTelecomCd }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkTelecomNm }}" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} {% if not editable %}disabled{% endif %}>
+                                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div>
+                                                            <span style="width: 30px;">{{ data.networkTelecomNm }}</span>
+                                                        </label>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
+                                                        {% for data in networkTelecom.datas|isMvno:True %}
+                                                        <label class="ckbox" style="display:block; padding: 2px 8px;">
+                                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
+                                                                <input id="networkTelecomCd_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdD" value="{{ data.networkTelecomCd }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkTelecomNm }}" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} {% if not editable %}disabled{% endif %}>
+                                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                                            </div>
+                                                            <span style="width: 30px;">{{ data.networkTelecomNm }}</span>
+                                                        </label>
+                                                        {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </td>
                                 </tr>
                                 <tr>

@@ -36,9 +36,8 @@ def appreqIndexCV(request):
     # 통신사코드 데이터 획득
     telecomCds = getComCdList(grpCd='G0002')
 
-    networkTelecomCds = getNetworkTelecomByNetworkGroupList()
-
-    print(networkTelecomCds)
+    # 망별 통신사 코드 데이터 획득
+    networkTelecoms = getNetworkTelecomByNetworkGroupList()
 
     # 템플릿 렌더링 및 데이터 전달
     return render(
@@ -48,6 +47,7 @@ def appreqIndexCV(request):
             "sysPolicy": sysPolicy,
             "companyTps": companyTps,
             "telecomCds": telecomCds,
+            "networkTelecoms": networkTelecoms,
         },
     )
 
@@ -57,17 +57,26 @@ def appreqResultCV(request):
     이용신청 결과
     '''
     if request.POST:
+        # 이용신청 조회
         qry = Q()
         qry &= Q(reqId__exact=request.POST.get("reqId"))
         appreq = SysAppreq.objects.get(
             qry
         )
 
+        # 망별 통신사 조회
+        networkTelecoms = SysNetworkTelecom.objects.for_order().filter(
+            networkTelecomCd__in=[] if appreq.networkTelecomCd is None else appreq.networkTelecomCd.split(",")
+        )
+
         # 템플릿 렌더링 및 데이터 전달
         return render(
             request,
             'appreq/result_pop.html',
-            {"appreq": appreq},
+            {
+                "appreq": appreq,
+                "networkTelecoms": networkTelecoms
+            },
         )
     else:
         raise Http404

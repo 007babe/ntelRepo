@@ -31,9 +31,11 @@
         <tr>
             <td class="t-label">통신사</td>
             <td class="t-content">
-                <span>
-                    {{ appreq.telecomCd }}
+                {% for networkTelecom in networkTelecoms %}
+                <span style="display: block;">
+                    {{ networkTelecom.networkTelecomNm }}
                 </span>
+                {% endfor %}
             </td>
         </tr>
         {% endif %}

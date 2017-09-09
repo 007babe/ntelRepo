@@ -314,15 +314,15 @@ $.jqGridCompanyTpAttr = function(companyTp) {
 /*
  * 통신사 관련 포맷
  */
-$.jqGridTelecomCdFormat = function(telecomCd) {
-    telecomCd = $.n2s(telecomCd);
-    var rtnValue = telecomCd
+$.jqGridNetwordTelecomCdFormat = function(networkTelecomCd) {
+    networkTelecomCd = $.n2s(networkTelecomCd);
+    var rtnValue = networkTelecomCd
 
-    if(telecomCd != "") {
-        var arrTelecomCd = telecomCd.split(",");
-        if(arrTelecomCd.length > 1) {
-            rtnValue = '<span data-toggle="tooltip" data-placement="top" data-original-title="' + telecomCd + '" title="' + telecomCd + '">'
-            rtnValue += arrTelecomCd[0] + " 외 " + (arrTelecomCd.length - 1);
+    if(networkTelecomCd != "") {
+        var arrNetworkTelecomCd = networkTelecomCd.split(",");
+        if(arrNetworkTelecomCd.length > 1) {
+            rtnValue = '<span data-toggle="tooltip" data-placement="top" data-original-title="' + networkTelecomCd + '" title="' + networkTelecomCd + '">'
+            rtnValue += arrNetworkTelecomCd[0] + " 외 " + (arrNetworkTelecomCd.length - 1);
             rtnValue += '</span>';
         }
     }

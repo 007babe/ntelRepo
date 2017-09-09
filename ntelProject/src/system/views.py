@@ -8,7 +8,8 @@ from django.db.models.query_utils import Q
 from django.http import HttpResponse
 from django.http.response import Http404
 
-from system.models import SysMenu, SysUser, SysCompany, SysMsg, SysShop
+from system.models import SysMenu, SysUser, SysCompany, SysMsg, SysShop, \
+    SysNetworkTelecom
 from utils.ajax import login_required_ajax, login_required_ajax_post
 from utils.json import jsonDefault
 from utils.json import makeJsonResult
@@ -87,6 +88,34 @@ def getJsonSysMsg(request):
             json.dumps(
                 makeJsonResult(
                     resultData=list(sysMsgs)
+                ),
+                default=jsonDefault
+            ),
+            content_type="application/json"
+        )
+    else:
+        raise Http404()
+
+
+def getJsonSysNetworkTelecom(request):
+    """
+        시스템 통신망별 통신사(sys_network_telecom) 데이터 획득(Json)
+    """
+    if request.method == 'POST':
+        sysNetworkTelecom = SysNetworkTelecom.objects.for_order(
+            useYn=True,
+        ).values(
+            'networkTelecomCd',
+            'networkTelecomNm',
+            'networkCd',
+            'telecomCd',
+            'useYn',
+        )
+
+        return HttpResponse(
+            json.dumps(
+                makeJsonResult(
+                    resultData=list(sysNetworkTelecom)
                 ),
                 default=jsonDefault
             ),

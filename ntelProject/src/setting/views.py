@@ -21,7 +21,8 @@ from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
 from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany
 from utils import data
 from utils.ajax import login_required_ajax_post
-from utils.data import is_empty, getComCdList, dictfetchall, getSysShopId
+from utils.data import is_empty, getComCdList, dictfetchall, getSysShopId, \
+    getNetworkTelecomByNetworkGroupList
 from utils.date import getltdt
 from utils.json import makeJsonResult, jsonDefault, JSONSerializer
 
@@ -556,12 +557,16 @@ def accountmanRegistCV(request):
             grpCd="G0002",
         )
 
+        # 망별 통신사 코드 데이터 획득
+        networkTelecoms = getNetworkTelecomByNetworkGroupList()
+
         return render(
             request,
             'setting/accountman/regist.html',
             {
                 "companyTps": companyTps,
                 "telecomCds": telecomCds,
+                "networkTelecoms": networkTelecoms,
             },
         )
     else:
@@ -604,10 +609,8 @@ def accountmanDetailCV(request):
             comCd__exact=request.user.shopId.companyId.companyTp
         )
 
-        # 통신사 구분값 획득(공통코드)
-        telecomCds = ComCd.objects.for_grp(
-            grpCd="G0002",
-        )
+        # 망별 통신사 코드 데이터 획득
+        networkTelecoms = getNetworkTelecomByNetworkGroupList()
 
         # 수정가능 여부 확인 후 세팅
         editable = True
@@ -620,8 +623,7 @@ def accountmanDetailCV(request):
             'setting/accountman/detail.html',
             {
                 "accountInfo": accountInfo,
-                "companyTps": companyTps,
-                "telecomCds": telecomCds,
+                "networkTelecoms": networkTelecoms,
                 "editable": editable,
             },
         )
@@ -651,7 +653,6 @@ def accountmanJsonList(request):
             qry &= Q(useYn__exact=sUseYn)
 
         qry &= Q(accountId__companyTp__comCd__contains=sCompanyTp)  # 거래처구분
-
         qry &= Q(accountId__companyNm__contains=sAccountNm)  # 거래처명
 
         accountInfos = SysCompanyAccount.objects.for_company(request.user.shopId.companyId)
@@ -674,7 +675,7 @@ def accountmanJsonList(request):
             addr1=F('accountId__addr1'),  # 거래처주소1
             addr2=F('accountId__addr2'),  # 거래처주소2
             isReal=F('accountId__isReal'),  # 시스템사용 실 거래처 여부
-            telecomCd=F('accountId__telecomCd'),  # 통신사
+            networkTelecomCd=F('accountId__networkTelecomCd'),  # 망통신사
             chargerNm=F('accountId__chargerNm'),  # 담당자명
         ).order_by(
             "-useYn",
@@ -699,7 +700,7 @@ def accountmanJsonList(request):
             "faxNo2",
             "faxNo3",
             "isReal",
-            "telecomCd",
+            "networkTelecomCd",
             "chargerNm",
             "regDt",
             "regId",
