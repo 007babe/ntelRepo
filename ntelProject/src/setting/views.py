@@ -14,12 +14,11 @@ from django.http.response import HttpResponse, Http404
 from django.middleware import csrf
 from django.shortcuts import render
 
-from common.models import ComCd
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
     ShopRegistForm, CompanyAccountRegistForm, \
     AccountRegistForm, AccountModifyForm
-from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany
-from utils import data
+from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
+    SysComCd
 from utils.ajax import login_required_ajax_post
 from utils.data import is_empty, getComCdList, dictfetchall, getSysShopId, \
     getNetworkCompanyByNetworkGroupList
@@ -545,7 +544,7 @@ def accountmanRegistCV(request):
     if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
 
         # 거래처(회사) 구분값 획득(공통코드)
-        companyTps = ComCd.objects.for_grp(
+        companyTps = SysComCd.objects.for_grp(
             grpCd="S0004",
             grpOpt="B",
         ).exclude(
@@ -596,7 +595,7 @@ def accountmanDetailCV(request):
         )
 
         # 거래처(회사) 구분값 획득(공통코드)
-        companyTps = ComCd.objects.for_grp(
+        companyTps = SysComCd.objects.for_grp(
             grpCd="S0004",
             grpOpt="B",
         ).exclude(

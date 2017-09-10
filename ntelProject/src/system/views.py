@@ -2,17 +2,68 @@ from __future__ import absolute_import
 
 import json
 
-from django.db.models.aggregates import Count
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
 from django.http.response import Http404
 
-from system.models import SysMenu, SysUser, SysCompany, SysMsg, SysShop
-from telecom.models import TelecomNetworkCompany
+from system.models import SysMenu, SysUser, SysCompany, SysMsg, SysShop, \
+    SysComCd, SysHttpStatus
 from utils.ajax import login_required_ajax, login_required_ajax_post
 from utils.json import jsonDefault
 from utils.json import makeJsonResult
+
+
+@login_required_ajax
+def getJsonSysComCd(request):
+    """
+        공통코드(com_cd) 데이터 획득(Json)
+    """
+    # 공통코드 데이터 획득
+    sysComCds = SysComCd.objects.for_grp(useYn=True).values(
+        'grpCd',
+        'comCd',
+        'comNm',
+        'grpOpt',
+        'useYn',
+    ).order_by(
+        'grpCd',
+        'ordSeq',
+    )
+
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(sysComCds)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )
+
+
+def getJsonSysHttpStatus(request):
+    """
+        Http Status(com_http_status) 데이터 획득(Json)
+    """
+    sysHttpStatuses = SysHttpStatus.objects.filter(
+        useYn=True,
+    ).values(
+        'status',
+        'title',
+        'message',
+        'useYn',
+    )
+
+    return HttpResponse(
+        json.dumps(
+            makeJsonResult(
+                resultData=list(sysHttpStatuses)
+            ),
+            default=jsonDefault
+        ),
+        content_type="application/json"
+    )
 
 
 @login_required_ajax

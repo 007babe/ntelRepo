@@ -6,8 +6,7 @@ from django.db.models.expressions import Value
 from django.forms.models import ModelForm
 from django.utils.translation import gettext as _
 
-from common.models import ComCd
-from system.models import SysAppreq
+from system.models import SysAppreq, SysComCd
 from system.models import SysPolicy
 from utils.data import getSysSeqId
 from utils.data import isUsableId
@@ -81,10 +80,10 @@ class SysAppreqRegistForm(ModelForm):
         instanceSysAppreq.reqId = self.reqId
 
         # 회사등급 ('S0006A')  일반등급으로 세팅(comCd.grpCd='S0006' 참조)
-        instanceSysAppreq.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
+        instanceSysAppreq.companyGrade = SysComCd.objects.get(comCd__exact='S0006A')
 
         # 진행상태 승인요청('S0008R')  세팅(comCd.grpCd='S0008' 참조)
-        instanceSysAppreq.reqStatus = ComCd.objects.get(comCd__exact='S0008A')
+        instanceSysAppreq.reqStatus = SysComCd.objects.get(comCd__exact='S0008A')
 
         # 비밀번호 암호화
         instanceSysAppreq.password = make_password(cleaned_data.get('password'))

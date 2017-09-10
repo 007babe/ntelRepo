@@ -1771,7 +1771,7 @@ $.fgGetComCdData = function(opts) {
     var useYn = $.n2s(opts.useYn); // 사용여부값 적용(true 일경우 useYn = "Y"만 세팅, 기본값 false)
     var grpOpt = $.n2s(opts.grpOpt); // 그룹옵션
 
-    return $.grep(GD_COM_CD, function(el, inx){
+    return $.grep(GD_SYS_COM_CD, function(el, inx){
     	return el.grpCd == grpCd
             && (useYn == "" ? true : el.useYn == useYn)
             && (grpOpt == "" ? true : el.grpOpt.indexOf(grpOpt) > -1)
@@ -2576,7 +2576,7 @@ $.gfHttpErrorPopup = function(opts) {
             var title = "";
             var message = "";
 
-            $.each(GD_COM_HTTP_STATUS, function(i, item) {
+            $.each(GD_SYS_HTTP_STATUS, function(i, item) {
                 if(item.status == jqXHR.status) {
                     status = item.status;
                     title = item.title;

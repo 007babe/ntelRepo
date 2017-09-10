@@ -121,7 +121,7 @@ class TelecomCallPlan(models.Model):
     """
     networkCompanyId = models.ForeignKey('telecom.TelecomNetwork', db_column='network_company_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_network_company_id', verbose_name='망별통신사코드')
     callPlanNm = models.CharField(db_column='call_plan_nm', max_length=100, null=True, blank=True, verbose_name='요금제 명')
-    networkTp = models.ForeignKey('common.ComCd', db_column='network_tp', related_name='r_%(app_label)s_%(class)s_service_tp', verbose_name='통신망구분')  # sys_com_cd.grp_cd = 'S0009'
+    networkTp = models.ForeignKey('system.SysComCd', db_column='network_tp', related_name='r_%(app_label)s_%(class)s_service_tp', verbose_name='통신망구분')  # sys_com_cd.grp_cd = 'S0009'
 
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
@@ -137,4 +137,3 @@ class TelecomCallPlan(models.Model):
 
     def __str__(self):
         return self.networkCompanyId
-    

@@ -1,17 +1,14 @@
 from pprint import pprint
 
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, \
-    UserCreationForm, UserChangeForm
 from django.contrib.auth.hashers import make_password
 from django.db.models.query_utils import Q
 from django.forms.forms import Form
 from django.forms.models import ModelForm
 from django.utils.translation import gettext as _
 
-from common.models import ComCd
-from system.forms import SysUserCreationForm, SysUserChangeForm
-from system.models import SysUser, SysCompany, SysShop, SysCompanyAccount
+from system.models import SysUser, SysCompany, SysShop, SysCompanyAccount, \
+    SysComCd
 from utils.data import getSysSeqId, isUsableId, is_empty, getSysShopId
 
 
@@ -311,7 +308,7 @@ class AccountRegistForm(ModelForm):
         instanceAccountRegist.companyId = getSysSeqId("S0004T")
 
         # 회사등급 ('S0006A')  일반등급으로 세팅(comCd.grpCd='S0006' 참조)
-        instanceAccountRegist.companyGrade = ComCd.objects.get(comCd__exact='S0006A')
+        instanceAccountRegist.companyGrade = SysComCd.objects.get(comCd__exact='S0006A')
 
         # 회사타입별 통신사 코드
         companyTp = self.request.POST.get('companyTp')

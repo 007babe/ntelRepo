@@ -9,8 +9,7 @@ from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
-from common.models import ComCd
-from system.models import SysAppreq, SysCompany, SysShop, SysUser
+from system.models import SysAppreq, SysCompany, SysShop, SysUser, SysComCd
 from utils.ajax import login_required_ajax, login_required_ajax_post
 from utils.data import getSysSeqId
 from utils.json import makeJsonResult, jsonDefault
@@ -201,7 +200,7 @@ def appreqmanJsonAppr(request):
             useYn=True,
             email=appreq.email,
             userNm=appreq.userNm,
-            userAuth=ComCd.objects.get(comCd__exact="S0001C"),
+            userAuth=SysComCd.objects.get(comCd__exact="S0001C"),
             shopId=sysShop,
             telNo1=appreq.telNo1,
             telNo2=appreq.telNo2,

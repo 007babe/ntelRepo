@@ -167,8 +167,8 @@ class SysCompany(models.Model):
     """
     companyId = models.CharField(db_column='company_id', primary_key=True, max_length=10, blank=False, default=None, verbose_name='회사ID') # 회사ID
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명') # 회사명
-    companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
-    companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
+    companyTp = models.ForeignKey('system.SysComCd', db_column='company_tp', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
+    companyGrade = models.ForeignKey('system.SysComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실제회사구분')
     networkCompanyId = models.CharField(db_column='network_company_id', max_length=200, null=True, blank=True, default=None, verbose_name='망별통신사코드')
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
@@ -397,7 +397,7 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     zipCd = models.CharField(db_column='zip_cd', max_length=7, null=True, blank=True, default=None, verbose_name='우편번호')
     addr1 = models.TextField(db_column='addr1', max_length=200, null=True, blank=True, default=None, verbose_name='주소1')
     addr2 = models.TextField(db_column='addr2', max_length=200, null=True, blank=True, default=None, verbose_name='주소2')
-    userAuth = models.ForeignKey('common.ComCd', db_column='user_auth', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_user_auth', verbose_name='사용자권한') # ComCd.grpCd = 'S0001'
+    userAuth = models.ForeignKey('system.SysComCd', db_column='user_auth', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_user_auth', verbose_name='사용자권한') # ComCd.grpCd = 'S0001'
     connLimit = models.CharField(db_column='conn_limit', max_length=10, null=True, blank=True, default=None, verbose_name='접속제한') # PC제한 : P, MOBILE제한 : M
     loginCnt = models.IntegerField(db_column='login_cnt', null=False, blank=True, default=0, verbose_name='로그인회수')
     useYn = models.BooleanField(db_column='use_yn', null=False, blank=True, default=False, verbose_name='사용여부')
@@ -554,7 +554,7 @@ class SysMenuAuth(models.Model):
     시스템 메뉴 권한 ModelClass
     """
     menuId = models.ForeignKey('system.SysMenu', db_column='menu_id', related_name='r_%(app_label)s_%(class)s_menu_id', on_delete=models.CASCADE, verbose_name='메뉴ID')
-    menuAuth = models.ForeignKey('common.ComCd', db_column='menu_auth', related_name='r_%(app_label)s_%(class)s_menu_auth', verbose_name='메뉴권한')
+    menuAuth = models.ForeignKey('system.SysComCd', db_column='menu_auth', related_name='r_%(app_label)s_%(class)s_menu_auth', verbose_name='메뉴권한')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
@@ -575,7 +575,7 @@ class SysMenuCompanyTp(models.Model):
     시스템 메뉴 회사타입 ModelClass
     """
     menuId = models.ForeignKey('system.SysMenu', db_column='menu_id', related_name='r_%(app_label)s_%(class)s_menu_id', on_delete=models.CASCADE, verbose_name='메뉴ID' )
-    companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='메뉴회사타입')
+    companyTp = models.ForeignKey('system.SysComCd', db_column='company_tp', related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='메뉴회사타입')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
@@ -595,7 +595,7 @@ class SysMsg(models.Model):
     """엔텔 시스템 사용 메세지
     """
     msgCd = models.CharField(primary_key=True, db_column='msg_cd', max_length=6, verbose_name='메세지코드')
-    msgTp = models.ForeignKey('common.ComCd', db_column='msg_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_msg_tp', verbose_name='메세지타입') # grpCd : S0007
+    msgTp = models.ForeignKey('system.SysComCd', db_column='msg_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_msg_tp', verbose_name='메세지타입') # grpCd : S0007
     title = models.CharField(db_column='title', max_length=100, null=False, blank=False, default=None, verbose_name='메세지제목') # 메세지제목
     msg = models.CharField(db_column='msg', max_length=500, null=False, blank=False, default=None, verbose_name='메세지내용') # 메세지내용
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
@@ -634,9 +634,9 @@ class SysAppreq(models.Model):
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     companyId = models.ForeignKey('system.SysCompany', on_delete=models.CASCADE, db_column='company_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_cd', verbose_name='회사코드')
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명')
-    companyTp = models.ForeignKey('common.ComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
+    companyTp = models.ForeignKey('system.SysComCd', db_column='company_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     networkCompanyId = models.CharField(db_column='network_company_id', max_length=200, null=True, blank=True, default=None, verbose_name='망별통신사코드')
-    companyGrade = models.ForeignKey('common.ComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
+    companyGrade = models.ForeignKey('system.SysComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
     shopNm = models.CharField(db_column='shop_nm', max_length=100, null=False, blank=False, verbose_name='대표매장명')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
     bizLicNo2 = models.CharField(db_column='biz_lic_no2', max_length=2, null=True, blank=True, verbose_name='사업자번호2')
@@ -659,7 +659,7 @@ class SysAppreq(models.Model):
     userNm = models.CharField(db_column='user_nm', max_length=30, null=False, blank=False, default=None, verbose_name='대표사용자명')
     password = models.CharField(db_column='password', max_length=128, null=False, blank=False, verbose_name='대표사용자비밀번호')
     email = models.EmailField(db_column='email', max_length=255, null=True, blank=True, default=None, verbose_name='이메일')
-    reqStatus = models.ForeignKey('common.ComCd', db_column='req_status', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_req_status', verbose_name='요청진행상태') # ComCd.grpCd = 'S0008'
+    reqStatus = models.ForeignKey('system.SysComCd', db_column='req_status', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_req_status', verbose_name='요청진행상태') # ComCd.grpCd = 'S0008'
     reqDt = models.DateTimeField(db_column='req_dt', auto_now_add=True, null=True, blank=True, verbose_name='요청일자')
     appDt = models.DateTimeField(db_column='app_dt', null=True, blank=True, verbose_name='승인일자')
     useYn = models.BooleanField(db_column='use_yn', null=False, blank=False, default=True, verbose_name='사용여부')

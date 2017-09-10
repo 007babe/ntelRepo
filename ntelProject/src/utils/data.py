@@ -4,8 +4,7 @@ import re
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 
-from common.models import ComCd
-from system.models import SysSeq, SysShop
+from system.models import SysSeq, SysShop, SysComCd
 from system.models import SysUser, SysAppreq
 from telecom.models import TelecomNetwork, TelecomNetworkCompany
 from utils.const import NTEL_EXCLUDE_IDS
@@ -14,7 +13,7 @@ from utils.const import NTEL_EXCLUDE_IDS
 def getComCdList(grpCd=None, useYn=None, grpOpt=None, orderOpt=True):
     '''공통코드 조회 리스트
     '''
-    return ComCd.objects.for_grp(grpCd, grpOpt, useYn, orderOpt)
+    return SysComCd.objects.for_grp(grpCd, grpOpt, useYn, orderOpt)
 
 
 def getSysSeqId(seqCd):
