@@ -113,3 +113,28 @@ class TelecomNetworkCompany(models.Model):
 
     def __str__(self):
         return self.networkCompanyId
+
+
+class TelecomCallPlan(models.Model):
+    """
+    통신사별 요금제 ModelClass
+    """
+    networkCompanyId = models.ForeignKey('telecom.TelecomNetwork', db_column='network_company_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_network_company_id', verbose_name='망별통신사코드')
+    callPlanNm = models.CharField(db_column='call_plan_nm', max_length=100, null=True, blank=True, verbose_name='요금제 명')
+    networkTp = models.ForeignKey('common.ComCd', db_column='network_tp', related_name='r_%(app_label)s_%(class)s_service_tp', verbose_name='통신망구분')  # sys_com_cd.grp_cd = 'S0009'
+
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Manager
+#    objects = TelecomNetworkCompanyManager()
+
+    class Meta:
+        db_table = "telecom_call_plan"
+
+    def __str__(self):
+        return self.networkCompanyId
+    
