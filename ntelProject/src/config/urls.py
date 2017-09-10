@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^receipt/', include('receipt.urls', namespace='receipt',),),  # /receipt 연결 : 수납/장부
     url(r'^report/', include('report.urls', namespace='report',),),  # /report 연결 : 통계리포트
     url(r'^setting/', include('setting.urls', namespace='setting',),),  # /setting 연결 : 환경설정
+    url(r'^telecom/', include('telecom.urls', namespace='telecom',),),  # /telecom 연결 : 통신사
 
     # 시스템관리 서비스 URL 설정
     url(r'^sysman/', include('sysman.urls', namespace='sysman',),),  # /sysman 연결 : 시스템관리

@@ -314,27 +314,29 @@ $.jqGridCompanyTpAttr = function(companyTp) {
 /*
  * 망별통신사 관련 포맷
  */
-$.jqGridNetwordTelecomCdFormat = function(networkTelecomCd) {
-    networkTelecomCd = $.n2s(networkTelecomCd);
+$.jqGridNetwordTelecomCdFormat = function(networkCompanyId) {
+    networkCompanyId = $.n2s(networkCompanyId);
     var rtnValue = "";
+    
+    console.log("networkCompanyId:" + networkCompanyId);
 
-    if(networkTelecomCd != "") {
-        var arrNetworkTelecomCd = networkTelecomCd.split(",");
-        var networkTelecomNm = "";
+    if(networkCompanyId != "") {
+        var arrNetworkCompanyId = networkCompanyId.split(",");
+        var networkCompanyNm = "";
 
         // 첫번째 망통신사 정보 가져오기
-        var networkTelecomInfo = $.grep(GD_SYS_NETWORK_TELECOM, function(el, inx){
-            return (el.networkTelecomCd == arrNetworkTelecomCd[0]);
+        var networkCompanyInfo = $.grep(GD_TELECOM_NETWORK_COMPANY, function(el, inx){
+            return (el.networkCompanyId == arrNetworkCompanyId[0]);
         });
 
-        $.each(networkTelecomInfo, function(i, item) {
-            networkTelecomNm = item.networkTelecomNm;
+        $.each(networkCompanyInfo, function(i, item) {
+            networkCompanyNm = item.networkCompanyNm;
         });
 
 
-        rtnValue += networkTelecomNm;
-        if(arrNetworkTelecomCd.length > 1) {
-            rtnValue += " 외 " + (arrNetworkTelecomCd.length - 1);
+        rtnValue += networkCompanyNm;
+        if(arrNetworkCompanyId.length > 1) {
+            rtnValue += " 외 " + (arrNetworkCompanyId.length - 1);
         }
     }
     return rtnValue;    

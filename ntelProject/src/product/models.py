@@ -9,7 +9,7 @@ class ProductMaker(models.Model):
     '''
     제품 제조사 정보
     '''
-    makerCd = models.CharField(db_column='maker_cd', primary_key=True, max_length=10, blank=False, default=None, verbose_name='제조사코드')
+    makerId = models.CharField(db_column='maker_id', primary_key=True, max_length=10, blank=False, default=None, verbose_name='제조사코드')
     makerSrtCd = models.CharField(db_column='maker_srt_cd', max_length=3, null=False, blank=False, verbose_name='제조사단축코드')
     makerNm = models.CharField(db_column='maker_nm', max_length=100, null=False, blank=False, verbose_name='제조사명')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
@@ -22,7 +22,7 @@ class ProductMaker(models.Model):
         db_table = "product_maker"
 
     def __str__(self):
-        return self.id
+        return self.makerId
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
@@ -30,8 +30,8 @@ class ProductPhone(models.Model):
     '''
     핸드폰 제품 정보
     '''
-    makerCd = models.ForeignKey('product.ProductMaker', db_column='make_cd', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_maker_cd', verbose_name='제조사코드')
-    telecomCd = models.CharField(db_column='telecom_cd', max_length=100, null=False, blank=False, verbose_name='통신사코드')
+    makerId = models.ForeignKey('product.ProductMaker', db_column='make_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_maker_id', verbose_name='제조사코드')
+    networkId = models.CharField(db_column='network_id', max_length=100, null=False, blank=False, verbose_name='통신망코드')
     modelCd = models.CharField(db_column='model_cd', max_length=100, null=False, blank=False, verbose_name='제품모델코드')
     modelNm = models.CharField(db_column='model_nm', max_length=100, null=False, blank=False, verbose_name='제품모델명')
     phoneNm = models.CharField(db_column='phone_nm', max_length=100, null=False, blank=False, verbose_name='단말기명')

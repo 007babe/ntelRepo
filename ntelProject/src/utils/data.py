@@ -5,8 +5,9 @@ from django.db.models.expressions import F
 from django.db.models.query_utils import Q
 
 from common.models import ComCd
-from system.models import SysSeq, SysShop, SysNetworkTelecom, SysNetwork
+from system.models import SysSeq, SysShop
 from system.models import SysUser, SysAppreq
+from telecom.models import TelecomNetwork, TelecomNetworkCompany
 from utils.const import NTEL_EXCLUDE_IDS
 
 
@@ -140,26 +141,26 @@ def dictfetchall(cursor):
     ]
 
 
-def getNetworkTelecomByNetworkGroupList():
+def getNetworkCompanyByNetworkGroupList():
     '''
-    망통신사 그룹 조회 리스트
+    망별 통신사 그룹 조회 리스트
     '''
     datas = []
 
-    networks = SysNetwork.objects.all().order_by(
+    networks = TelecomNetwork.objects.all().order_by(
         "ordSeq"
     )
 
     for network in networks:
         networkDict = {}
-        networkDict["networkCd"] = network.networkCd
+        networkDict["networkId"] = network.networkId
         networkDict["networkNm"] = network.networkNm
         networkDict["ordSeq"] = network.ordSeq
 
-        networkTelecom = SysNetworkTelecom.objects.for_order(
-            networkCd=network.networkCd
+        networkCompany = TelecomNetworkCompany.objects.for_order(
+            networkId=network.networkId
         )
-        networkDict["datas"] = networkTelecom
+        networkDict["datas"] = networkCompany
 
         datas.append(networkDict)
 

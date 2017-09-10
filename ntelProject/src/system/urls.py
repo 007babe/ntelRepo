@@ -7,8 +7,6 @@ urlpatterns = [
     ###########################
     # Json Data
     ###########################
-    # 시스템 통신망별 통신사 Json데이터 획득
-    url(r'^json/sys_network_telecom$', views.getJsonSysNetworkTelecom, name='json__sys_network_telecom'),
     # 시스템 회사 Json데이터 획득
     url(r'^json/sys_company$', views.getJsonSysCompany, name='json__sys_company'),
     # 시스템 소속 매장 Json데이터 획득

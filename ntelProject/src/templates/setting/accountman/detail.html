@@ -64,24 +64,24 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for networkTelecom in networkTelecoms %}
+                                                {% for networkCompany in networkCompanys %}
                                                 <tr>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkTelecom.datas|isMvno:False %}
+                                                        {% for data in networkCompany.datas|isMvno:False %}
                                                         <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;" formOnly="POP">
                                                             <label class="radio">
-                                                                <input type="radio" id="networkTelecomCd_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdA" value="{{ data.networkTelecomCd }}"  style="position: absolute; opacity: 0;" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} label="{{ data.networkTelecomNm}}" {% if not editable %}disabled{% endif %}>
-                                                                <span>{{ data.networkTelecomNm }}</span>
+                                                                <input type="radio" id="networkCompanyId_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdA" value="{{ data.networkCompanyId }}"  style="position: absolute; opacity: 0;" {% if data.networkCompanyId in accountInfo.accountId.networkCompanyId_as_list %}checked{% endif %} label="{{ data.networkCompanyNm}}" {% if not editable %}disabled{% endif %}>
+                                                                <span>{{ data.networkCompanyNm }}</span>
                                                             </label>
                                                         </div>
                                                         {% endfor %}
                                                     </td>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkTelecom.datas|isMvno:True %}
+                                                        {% for data in networkCompany.datas|isMvno:True %}
                                                         <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;" formOnly="POP">
                                                             <label class="radio">
-                                                                <input type="radio" id="networkTelecomCd_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdA" value="{{ data.networkTelecomCd }}"  style="position: absolute; opacity: 0;" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} label="{{ data.networkTelecomNm}}" {% if not editable %}disabled{% endif %}>
-                                                                <span>{{ data.networkTelecomNm }}</span>
+                                                                <input type="radio" id="networkCompanyId_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdA" value="{{ data.networkCompanyId }}"  style="position: absolute; opacity: 0;" {% if data.networkCompanyId in accountInfo.accountId.networkCompanyId_as_list %}checked{% endif %} label="{{ data.networkCompanyNm}}" {% if not editable %}disabled{% endif %}>
+                                                                <span>{{ data.networkCompanyNm }}</span>
                                                             </label>
                                                         </div>
                                                         {% endfor %}
@@ -107,27 +107,27 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for networkTelecom in networkTelecoms %}
+                                                {% for networkCompany in networkCompanys %}
                                                 <tr>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkTelecom.datas|isMvno:False %}
+                                                        {% for data in networkCompany.datas|isMvno:False %}
                                                         <label class="ckbox" style="display:block; padding: 2px 8px;">
                                                             <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
-                                                                <input id="networkTelecomCd_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdD" value="{{ data.networkTelecomCd }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkTelecomNm }}" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} {% if not editable %}disabled{% endif %}>
+                                                                <input id="networkCompanyId_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdD" value="{{ data.networkCompanyId }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkCompanyNm }}" {% if data.networkCompanyId in accountInfo.accountId.networkCompanyId_as_list %}checked{% endif %} {% if not editable %}disabled{% endif %}>
                                                                 <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
                                                             </div>
-                                                            <span style="width: 30px;">{{ data.networkTelecomNm }}</span>
+                                                            <span style="width: 30px;">{{ data.networkCompanyNm }}</span>
                                                         </label>
                                                         {% endfor %}
                                                     </td>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkTelecom.datas|isMvno:True %}
+                                                        {% for data in networkCompany.datas|isMvno:True %}
                                                         <label class="ckbox" style="display:block; padding: 2px 8px;">
                                                             <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
-                                                                <input id="networkTelecomCd_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkTelecomCdD" value="{{ data.networkTelecomCd }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkTelecomNm }}" {% if data.networkTelecomCd in accountInfo.accountId.networkTelecomCd_as_list %}checked{% endif %} {% if not editable %}disabled{% endif %}>
+                                                                <input id="networkCompanyId_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdD" value="{{ data.networkCompanyId }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkCompanyNm }}" {% if data.networkCompanyId in accountInfo.accountId.networkCompanyId_as_list %}checked{% endif %} {% if not editable %}disabled{% endif %}>
                                                                 <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
                                                             </div>
-                                                            <span style="width: 30px;">{{ data.networkTelecomNm }}</span>
+                                                            <span style="width: 30px;">{{ data.networkCompanyNm }}</span>
                                                         </label>
                                                         {% endfor %}
                                                     </td>

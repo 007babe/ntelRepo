@@ -271,7 +271,7 @@ class AccountRegistForm(ModelForm):
     useYn = forms.BooleanField(required=False)
 
     # 통신사코드
-    networkTelecomCd = forms.CharField(required=False, max_length=100)
+    networkCompanyId = forms.CharField(required=False, max_length=100)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -280,7 +280,7 @@ class AccountRegistForm(ModelForm):
         self.fields.keyOrder = [
             'companyNm',
             'companyTp',
-            'networkTelecomCd',
+            'networkCompanyId',
             'chargerNm',
             'telNo1',
             'telNo2',
@@ -316,9 +316,9 @@ class AccountRegistForm(ModelForm):
         # 회사타입별 통신사 코드
         companyTp = self.request.POST.get('companyTp')
         if companyTp == 'S0004D':  # 딜러점일 경우
-            instanceAccountRegist.networkTelecomCd = ",".join(self.request.POST.getlist("networkTelecomCdD")) 
+            instanceAccountRegist.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdD")) 
         elif companyTp == 'S0004A':  # 대리점일 경우
-            instanceAccountRegist.networkTelecomCd = self.request.POST.get("networkTelecomCdA")
+            instanceAccountRegist.networkCompanyId = self.request.POST.get("networkCompanyIdA")
 
         # 실제 회사가 아님
         instanceAccountRegist.isReal = False
@@ -349,7 +349,7 @@ class AccountModifyForm(ModelForm):
     chargerNm = forms.CharField(required=True)
 
     # 망별 통신사코드
-    networkTelecomCd = forms.CharField(required=False, max_length=100)
+    networkCompanyId = forms.CharField(required=False, max_length=100)
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)  # request 객체
@@ -358,7 +358,7 @@ class AccountModifyForm(ModelForm):
         self.fields.keyOrder = [
             'companyNm',
             'companyTp',
-            'networkTelecomCd',
+            'networkCompanyId',
             'chargerNm',
             'telNo1',
             'telNo2',
@@ -388,9 +388,9 @@ class AccountModifyForm(ModelForm):
         # 회사타입별 통신사 코드
         companyTpSrtCd = instanceAccountModify.companyTp.srtCd
         if companyTpSrtCd == 'D':  # 딜러점일 경우
-            instanceAccountModify.networkTelecomCd = ",".join(self.request.POST.getlist("networkTelecomCdD"))
+            instanceAccountModify.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdD"))
         elif companyTpSrtCd == 'A':  # 대리점일 경우
-            instanceAccountModify.networkTelecomCd = self.request.POST.get("networkTelecomCdA")
+            instanceAccountModify.networkCompanyId = self.request.POST.get("networkCompanyIdA")
 
         # 수정자 ID
         instanceAccountModify.modId = self.request.user  # 수정자ID
@@ -404,7 +404,7 @@ class AccountModifyForm(ModelForm):
         model = SysCompany
         fields = [
             "companyNm",
-            "networkTelecomCd",
+            "networkCompanyId",
             "chargerNm",
             "telNo1",
             "telNo2",

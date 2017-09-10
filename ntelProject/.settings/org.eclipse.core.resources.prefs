@@ -33,5 +33,6 @@ encoding//src/system/migrations/0034_sysappreq_reqdt.py=utf-8
 encoding//src/system/migrations/0040_remove_sysappreq_reqstatus.py=utf-8
 encoding//src/system/migrations/0041_sysappreq_reqstatus.py=utf-8
 encoding//src/system/migrations/0042_auto_20170809_1532.py=utf-8
+encoding//src/system/migrations/0065_auto_20170908_1803.py=utf-8
 encoding//src/templates/registration/login.html=UTF-8
 encoding//src/utils/__init__.py=utf-8

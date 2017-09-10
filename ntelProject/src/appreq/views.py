@@ -4,15 +4,15 @@ import json
 from smtplib import SMTPDataError
 
 from django.core.mail import send_mail
-from django.db import connection
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse, Http404
 from django.shortcuts import render
 
 from appreq.forms import SysAppreqRegistForm
-from system.models import SysAppreq, SysNetworkTelecom
+from system.models import SysAppreq
 from system.models import SysPolicy
-from utils.data import getComCdList, getNetworkTelecomByNetworkGroupList
+from telecom.models import TelecomNetworkCompany
+from utils.data import getComCdList, getNetworkCompanyByNetworkGroupList
 from utils.data import isUsableId
 from utils.json import makeJsonResult
 
@@ -33,11 +33,8 @@ def appreqIndexCV(request):
     # 업체구분 데이터 획득
     companyTps = getComCdList(grpCd='S0004', grpOpt='B')
 
-    # 통신사코드 데이터 획득
-    telecomCds = getComCdList(grpCd='G0002')
-
     # 망별 통신사 코드 데이터 획득
-    networkTelecoms = getNetworkTelecomByNetworkGroupList()
+    networkCompanys = getNetworkCompanyByNetworkGroupList()
 
     # 템플릿 렌더링 및 데이터 전달
     return render(
@@ -46,8 +43,7 @@ def appreqIndexCV(request):
         {
             "sysPolicy": sysPolicy,
             "companyTps": companyTps,
-            "telecomCds": telecomCds,
-            "networkTelecoms": networkTelecoms,
+            "networkCompanys": networkCompanys,
         },
     )
 
@@ -65,8 +61,8 @@ def appreqResultCV(request):
         )
 
         # 망별 통신사 조회
-        networkTelecoms = SysNetworkTelecom.objects.for_order().filter(
-            networkTelecomCd__in=[] if appreq.networkTelecomCd is None else appreq.networkTelecomCd.split(",")
+        networkCompanys = TelecomNetworkCompany.objects.for_order().filter(
+            networkCompanyId__in=[] if appreq.networkCompanyId is None else appreq.networkCompanyId.split(",")
         )
 
         # 템플릿 렌더링 및 데이터 전달
@@ -75,7 +71,7 @@ def appreqResultCV(request):
             'appreq/result_pop.html',
             {
                 "appreq": appreq,
-                "networkTelecoms": networkTelecoms
+                "networkCompanys": networkCompanys
             },
         )
     else:

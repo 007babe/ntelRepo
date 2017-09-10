@@ -8,11 +8,13 @@
 // System Global Data Info 
 var gSysGDs =  [
     { key : "GD_COM_CD", url : "/common/json/com_cd", cbFunc : "", useYn : true, desc : "공통코드" },
+    
     { key : "GD_COM_HTTP_STATUS", url : "/common/json/com_http_status", cbFunc : "", useYn : true, desc : "HTTP 상태 데이터" },
-    { key : "GD_SYS_NETWORK_TELECOM", url : "/system/json/sys_network_telecom", cbFunc : "", useYn : true, desc : "통신망별 통신사" },
     { key : "GD_SYS_MENU", url : "/system/json/sys_menu", cbFunc : "$.gfSetSysMenu();", useYn : true, desc : "사용자메뉴" },
     { key : "GD_SYS_MSG", url : "/system/json/sys_msg", cbFunc : "", useYn : true, desc : "시스템메세지 데이터" },
     { key : "GD_SYS_SHOP", url : "/system/json/sys_shop", cbFunc : "", useYn : true, desc : "소속매장" },
+
+    { key : "GD_TELECOM_NETWORK_COMPANY", url : "/telecom/json/telecom_network_company", cbFunc : "", useYn : true, desc : "통신망별 통신사" },
 
     { key : "GD_STAFF", url : "/static/json/staffInfo.json", cbFunc : "", useYn : true, desc : "직원 데이터" },
     { key : "GD_AGENT", url : "/static/json/agentInfo.json", cbFunc : "", useYn : true, desc : "대리/딜러점 데이터" },
