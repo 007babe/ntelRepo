@@ -52,9 +52,7 @@
                                 <tr>
                                     <td class="t-label t-l-w">아이디</td>
                                     <td class="t-content t-c-w al pd-l-5">
-                                        <span>
-                                            {{ staffInfo.userId }}
-                                        </span>
+                                        <span>{{ staffInfo.userId }}</span>
                                     </td>
                                 </tr>
                                 {% if editable %}
@@ -197,9 +195,6 @@
     </div>
 </div>
 
-
-
-
 <!-- Javascript Local Code Start -->
 <script>
 $(document).ready(function() {
@@ -218,6 +213,12 @@ $(document).ready(function() {
     // 일반 form 객체 초기화
     $.gfInitFormField("POP");
 });
+
+/*
+ * 팝업 노출 후 초기화(동작이 없어도 추가해야 함)
+ */
+$.fnInitPop = function() {
+};
 
 /*
  * 직원 정보 수정

@@ -21,6 +21,9 @@ urlpatterns = [
     url(r'^json/sys_msg$', views.getJsonSysMsg, name='json__sys_msg'),
     # 매장 직원 Json데이터 획득
     url(r'^json/shop_staff$', views.getJsonShopStaff, name='json__shop_staff'),
+    # 거래처 Json데이터 획득
+    url(r'^json/company_account$', views.getJsonShopStaff, name='json__company_account'),
+
     ###########################
     # Rendering Page
     ###########################

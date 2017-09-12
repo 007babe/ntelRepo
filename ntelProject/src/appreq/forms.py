@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 
 from system.models import SysAppreq, SysComCd
 from system.models import SysPolicy
-from utils.data import getSysSeqId
+from utils.data import getSysSeqId, is_empty
 from utils.data import isUsableId
 
 
@@ -36,6 +36,10 @@ class SysAppreqRegistForm(ModelForm):
     email = forms.EmailField(max_length=255)
     # 진행상태
     reqStatus = forms.CharField(required=False)  # 신청ID는 신규생성이므로 Null=True
+    # 통신사
+    networkCompanyIdD = forms.CharField(required=False)  #딜러점 통신사
+    networkCompanyIdA = forms.CharField(required=False)  #대리점 통신사
+    networkCompanyIdC = forms.CharField(required=False)  #유선사업 통신사
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -71,6 +75,18 @@ class SysAppreqRegistForm(ModelForm):
         if password != passwordChk:
             self.add_error('password', _('비밀번호확인과 일치하지 않습니다.'))
 
+        # 통신사 선택 체크
+        companyTp = self.request.POST.get('companyTp')
+        if companyTp == 'S0004D':  # 딜러점일 경우
+            if is_empty(self.request.POST.getlist("networkCompanyIdD")):
+                self.add_error('networkCompanyIdD', _('통신사를 선택해 주세요.'))
+        elif companyTp == 'S0004A':  # 대리점일 경우
+            if is_empty(self.request.POST.get("networkCompanyIdA")):
+                self.add_error('networkCompanyIdA', _('통신사를 선택해 주세요.'))
+        elif companyTp == 'S0004C':  # 유선사업일 경우
+            if is_empty(self.request.POST.getlist("networkCompanyIdC")):
+                self.add_error('networkCompanyIdC', _('통신사를 선택해 주세요.'))
+
     def save(self, commit=True):
         cleaned_data = super(SysAppreqRegistForm, self).clean()
         instanceSysAppreq = super(SysAppreqRegistForm, self).save(commit=False)
@@ -89,13 +105,13 @@ class SysAppreqRegistForm(ModelForm):
         instanceSysAppreq.password = make_password(cleaned_data.get('password'))
 
         # 회사타입별 망별통신사 코드
-        print("networkCompanyIdD", self.request.POST.getlist("networkCompanyIdD"))
-        print("networkCompanyIdA", self.request.POST.getlist("networkCompanyIdA"))
         companyTp = self.request.POST.get('companyTp')
         if companyTp == 'S0004D':  # 딜러점일 경우
             instanceSysAppreq.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdD")) 
         elif companyTp == 'S0004A':  # 대리점일 경우
             instanceSysAppreq.networkCompanyId = self.request.POST.get("networkCompanyIdA")
+        elif companyTp == 'S0004C':  # 유선사업일 경우
+            instanceSysAppreq.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdC")) 
 
         if commit:
             instanceSysAppreq.save()

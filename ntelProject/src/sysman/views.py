@@ -149,7 +149,7 @@ def appreqmanJsonAppr(request):
             companyTp=appreq.companyTp,
             companyGrade=appreq.companyGrade,
             networkCompanyId=appreq.networkCompanyId,
-            isReal=True,
+            realYn=True,
             policyId=appreq.policyId,
             bizLicNo1=appreq.bizLicNo1,
             bizLicNo2=appreq.bizLicNo2,
@@ -186,7 +186,7 @@ def appreqmanJsonAppr(request):
             zipCd=appreq.zipCd,
             addr1=appreq.addr1,
             addr2=appreq.addr2,
-            isMain=True,
+            mainYn=True,
             regId=SysUser.objects.get(userId__exact=request.user.userId),
             modId=SysUser.objects.get(userId__exact=request.user.userId),
         )

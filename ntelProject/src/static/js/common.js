@@ -86,7 +86,8 @@ $.gfGetGlobalData = function(opts) {
     $.gfAjax({
         url: url,
         dataType: "json",
-        contentType: "application/json; charset=utf-8",
+//        contentType: "application/json; charset=utf-8",
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
         beforeSendFunc: function(data, textStatus, jqXHR) {
             $("#btnRegData").prop('disabled', true);
         },
@@ -325,6 +326,7 @@ $.gfCommonPopUp = function(opts) {
                 _divPop.off("shown.bs.modal");
                 _divPop.remove(); // 기존 모달 팝업 지우기
             });
+
 
             // 팝업 보이기
             _divPop.modal("show");
@@ -1193,6 +1195,7 @@ $.gfInitStaff2ComboBox = function(formOnly) {
         var _item = $(item);
 
         var isSetNF = _item.attr("isSetNF") == "true" ? true : false;
+        var textNF = $.isEmpty(_item.attr("textNF")) ? "" : _item.attr("textNF");
         var useYn = _item.attr("useYn") == "true" ? true : false;
         var setValue = $.isEmpty(_item.attr("setValue")) ? "" : _item.attr("setValue");
         var isDisabled = _item.attr("isDisabled") == "true" ? true : false;
@@ -1200,6 +1203,7 @@ $.gfInitStaff2ComboBox = function(formOnly) {
 
         _item.gfSetStaff2ComboBox({
             isSetNF : isSetNF,
+            textNF : textNF,
             useYn : useYn,
             setValue : setValue,
             isDisabled : isDisabled,
@@ -1216,6 +1220,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
 
     // 옵션
     var isSetNF      = false;                             // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
+    var textNF       = "";                                // 값이 없는 필드 text
     var useYn        = false;                             // 사용여부값 적용
     var setValue     = "";                                // 선택되어질 값 세팅
     var isDisabled   = false;                             // 사용불가
@@ -1223,6 +1228,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
 
     if(!$.isEmpty(opts)) {
         isSetNF      = $.isEmpty(opts.isSetNF) ? false : opts.isSetNF; // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
+        textNF       = $.isEmpty(opts.textNF) ? "" : opts.textNF; // 값이 없는 필드 text
         useYn        = $.isEmpty(opts.useYn) ? false : opts.useYn;
         setValue     = opts.setValue;
         isDisabled   = $.isEmpty(opts.isDisabled) ? false : opts.isDisabled;
@@ -1230,7 +1236,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
     }
 
     // 사용여부(useYn) 값에 의한 Filtering
-    var gdStaffF = $.grep(GD_STAFF, function(el, inx){
+    var gdStaffF = $.grep(GD_SHOP_STAFF, function(el, inx){
         return useYn ? el.useYn == "Y" : true;
     });
 
@@ -1241,7 +1247,7 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
     if(isSetNF) {
         _this.append($("<option/>")
                         .attr("value", "")
-                        .text("")
+                        .text(textNF)
                        );
     }
 
@@ -1251,7 +1257,8 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
         $.each(item, function(k, v) {
             _option.attr(k, v);
         });
-        _this.append(_option.text(item.text));
+        _option.attr("value", item.userId);
+        _this.append(_option.text(item.userNm + "[" + item.userAuthNm + "]"));
     });
 
     // 선택되어질 값 설정

@@ -267,8 +267,10 @@ class AccountRegistForm(ModelForm):
     # 사용여부
     useYn = forms.BooleanField(required=False)
 
-    # 통신사코드
-    networkCompanyId = forms.CharField(required=False, max_length=100)
+    # 통신사
+    networkCompanyIdD = forms.CharField(required=False)  #딜러점 통신사
+    networkCompanyIdA = forms.CharField(required=False)  #대리점 통신사
+    networkCompanyIdC = forms.CharField(required=False)  #유선사업 통신사
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -300,6 +302,19 @@ class AccountRegistForm(ModelForm):
     def clean(self):
         cleaned_data = super(AccountRegistForm, self).clean()
 
+        # 통신사 선택 체크
+        companyTp = self.request.POST.get('companyTp')
+        print(self.request.POST.get('companyTp'))
+        if companyTp == 'S0004D':  # 딜러점일 경우
+            if is_empty(self.request.POST.getlist("networkCompanyIdD")):
+                self.add_error('networkCompanyIdD', _('통신사를 선택해 주세요.'))
+        elif companyTp == 'S0004A':  # 대리점일 경우
+            if is_empty(self.request.POST.get("networkCompanyIdA")):
+                self.add_error('networkCompanyIdA', _('통신사를 선택해 주세요.'))
+        elif companyTp == 'S0004C':  # 유선사업일 경우
+            if is_empty(self.request.POST.getlist("networkCompanyIdC")):
+                self.add_error('networkCompanyIdC', _('통신사를 선택해 주세요.'))
+
     def save(self, commit=True):
         cleaned_data = super(AccountRegistForm, self).clean()
         instanceAccountRegist = super(AccountRegistForm, self).save(commit=False)
@@ -316,9 +331,11 @@ class AccountRegistForm(ModelForm):
             instanceAccountRegist.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdD")) 
         elif companyTp == 'S0004A':  # 대리점일 경우
             instanceAccountRegist.networkCompanyId = self.request.POST.get("networkCompanyIdA")
+        elif companyTp == 'S0004C':  # 유선사업일 경우
+            instanceAccountRegist.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdC")) 
 
         # 실제 회사가 아님
-        instanceAccountRegist.isReal = False
+        instanceAccountRegist.realYn = False
 
         # SysCompany 등록시는 사용 = True
         instanceAccountRegist.useYn = True
@@ -345,8 +362,10 @@ class AccountModifyForm(ModelForm):
     # 담당자명
     chargerNm = forms.CharField(required=True)
 
-    # 망별 통신사코드
-    networkCompanyId = forms.CharField(required=False, max_length=100)
+    # 통신사
+    networkCompanyIdD = forms.CharField(required=False)  #딜러점 통신사
+    networkCompanyIdA = forms.CharField(required=False)  #대리점 통신사
+    networkCompanyIdC = forms.CharField(required=False)  #유선사업 통신사
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)  # request 객체
@@ -378,16 +397,30 @@ class AccountModifyForm(ModelForm):
     def clean(self):
         cleaned_data = super(AccountModifyForm, self).clean()
 
+        # 통신사 선택 체크
+        companyTp = self.instance.companyTp.comCd
+        if companyTp == 'S0004D':  # 딜러점일 경우
+            if is_empty(self.request.POST.getlist("networkCompanyIdD")):
+                self.add_error('networkCompanyIdD', _('통신사를 선택해 주세요.'))
+        elif companyTp == 'S0004A':  # 대리점일 경우
+            if is_empty(self.request.POST.get("networkCompanyIdA")):
+                self.add_error('networkCompanyIdA', _('통신사를 선택해 주세요.'))
+        elif companyTp == 'S0004C':  # 유선사업일 경우
+            if is_empty(self.request.POST.getlist("networkCompanyIdC")):
+                self.add_error('networkCompanyIdC', _('통신사를 선택해 주세요.'))
+
     def save(self, commit=True):
         cleaned_data = super(AccountModifyForm, self).clean()
         instanceAccountModify = super(AccountModifyForm, self).save(commit=False)
 
         # 회사타입별 통신사 코드
-        companyTpSrtCd = instanceAccountModify.companyTp.srtCd
-        if companyTpSrtCd == 'D':  # 딜러점일 경우
+        companyTp = instanceAccountModify.companyTp.comCd
+        if companyTp == 'S0004D':  # 딜러점일 경우
             instanceAccountModify.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdD"))
-        elif companyTpSrtCd == 'A':  # 대리점일 경우
+        elif companyTp == 'S0004A':  # 대리점일 경우
             instanceAccountModify.networkCompanyId = self.request.POST.get("networkCompanyIdA")
+        elif companyTp == 'S0004C':  # 유선사업일 경우
+            instanceAccountModify.networkCompanyId = ",".join(self.request.POST.getlist("networkCompanyIdC")) 
 
         # 수정자 ID
         instanceAccountModify.modId = self.request.user  # 수정자ID

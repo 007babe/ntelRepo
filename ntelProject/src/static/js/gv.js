@@ -12,10 +12,11 @@ var gSysGDs =  [
     { key : "GD_SYS_MENU", url : "/system/json/sys_menu", cbFunc : "$.gfSetSysMenu();", useYn : true, desc : "사용자메뉴" },
     { key : "GD_SYS_MSG", url : "/system/json/sys_msg", cbFunc : "", useYn : true, desc : "시스템메세지 데이터" },
     { key : "GD_SYS_SHOP", url : "/system/json/sys_shop", cbFunc : "", useYn : true, desc : "소속매장" },
-
+    { key : "GD_SHOP_STAFF", url : "/system/json/shop_staff", cbFunc : "", useYn : true, desc : "매장 직원 데이터" },
+    { key : "GD_ACCOUNT", url : "/system/json/company_account", cbFunc : "", useYn : true, desc : "거래처 데이터" },
+    
     { key : "GD_TELECOM_NETWORK_COMPANY", url : "/telecom/json/telecom_network_company", cbFunc : "", useYn : true, desc : "통신망별 통신사" },
 
-    { key : "GD_STAFF", url : "/static/json/staffInfo.json", cbFunc : "", useYn : true, desc : "직원 데이터" },
     { key : "GD_AGENT", url : "/static/json/agentInfo.json", cbFunc : "", useYn : true, desc : "대리/딜러점 데이터" },
     { key : "GD_PROD_PHONE", url : "/static/json/productPhoneInfo.json", cbFunc : "", useYn : true, desc : "입고 단말기" },
     { key : "GD_PROD_PHONE_USED", url : "/static/json/productPhoneUsedInfo.json", cbFunc : "", useYn : true, desc : "입고 단말기(중고)" },

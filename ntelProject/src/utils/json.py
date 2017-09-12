@@ -1,7 +1,9 @@
 import datetime
+from io import StringIO
+
+import json
 
 from django.core.serializers.json import Serializer
-from io import StringIO
 
 
 class JSONSerializer(Serializer):
@@ -64,3 +66,32 @@ def makeJsonResult(result=True, resultMessage=None, form=None, resultData=None):
     jsonData['errorItem'] = errorItem
 
     return jsonData
+
+
+def makeJsonDump(result=True, resultMessage=None, form=None, resultData=None):
+    '''
+    json결과 세팅
+    '''
+    jsonData = {}
+    resultCode = "OK" if result else "NG"
+    errorItem = ""
+
+    # From 데이터가 있는 경우
+    if form is not None:
+        if len(form.errors) == 0:
+            resultCode = "OK"
+        else:
+            errorItem = list(form.errors.keys())[0]
+            resultMessage = form[errorItem].errors.as_text().replace("* ", "\n")
+            resultCode = "NG"
+
+    # 결과 코드 세팅
+    jsonData['resultCode'] = resultCode
+    jsonData['resultMessage'] = resultMessage if resultMessage is not None else ""
+    jsonData['resultData'] = resultData if resultData is not None else {}
+    jsonData['errorItem'] = errorItem
+
+    return json.dumps(
+        jsonData,
+        default=jsonDefault,
+    )

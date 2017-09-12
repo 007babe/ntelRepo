@@ -44,7 +44,7 @@
                                     <td class="t-label t-l-w">사업자ID</td>
                                     <td class="t-content t-c-w ac">
                                         <span>
-                                            {{ appreq.companyId }}
+                                            {{ appreq.companyId|default_if_none:"" }}
                                         </span>
                                     </td>
                                 </tr>                                    

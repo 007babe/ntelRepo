@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'logins.apps.LoginsConfig',  # Login 관련 App
     'appreq.apps.AppreqConfig',  # 이용신청 관련 App
     'main.apps.MainConfig',  # Main App
+    'product.apps.ProductConfig',  # 제품 App
     'stock.apps.StockConfig',  # 재고 App
     'open.apps.OpenConfig',  # 개통업무 App
     'plan.apps.PlanConfig',  # 미결업무 App

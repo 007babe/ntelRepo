@@ -31,7 +31,10 @@ def appreqIndexCV(request):
     ).first()
 
     # 업체구분 데이터 획득
-    companyTps = getComCdList(grpCd='S0004', grpOpt='B')
+    companyTps = getComCdList(
+        grpCd='S0004', 
+        grpOpt='C'
+    )
 
     # 망별 통신사 코드 데이터 획득
     networkCompanys = getNetworkCompanyByNetworkGroupList()

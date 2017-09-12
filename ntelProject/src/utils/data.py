@@ -123,7 +123,7 @@ def is_empty(value):
     '''
     값이 None or Null String 인지 확인
     '''
-    if value is None or value == "":
+    if value is None or not value:
         return True
     else:
         return False

@@ -1,5 +1,7 @@
 from __future__ import unicode_literals  # Python 2.x 지원용
 
+from pprint import pprint
+
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User, PermissionsMixin
 from django.db import models
@@ -31,10 +33,27 @@ class SysComCdManager(models.Manager):
             ("" if orderOpt else "-") + "ordSeq"
         )
 
+    def as_list(self, useYn=None):
+        '''
+        list데이터용
+        '''
+        return list(
+            self.for_grp(useYn=useYn).values(
+                'grpCd',
+                'comCd',
+                'comNm',
+                'grpOpt',
+                'useYn',
+            ).order_by(
+                'grpCd',
+                'ordSeq',
+            )
+        )
+
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysComCd(models.Model):
-    """ 
+    """
     공통코드 ModelClass
     """
     comCd = models.CharField(primary_key=True, db_column='com_cd', max_length=8, verbose_name='공통코드')
@@ -68,6 +87,31 @@ class SysComCd(models.Model):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
+class SysHttpStatusManager(models.Manager):
+    '''
+    Http Code 매니저
+    '''
+    def as_list(self, useYn=None):
+        '''
+        list 데이터용
+        '''
+        qry = Q()
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
+        return list(
+            self.get_queryset().filter(
+                qry
+            ).values(
+                "status",
+                "title",
+                "message",
+                "useYn",
+            )
+        )
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysHttpStatus(models.Model):
     """ Http Code ModelClass
     """
@@ -79,6 +123,9 @@ class SysHttpStatus(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Manager
+    objects = SysHttpStatusManager()
 
     # 속성
     class Meta:
@@ -145,7 +192,7 @@ class SysCompanyManager(models.Manager):
             "shopId"
         )
 
-    def for_account(self, companyId, isReal=True):
+    def for_account(self, companyId, realYn=True):
         '''
         자사 거래처 데이터
         '''
@@ -154,9 +201,49 @@ class SysCompanyManager(models.Manager):
 
         qry = Q()
         qry &= Q(companyId__in=[companyAccount.accountId for companyAccount in companyAccounts])
-        qry &= Q(isReal__exact=isReal)
+        qry &= Q(realYn__exact=realYn)
         return self.get_queryset().filter(
             qry
+        )
+
+    def as_list(self, useYn=None):
+        qry = Q()
+
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
+        sysCompanys = SysCompany.objects.annotate(
+            companyTpNm=F('companyTp__comNm'),
+            companyGradeNm=F('companyGrade__comNm'),
+            regNm=F('regId__userNm'),
+            modNm=F('modId__userNm'),
+        ).filter(
+            qry
+        ).order_by(
+            'companyId',
+        ).values(
+            'companyId',
+            'companyNm',
+            'companyTp',
+            'companyTpNm',
+            'companyGrade',
+            'companyGradeNm',
+            'telNo',
+            'cellNo',
+            'zipCd',
+            'addr1',
+            'addr2',
+            'useYn',
+            'regDt',
+            'regId',
+            'regNm',
+            'modDt',
+            'modId',
+            'modNm',
+        )
+
+        return list(
+            sysCompanys
         )
 
 
@@ -169,7 +256,7 @@ class SysCompany(models.Model):
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=False, blank=False, verbose_name='회사명') # 회사명
     companyTp = models.ForeignKey('system.SysComCd', db_column='company_tp', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_company_tp', verbose_name='회사구분') # ComCd.grpCd = 'S0004'
     companyGrade = models.ForeignKey('system.SysComCd', db_column='company_grade', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_company_grade', verbose_name='회사등급')  # ComCd.grpCd = 'S0006'
-    isReal = models.BooleanField(db_column='is_real', null=False, blank=False, default=False, verbose_name='실제회사구분')
+    realYn = models.BooleanField(db_column='real_yn', null=False, blank=False, default=False, verbose_name='실제회사구분')
     networkCompanyId = models.CharField(db_column='network_company_id', max_length=200, null=True, blank=True, default=None, verbose_name='망별통신사코드')
     policyId = models.ForeignKey('system.SysPolicy', db_column='policy_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_policy_id', verbose_name='이용약관ID')
     bizLicNo1 = models.CharField(db_column='biz_lic_no1', max_length=3, null=True, blank=True, verbose_name='사업자번호1')
@@ -275,6 +362,41 @@ class SysShopManager(models.Manager):
             qry
         )
 
+    def as_list_by_auth(self, userAuth=None, companyId=None, shopId=None):
+        '''
+        권한에 따른 매장 데이터 List
+        '''
+        qry = Q()
+        if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템 관리자, 대표, 총괄일 경우
+            qry &= Q(companyId__exact=companyId)
+        else:  # 그외
+            qry &= Q(shopId__exact=shopId)
+
+        sysShop = SysShop.objects.annotate(
+            companyNm=F("companyId__companyNm"),
+        ).filter(
+            qry
+        ).order_by(
+            "shopId",
+        ).values(
+            "shopId",
+            "shopNm",
+            "zipCd",
+            "addr1",
+            "addr2",
+            "telNo1",
+            "telNo2",
+            "telNo3",
+            "cellNo1",
+            "cellNo2",
+            "cellNo3",
+            "companyNm",
+        )
+
+        return list(
+            sysShop
+        )
+
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysShop(models.Model):
@@ -284,7 +406,7 @@ class SysShop(models.Model):
     shopId = models.CharField(db_column='shop_id', primary_key=True, max_length=14, blank=False, default=None, verbose_name='매장ID')
     companyId = models.ForeignKey('system.SysCompany', on_delete=models.CASCADE, db_column='company_id', blank=True, null=True, default=None, related_name='r_%(app_label)s_%(class)s_company_id')
     shopNm = models.CharField(db_column='shop_nm', max_length=100, blank=True, verbose_name='매장명')
-    isMain = models.BooleanField(db_column='is_main', default=False, verbose_name='기본매장여부')
+    mainYn = models.BooleanField(db_column='mainYn', default=False, verbose_name='기본매장여부')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화1')
     telNo2 = models.CharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화2')
     telNo3 = models.CharField(db_column='tel_no3', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화3')
@@ -359,24 +481,103 @@ class SysUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def for_company(self, companyId):
+    def for_company(self, useYn=None, companyId=None):
         '''
         동일회사 데이터
         '''
         qry = Q()
+
+        if useYn is not None:
+            qry = Q(useYn__exact=useYn)
+
         qry &= Q(shopId__companyId__exact=companyId)
         return self.get_queryset().filter(
             qry
         )
 
-    def for_shop(self, shopId):
+    def for_shop(self, useYn=None, shopId=None):
         '''
         동일매장 데이터
         '''
         qry = Q()
+
+        if useYn is not None:
+            qry = Q(useYn__exact=useYn)
+
         qry &= Q(shopId__exact=shopId)
         return self.get_queryset().filter(
             qry
+        )
+
+    def as_list_staff_for_shop(self, useYn=None, shopId=None, userId=None, userAuth=None):
+        '''
+        동일매장 데이터
+        '''
+        # 해당 매장 직원
+        staffShop = self.for_shop(
+            useYn=useYn,
+            shopId=shopId,
+        ).filter(
+            userAuth__ordSeq__gte=SysComCd.objects.get(
+                    comCd=userAuth,
+                ).ordSeq
+        )
+
+        # 로그인 본인
+        staffMe = self.get_queryset().filter(
+            userId=userId
+        )
+
+        # Union
+        staffs = staffShop | staffMe
+
+        staffs = staffs.order_by(
+            "userAuth__ordSeq",
+            "userNm",
+        ).annotate(
+            userAuthNm=F("userAuth__comNm"),
+        ).values(
+            "userId",
+            "userNm",
+            "userAuth",
+            "userAuthNm",
+        )
+
+        return list(
+            staffs
+        )
+
+    def as_list_staff_by_auth(self, useYn=None, userAuth=None, companyId=None, shopId=None):
+        '''
+        권한에 따른 직원 데이터 List
+        '''
+        staffs = None
+        qry = Q
+
+        if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템 관리자, 대표, 총괄일 경우
+            staffs = self.for_company(
+                useYn=useYn,
+                companyId=companyId,
+            )
+        else:  # 그외
+            staffs = self.for_shop(
+                useYn=useYn,
+                shopId=shopId,
+            )
+
+        staffs = staffs.annotate(
+            companyNm=F("companyId__companyNm"),
+        ).filter(
+            qry
+        ).order_by(
+            "shopId",
+            "userAuth__ordSeq",
+            "userNm",
+        ).values(
+        )
+
+        return list(
+            staffs
         )
 
 
@@ -384,7 +585,7 @@ class SysUserManager(BaseUserManager):
 class SysUser(AbstractBaseUser, PermissionsMixin):
     """장고 User모델 Customized
     """
-    userId = models.CharField(primary_key=True, db_column='user_id', max_length=20, verbose_name='아이디')
+    userId = models.CharField(primary_key=True, db_column='user_id', max_length=20, verbose_name='사용자ID')
     userNm = models.CharField(db_column='user_nm', max_length=30, null=False, blank=False, verbose_name='사용자 이름')
     shopId = models.ForeignKey('system.SysShop', on_delete=models.CASCADE, db_column='shop_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_shop_id', verbose_name='매장ID') # SysShop.shopId
     email = models.EmailField(db_column='email', max_length=255, null=True, blank=True, default=None, verbose_name='이메일')
@@ -485,6 +686,51 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
+class SysMenuManager(models.Manager):
+    '''
+    시스템 메뉴 매니저
+    '''
+    def as_list(self, userAuth=None, companyTp=None):
+        '''
+        메뉴구성 데이터
+        '''
+        # sysMenu
+        qry = Q(useYn__exact=True)  # 사용여부
+        qry &= Q(menuLvl__exact=3)  # 레벨 3
+        # sysMenuAuth
+        qry &= Q(r_system_sysmenuauth_menu_id__useYn__exact=True)  # 사용여부
+        qry &= Q(r_system_sysmenuauth_menu_id__menuAuth__exact=userAuth)  # 사용자 권한
+        # SysMenuCompayTp
+        qry &= Q(r_system_sysmenucompanytp_menu_id__useYn__exact=True)  # 사용여부
+        qry &= Q(r_system_sysmenucompanytp_menu_id__companyTp__exact=companyTp)  # 회사타입
+
+        sysMenus = SysMenu.objects.annotate(
+            upMenuNm=F('upMenuId__menuNm'),
+            upMenuCss=F('upMenuId__menuCss'),
+            topMenuNm=F('upMenuId__upMenuId__menuNm'),
+        ).filter(
+            qry
+        ).order_by(
+            'upMenuId',
+            'menuId',
+        ).values(
+            'menuId',
+            'menuNm',
+            'menuTmp',
+            'menuCss',
+            'upMenuId',
+            'upMenuNm',
+            'upMenuCss',
+            'topMenuNm',
+        )
+
+        return list(
+            sysMenus
+        )
+
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysMenu(models.Model):
     """
     시스템 메뉴 ModelClass
@@ -502,6 +748,10 @@ class SysMenu(models.Model):
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
 
+    # Manager
+    objects = SysMenuManager()
+
+    # 속성
     class Meta:
         db_table = "sys_menu"
 
@@ -591,8 +841,37 @@ class SysMenuCompanyTp(models.Model):
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
+class SysMsgManager(models.Manager):
+    '''
+    시스템 사용 메세지 매니저
+    '''
+    def as_list(self, useYn=None):
+        '''
+        list데이터용
+        '''
+        qry = Q()
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
+        return list(
+            SysMsg.objects.annotate(
+                msgType=F("msgTp__comNm"),
+            ).filter(
+                qry
+            ).values(
+                "msgCd",
+                "msgType",
+                "title",
+                "msg",
+                "useYn",
+            )
+        )
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
 class SysMsg(models.Model):
-    """엔텔 시스템 사용 메세지
+    """
+    시스템 사용 메세지
     """
     msgCd = models.CharField(primary_key=True, db_column='msg_cd', max_length=6, verbose_name='메세지코드')
     msgTp = models.ForeignKey('system.SysComCd', db_column='msg_tp', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_msg_tp', verbose_name='메세지타입') # grpCd : S0007
@@ -603,6 +882,9 @@ class SysMsg(models.Model):
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
     modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
     modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Manager
+    objects = SysMsgManager()
 
     # 속성
     class Meta:

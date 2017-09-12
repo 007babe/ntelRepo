@@ -317,8 +317,6 @@ $.jqGridCompanyTpAttr = function(companyTp) {
 $.jqGridNetwordTelecomCdFormat = function(networkCompanyId) {
     networkCompanyId = $.n2s(networkCompanyId);
     var rtnValue = "";
-    
-    console.log("networkCompanyId:" + networkCompanyId);
 
     if(networkCompanyId != "") {
         var arrNetworkCompanyId = networkCompanyId.split(",");

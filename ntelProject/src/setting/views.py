@@ -91,9 +91,13 @@ def staffmanDetailCV(request):
         # 직원 정보 데이터 획득
         staffInfo = None
         if userAuth == "S0001T":  # 점장일 경우
-            staffInfo = SysUser.objects.for_shop(request.user.shopId)
+            staffInfo = SysUser.objects.for_shop(
+                shopId=request.user.shopId,
+            )
         else:
-            staffInfo = SysUser.objects.for_company(request.user.shopId.companyId)
+            staffInfo = SysUser.objects.for_company(
+                companyId=request.user.shopId.companyId,
+            )
 
         staffInfo = staffInfo.get(
             qry
@@ -189,9 +193,13 @@ def staffmanJsonList(request):
         ####################
         staffInfos = None
         if userAuth == "S0001T":  # 점장일 경우
-            staffInfos = SysUser.objects.for_shop(request.user.shopId)
+            staffInfos = SysUser.objects.for_shop(
+                shopId=request.user.shopId
+            )
         else:
-            staffInfos = SysUser.objects.for_company(request.user.shopId.companyId)
+            staffInfos = SysUser.objects.for_company(
+                companyId=request.user.shopId.companyId
+            )
 
         staffInfos = staffInfos.filter(
             qry
@@ -257,9 +265,12 @@ def staffmanJsonModify(request):
         resultData = {}
 
         # 수정할 데이터 획득
-        staffInfo = SysUser.objects.for_company(request.user.shopId.companyId).get(
-            userId=request.POST.get("userId")
+        staffInfo = SysUser.objects.for_company(
+            companyId=request.user.shopId.companyId,
+        ).get(
+            userId__exact=request.POST.get("userId")
         )
+
 
         # 직원정보 수정 폼
         staffModifyForm = StaffModifyForm(
@@ -436,7 +447,7 @@ def shopmanJsonList(request):
             "faxNo1",
             "faxNo2",
             "faxNo3",
-            "isMain",
+            "mainYn",
             "staffCnt",
             "staffCntUseY",
             "staffCntUseN",
@@ -546,7 +557,7 @@ def accountmanRegistCV(request):
         # 거래처(회사) 구분값 획득(공통코드)
         companyTps = SysComCd.objects.for_grp(
             grpCd="S0004",
-            grpOpt="B",
+            grpOpt="C",
         ).exclude(
             comCd__exact=request.user.shopId.companyId.companyTp
         )
@@ -607,7 +618,7 @@ def accountmanDetailCV(request):
 
         # 수정가능 여부 확인 후 세팅
         editable = True
-        if accountInfo.accountId.isReal:  # 실매장일 경우 수정불가
+        if accountInfo.accountId.realYn:  # 실매장일 경우 수정불가
             editable = False
 
         # Rendering
@@ -667,7 +678,7 @@ def accountmanJsonList(request):
             cellNo3=F('accountId__cellNo3'),  # 거래처담당자휴대폰3
             addr1=F('accountId__addr1'),  # 거래처주소1
             addr2=F('accountId__addr2'),  # 거래처주소2
-            isReal=F('accountId__isReal'),  # 시스템사용 실 거래처 여부
+            realYn=F('accountId__realYn'),  # 시스템사용 실 거래처 여부
             networkCompanyId=F('accountId__networkCompanyId'),  # 망통신사
             chargerNm=F('accountId__chargerNm'),  # 담당자명
         ).order_by(
@@ -692,7 +703,7 @@ def accountmanJsonList(request):
             "faxNo1",
             "faxNo2",
             "faxNo3",
-            "isReal",
+            "realYn",
             "networkCompanyId",
             "chargerNm",
             "regDt",
@@ -727,7 +738,7 @@ def accountmanJsonModify(request):
         # 수정할 데이터 획득
         accountInfo = SysCompany.objects.for_account(
             companyId=request.user.shopId.companyId,
-            isReal=False,  # 실제 매장은 수정대상이 아님
+            realYn=False,  # 실제 매장은 수정대상이 아님
         ).get(
             companyId__exact=request.POST.get("accountId")
         )

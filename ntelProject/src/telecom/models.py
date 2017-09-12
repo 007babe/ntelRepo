@@ -14,6 +14,7 @@ class TelecomNetwork(models.Model):
     """
     networkId = models.CharField(db_column='network_id', primary_key=True, max_length=2, verbose_name='통신망 코드')
     networkNm = models.CharField(db_column='network_nm', max_length=100, null=True, blank=True, verbose_name='통신망 명')
+    srtCd = models.CharField(db_column='srt_cd', max_length=3, null=True, blank=True, default=None, verbose_name='단축코드')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     ordSeq = models.IntegerField(db_column='ord_seq', default=1, verbose_name='순서')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
@@ -35,7 +36,8 @@ class TelecomCompany(models.Model):
     """
     companyId = models.CharField(db_column='company_id', primary_key=True, max_length=3, verbose_name='통신사 코드')
     companyNm = models.CharField(db_column='company_nm', max_length=100, null=True, blank=True, verbose_name='통신사 명')
-    isMvno = models.BooleanField(db_column='is_mvno', null=False, blank=False, default=False, verbose_name='MVNO구분')
+    mvnoYn = models.BooleanField(db_column='mvnoYn', null=False, blank=False, default=False, verbose_name='MVNO여부')
+    lineTp = models.ForeignKey('system.SysComCd', db_column='line_tp', default=None, related_name='r_%(app_label)s_%(class)s_line_tp', verbose_name='유무선구분')  # sys_com_cd.grp_cd = 'G0026'
     ordSeq = models.IntegerField(db_column='ord_seq', default=1, verbose_name='순서')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
@@ -121,7 +123,7 @@ class TelecomCallPlan(models.Model):
     """
     networkCompanyId = models.ForeignKey('telecom.TelecomNetwork', db_column='network_company_id', null=False, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_network_company_id', verbose_name='망별통신사코드')
     callPlanNm = models.CharField(db_column='call_plan_nm', max_length=100, null=True, blank=True, verbose_name='요금제 명')
-    networkTp = models.ForeignKey('system.SysComCd', db_column='network_tp', related_name='r_%(app_label)s_%(class)s_service_tp', verbose_name='통신망구분')  # sys_com_cd.grp_cd = 'S0009'
+    networkTp = models.ForeignKey('system.SysComCd', db_column='network_tp', related_name='r_%(app_label)s_%(class)s_network_tp', verbose_name='통신망구분')  # sys_com_cd.grp_cd = 'S0009'
 
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')

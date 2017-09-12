@@ -80,7 +80,7 @@
                                 </td>
                              </tr>
                              <!-- 대리점 통신사 -->
-                             <tr id="trTelecomA" style="display: none;">
+                             <tr id="trNetworkCompanyA" style="display: none;">
                                 <td class="t-label t-l-w">통신사</td>
                                 <td class="t-content t-c-w al" colspan="3">
                                     <span style="width: 100%;">
@@ -99,7 +99,7 @@
                                                 {% for networkCompany in networkCompanys %}
                                                 <tr>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkCompany.datas|isMvno:False %}
+                                                        {% for data in networkCompany.datas|mvnoYn:False %}
                                                         <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;">
                                                             <label class="radio">
                                                                 <input type="radio" id="networkCompanyId_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdA" value="{{ data.networkCompanyId }}"  style="position: absolute; opacity: 0;" {% if data.networkOrdSeq == 1 and data.companyOrdSeq == 1 %}checked{% endif %} label="{{ data.networkCompanyNm}}">
@@ -109,7 +109,7 @@
                                                         {% endfor %}
                                                     </td>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkCompany.datas|isMvno:True %}
+                                                        {% for data in networkCompany.datas|mvnoYn:True %}
                                                         <div formType="iChecks" class="i-checks disp-ib" style="display:block; padding: 2px 2px;">
                                                             <label class="radio">
                                                                 <input type="radio" id="networkCompanyId_A_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdA" value="{{ data.networkCompanyId }}"  style="position: absolute; opacity: 0;" {% if data.networkOrdSeq == 1 and data.companyOrdSeq == 1  %}checked{% endif %} label="{{ data.networkCompanyNm}}">
@@ -125,7 +125,7 @@
                                     </span>
                                 </td>
                             </tr>
-                            <tr id="trTelecomD" style="display: none;">
+                            <tr id="trNetworkCompanyD" style="display: none;">
                                 <td class="t-label t-l-w">통신사</td>
                                 <td class="t-content t-c-w al" colspan="3">
                                     <span style="width: 100%;">
@@ -144,7 +144,7 @@
                                                 {% for networkCompany in networkCompanys %}
                                                 <tr>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkCompany.datas|isMvno:False %}
+                                                        {% for data in networkCompany.datas|mvnoYn:False %}
                                                         <label class="ckbox" style="display:block; padding: 2px 8px;">
                                                             <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
                                                                 <input id="networkCompanyId_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdD" value="{{ data.networkCompanyId }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkCompanyNm }}" checked>
@@ -155,7 +155,7 @@
                                                         {% endfor %}
                                                     </td>
                                                     <td style="text-align: center; height: 28px; border:1px solid #ccc; text-align: left;">
-                                                        {% for data in networkCompany.datas|isMvno:True %}
+                                                        {% for data in networkCompany.datas|mvnoYn:True %}
                                                         <label class="ckbox" style="display:block; padding: 2px 8px;">
                                                             <div formType="iChecks" class="icheckbox_square-green" style="position: relative;">
                                                                 <input id="networkCompanyId_D_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdD" value="{{ data.networkCompanyId }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkCompanyNm }}" checked>
@@ -169,6 +169,24 @@
                                                 {% endfor %}
                                             </tbody>
                                         </table>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr id="trNetworkCompanyC" style="display: none;">
+                                <td class="t-label t-l-w">통신사</td>
+                                <td class="t-content t-c-w al" colspan="3">
+                                    <span style="width: 100%;">
+                                        {% for networkCompany in networkCompanys %}
+                                            {% for data in networkCompany.datas|lineTpCabled %}
+                                        <label class="ckbox" style="display:block; padding: 2px 8px;">
+                                            <div formType="iChecks" class="icheckbox_square-green" style="position: relative;" formOnly="POP">
+                                                <input id="networkCompanyId_C_{{ data.networkSrtSeq }}_{{ data.telecomSrtSeq }}" name="networkCompanyIdC" value="{{ data.networkCompanyId }}"  type="checkbox" class="i-checks" style="position: absolute; opacity: 0;" label="{{ data.networkCompanyNm }}" checked>
+                                                <ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                            </div>
+                                            <span style="width: 30px;">{{ data.networkCompanyNm }}</span>
+                                        </label>
+                                            {% endfor %}
+                                        {% endfor %}
                                     </span>
                                 </td>
                             </tr>
@@ -351,18 +369,26 @@ $(document).ready(function() {
     $("input:radio[name='companyTp']").on("ifClicked", function(){
         var _this = $(this)
         var srtCd = _this.attr("srtCd");
-        var _trTelecomA = $("#trTelecomA"); // 대리점 통신사 선택 영역
-        var _trTelecomD = $("#trTelecomD"); // 딜러점 통신사 선택 영역
+        var _trNetworkCompanyA = $("#trNetworkCompanyA"); // 대리점 통신사 선택 영역
+        var _trNetworkCompanyD = $("#trNetworkCompanyD"); // 딜러점 통신사 선택 영역
+        var _trNetworkCompanyC = $("#trNetworkCompanyC"); // 유선사업 통신사 선택 영역
 
         if (srtCd == "A"){ // 대리점일 경우
-            _trTelecomA.show();
-            _trTelecomD.hide();
+            _trNetworkCompanyA.show();
+            _trNetworkCompanyD.hide();
+            _trNetworkCompanyC.hide();
         } else if (srtCd == "D"){ // 대리점일 경우
-            _trTelecomA.hide();
-            _trTelecomD.show();
+            _trNetworkCompanyA.hide();
+            _trNetworkCompanyD.show();
+            _trNetworkCompanyC.hide();
+        } else if (srtCd == "C"){ // 유선사업일 경우
+            _trNetworkCompanyA.hide();
+            _trNetworkCompanyD.hide();
+            _trNetworkCompanyC.show();
         } else { // 판매점 포함 기타
-            _trTelecomA.hide();
-            _trTelecomD.hide();
+            _trNetworkCompanyA.hide();
+            _trNetworkCompanyD.hide();
+            _trNetworkCompanyC.hide();
         }
     });
 
