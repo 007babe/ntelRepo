@@ -417,8 +417,6 @@ $(document).ready(function() {
                     _idChk.val(resultCode == "OK" ? "Y" : "N")
                 },
                 failFunc: function(jqXHR, textStatus, errorThrown) {
-                    console.log("dupcheck=>failFunc status[" + jqXHR.status + "],textStatus[" + textStatus + "]");
-
                     $.gfNotiMsg({
                         msgCd : "",
                         msgType : "warning",
@@ -452,34 +450,34 @@ $(document).ready(function() {
  * 사용신청 등록
  */
 $.fnRegistAppreq = function(frmTarget) {
-     $.gfAjax({
-         url: "{% url 'appreq:regist' %}",
-         data: frmTarget.serializeArray(),
-         async: true,
-         dataType: "json",
-         okFunc: function(data, cbFunc) {
-             $.gfCommonPopUp({
-                 popUrl: "{% url 'appreq:result' %}",
-                 width: "520",
-                 params: {
-                     reqId: data.resultData.reqId
-                 },
-                 attrs: {
-                     "data-keyboard": "false"
-                 },
-                 loginRequired : false
-             });
-         },
-         failFunc: function(jqXHR, textStatus, errorThrown) {
-             $.gfHttpErrorPopup({
-                 jqXHR : jqXHR,
-                 textStatus : textStatus,
-                 errorThrown : errorThrown,
-                 loginRequired : false,
-             });
-         },
-         spinTarget: $("#divAppreq"),
-     });
+    $.gfAjax({
+        url: "{% url 'appreq:regist' %}",
+        data: frmTarget.serializeArray(),
+        async: true,
+        dataType: "json",
+        okFunc: function(data, cbFunc) {
+            $.gfCommonPopUp({
+                popUrl: "{% url 'appreq:result' %}",
+                width: "520",
+                params: {
+                    reqId: data.resultData.reqId
+                },
+                attrs: {
+                    "data-keyboard": "false"
+                },
+                loginRequired : false
+            });
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : false,
+            });
+        },
+        spinTarget: $("#divAppreq"),
+    });
 };
 
 </script>

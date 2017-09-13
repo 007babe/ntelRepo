@@ -85,14 +85,39 @@ class SysUserCreationForm(UserCreationForm):
         loginUserId = self.request.user.userId
         shopId = self.request.user.shopId_id
         companyId = self.request.user.shopId.companyId_id
-        
-        user.set_password(self.cleaned_data['password1'])
 
+        user.set_password(self.cleaned_data['password1'])
 
         if commit:
             user.save()
 
         return user
+
+
+class SysUserChangeShopForm(ModelForm):
+    '''
+    사용자 매장 변경 Form
+    '''
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # request 객체
+        super(SysUserChangeShopForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(SysUserChangeShopForm, self).clean()
+
+    def save(self, commit=True):
+        cleaned_data = super(SysUserChangeShopForm, self).clean()
+        instanceUserChangeShop = super(SysUserChangeShopForm, self).save(commit=False)
+
+        if commit:
+            instanceUserChangeShop.save()
+        return instanceUserChangeShop
+
+    class Meta:
+        model = SysUser
+        fields = [
+            "shopId",
+        ]
 
 
 class SysUserChangeForm(UserChangeForm):

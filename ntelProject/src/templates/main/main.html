@@ -10,6 +10,29 @@
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu-head">
             <li class="nav-header">
+                <div class="dropdown profile-element" style="margin-bottom: 10px">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#" {% if userShops.count <= 1 %}style="cursor:default;"{% endif %}>
+                        <span class="clear">
+                            <span class="text-muted text-xs block">
+                                <span>
+                                    <strong style="color:#f8ac59; font-size:17px;">{{ user.shopId.shopNm }}</strong>
+                                </span>
+                                {% if userShops.count > 1 %}
+                                <span>
+                                    <b class="caret"></b>
+                                </span>
+                                {% endif %}
+                            </span>
+                        </span>
+                    </a>
+                    {% if userShops.count > 1 %}
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs" style="background-color: #d7dde2;">
+                        {% for userShop in userShops|excludeShop:user.shopId %}
+                        <li style="line-height:18px;"><a href="javascript:$.fnChangeShop('{{ userShop.shopId }}')" style="font-size:14px; color:#0f0f0f;">{{ userShop.shopNm }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
                 <div class="dropdown profile-element">
                     <span>
                         <img alt="image" class="img-circle" src="{% static 'img/profile_small_roh.png' %}"/>
@@ -219,6 +242,34 @@ $(document).ready(function() {
         location.reload();
     });
 });
+
+/*
+ * 사용매장 변경
+ */
+$.fnChangeShop = function(shopId) {
+    $.gfAjax({
+        url: "{% url 'main:json__changeshop' %}",
+        data: {
+            'shopId' : shopId,
+        },
+        dataType: "json",
+        okFunc: function(data, cbFunc) {
+            // 성공시 리로드
+            console.log("매장변경 성공");
+            location.reload();            
+        },
+        failFunc: function(jqXHR, textStatus, errorThrown) {
+            // Http Error처리
+            $.gfHttpErrorPopup({
+                jqXHR : jqXHR,
+                textStatus : textStatus,
+                errorThrown : errorThrown,
+                loginRequired : true,
+            });
+        },
+    });
+}    
+
 </script>
 {% endblock body_script_local %}
 
