@@ -20,7 +20,7 @@
                 </div>
                 <label class="col-sm control-label search">매장</label>
                 <div class="col-sm">
-                    <select id="sShopId" name="sShopId" class="form-control form-box" formType="shopSel" isSetNF="true" textNF="전체">
+                    <select id="sOrgShopId" name="sOrgShopId" class="form-control form-box" formType="shopSel" isSetNF="true" textNF="전체">
                     </select>
                 </div>
                 <label class="col-sm control-label search">권한</label>
@@ -78,7 +78,7 @@ $(document).ready(function() {
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
-        	'상태', '매장', '권한', '직원명', '아이디', '휴대폰',
+        	'상태', '사용매장', '소속매장', '권한', '직원명', '아이디', '휴대폰',
         	'주소', '접속제한', '로그인회수', '마지막 접속일시', '등록일'
         ],
         colModel:[
@@ -95,6 +95,11 @@ $(document).ready(function() {
             },
             {
                 name: 'shopNm',
+                width: 50,
+                align: "center"
+            },
+            {
+                name: 'orgShopNm',
                 width: 120,
                 align: "center"
             },

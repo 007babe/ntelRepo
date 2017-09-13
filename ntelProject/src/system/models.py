@@ -340,24 +340,33 @@ class SysShopManager(models.Manager):
     '''
     시스템 매장 매니저
     '''
-    def for_company(self, companyId):
+    def for_company(self, useYn=None, companyId=None):
         '''
         동일회사 데이터
         '''
         qry = Q()
+
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
         qry &= Q(companyId__exact=companyId)
+
         return self.get_queryset().filter(
             qry
         ).order_by(
             "shopId"
         )
 
-    def for_shop(self, shopId):
+    def for_shop(self, useYn=None, shopId=None):
         '''
         동일매장 데이터
         '''
         qry = Q()
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
         qry &= Q(shopId__exact=shopId)
+
         return self.get_queryset().filter(
             qry
         )
@@ -490,12 +499,12 @@ class SysUserManager(BaseUserManager):
         if useYn is not None:
             qry = Q(useYn__exact=useYn)
 
-        qry &= Q(shopId__companyId__exact=companyId)
+        qry &= Q(orgShopId__companyId__exact=companyId)
         return self.get_queryset().filter(
             qry
         )
 
-    def for_shop(self, useYn=None, shopId=None):
+    def for_shop(self, useYn=None, shopId=None, orgShopId=None):
         '''
         동일매장 데이터
         '''
@@ -504,19 +513,36 @@ class SysUserManager(BaseUserManager):
         if useYn is not None:
             qry = Q(useYn__exact=useYn)
 
-        qry &= Q(shopId__exact=shopId)
+        if shopId is not None:
+            qry &= Q(shopId__exact=shopId)
+
+        if orgShopId is not None:
+            qry &= Q(orgShopId__exact=orgShopId)
+
         return self.get_queryset().filter(
             qry
         )
 
-    def as_list_staff_for_shop(self, useYn=None, shopId=None, userId=None, userAuth=None):
+    def as_list_staff_for_shop(self, useYn=None, shopId=None, orgShopId=None, userId=None, userAuth=None):
         '''
         동일매장 데이터
         '''
+        qry = Q()
+
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
+        if shopId is not None:
+            qry &= Q(shopId__exact=shopId)
+
+        if orgShopId is not None:
+            qry &= Q(orgShopId__exact=orgShopId)
+
         # 해당 매장 직원
         staffShop = self.for_shop(
             useYn=useYn,
             shopId=shopId,
+            orgShopId=orgShopId,
         ).filter(
             userAuth__ordSeq__gte=SysComCd.objects.get(
                     comCd=userAuth,
@@ -547,21 +573,24 @@ class SysUserManager(BaseUserManager):
             staffs
         )
 
-    def as_list_staff_by_auth(self, useYn=None, userAuth=None, companyId=None, shopId=None):
+    def as_list_staff_by_auth(self, useYn=None, userAuth=None, companyId=None, shopId=None, orgShopId=None):
         '''
         권한에 따른 직원 데이터 List
         '''
         staffs = None
         qry = Q
 
+        if useYn is not None:
+            qry &= Q(useYn__exact=useYn)
+
         if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템 관리자, 대표, 총괄일 경우
             staffs = self.for_company(
-                useYn=useYn,
+                qry,
                 companyId=companyId,
             )
         else:  # 그외
             staffs = self.for_shop(
-                useYn=useYn,
+                qry,
                 shopId=shopId,
             )
 
@@ -587,7 +616,8 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     """
     userId = models.CharField(primary_key=True, db_column='user_id', max_length=20, verbose_name='사용자ID')
     userNm = models.CharField(db_column='user_nm', max_length=30, null=False, blank=False, verbose_name='사용자 이름')
-    shopId = models.ForeignKey('system.SysShop', on_delete=models.CASCADE, db_column='shop_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_shop_id', verbose_name='매장ID') # SysShop.shopId
+    shopId = models.ForeignKey('system.SysShop', on_delete=models.CASCADE, db_column='shop_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_shop_id', verbose_name='시스템매장ID') # SysShop.shopId
+    orgShopId = models.ForeignKey('system.SysShop', on_delete=models.CASCADE, db_column='org_shop_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_org_shop_id', verbose_name='소속매장ID') # SysShop.shopId
     email = models.EmailField(db_column='email', max_length=255, null=True, blank=True, default=None, verbose_name='이메일')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='전화1')
     telNo2 = models.CharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='전화2')
@@ -628,55 +658,66 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
         return self.userAuth.comNm
 
     @property
-    def shopNm(self):
+    def orgShopNm(self):
         '''
         사용자 소속 매장명
         '''
-        return self.shopId.shopNm
+        return self.orgShopId.shopNm
 
-#    shopNm1 = property(_shopNm)
+    @property
+    def shopNm(self):
+        '''
+        사용자 사용 매장명
+        '''
+        return self.shopId.shopNm
 
     def companyId(self):
         '''
         사용자 소속 회사ID
         '''
-        return self.shopId.companyId
+        return self.orgShopId.companyId
 
     def companyNm(self):
         '''
         사용자 소속 회사명
         '''
-        return self.shopId.companyId.companyNm
+        return self.orgShopId.companyId.companyNm
 
     def companyTp(self):
         '''
         회사구분
         '''
-        return self.shopId.companyId.companyTp
+        return self.orgShopId.companyId.companyTp
 
     def companyTpNm(self):
         '''
         회사구분명
         '''
-        return self.shopId.companyId.companyTp.comNm
+        return self.orgShopId.companyId.companyTp.comNm
 
-    def shopCnt(self):
+    def companyShops(self):
         '''
         회사의 매장 수
         '''
-        return SysShop.objects.filter(
-            companyId__exact=self.companyId(),
-            useYn__exact=True
-        ).count()
+        return SysShop.objects.for_company(
+            companyId=self.companyId(),
+        )
 
-    def staffCnt(self):
+    def shopStaffs(self):
         '''
-        매장의 직원 수
+        사용매장의 소속직원
         '''
         return SysUser.objects.filter(
-            shopId__exact=self.shopId,
-            useYn__exact=True
-        ).count()
+            orgShopId__exact=self.shopId,
+        )
+
+    def orgShopStaffs(self):
+        '''
+        소속매장의 소속직원
+        '''
+        return SysUser.objects.filter(
+            orgShopId__exact=self.orgShopId,
+        )
 
     def __str__(self):
         return self.userId

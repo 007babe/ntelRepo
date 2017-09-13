@@ -35,6 +35,9 @@ class StaffModifyForm(ModelForm):
         if not is_empty(self.request.POST.get("password")):
             instanceStaffModify.password = make_password(self.request.POST.get("password"))
 
+        # 현재사용매장 세팅
+        instanceStaffModify.shopId = cleaned_data.get("orgShopId")
+
         instanceStaffModify.modId = self.request.user  # 수정자ID
 
         if commit:
@@ -47,6 +50,7 @@ class StaffModifyForm(ModelForm):
             "email",
             "userNm",
             "shopId",
+            "orgShopId",
             "addr1",
             "modId",
             "cellNo1",
@@ -91,14 +95,16 @@ class StaffRegistForm(ModelForm):
 
         # 등록 가능한 매장 인지 확인(등록자 회사 또는 매장)
         if self.request.user.userAuth_id in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄일 경우
-            shops = SysShop.objects.for_company(self.request.user.shopId.companyId).filter(
-                shopId__exact=cleaned_data.get('shopId')
+            shops = SysShop.objects.for_company(
+                companyId=self.request.user.orgShopId.companyId
+            ).filter(
+                shopId__exact=cleaned_data.get('orgShopId')
             )
             if shops.count() < 1:
-                self.add_error('shopId', _('사용자를 등록할 수 없는 매장입니다.'))
+                self.add_error('orgShopId', _('사용자를 등록할 수 없는 매장입니다.'))
         elif self.request.user.userAuth_id in ["S0001T"]:  # 점장
-            if cleaned_data.get('shopId').shopId != self.request.user.shopId_id:
-                self.add_error('shopId', _('사용자를 등록할 수 없는 매장입니다.'))
+            if cleaned_data.get('orgShopId').shopId != self.request.user.orgShopId_id:
+                self.add_error('orgShopId', _('사용자를 등록할 수 없는 매장입니다.'))
         else:
             self.add_error('__all__', _('사용자를 등록할 수 없습니다.'))
 
@@ -121,6 +127,9 @@ class StaffRegistForm(ModelForm):
 
         # 비밀번호 암호화
         instanceStaffRegist.password = make_password(cleaned_data.get('password'))
+
+        # 현재사용매장 세팅
+        instanceStaffRegist.shopId = cleaned_data.get("orgShopId")
 
         # 등록자 ID
         instanceStaffRegist.regId = self.request.user

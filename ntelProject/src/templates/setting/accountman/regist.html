@@ -92,7 +92,7 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr id="trNetworkTelecomD" style="display:none;">
+                                <tr id="trNetworkCompanyD" style="display:none;">
                                     <td class="t-label t-l-w">통신사</td>
                                     <td class="t-content t-c-w al">
                                         <table style="border:1px solid #ccc; width: 100%;">
@@ -137,7 +137,7 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr id="trNetworkTelecomC" style="display:none;">
+                                <tr id="trNetworkCompanyC" style="display:none;">
                                     <td class="t-label t-l-w">통신사</td>
                                     <td class="t-content t-c-w al">
                                         <span>
@@ -332,8 +332,8 @@ $.fnInitPop = function() {
  */
 $.fnSetNetworkCompany = function(srtCd) {
     var _trNetworkCompanyA = $("#trNetworkCompanyA"); // 대리점 통신사 선택 영역
-    var trNetworkCompanyD = $("#trNetworkTelecomD"); // 딜러점 통신사 선택 영역
-    var trNetworkCompanyC = $("#trNetworkTelecomC"); // 유선사업 통신사 선택 영역
+    var _trNetworkCompanyD = $("#trNetworkCompanyD"); // 딜러점 통신사 선택 영역
+    var _trNetworkCompanyC = $("#trNetworkCompanyC"); // 유선사업 통신사 선택 영역
 
     if (srtCd == "A"){ // 대리점일 경우
         _trNetworkCompanyA.show();

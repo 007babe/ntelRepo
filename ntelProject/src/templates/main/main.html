@@ -1,6 +1,7 @@
 ﻿{#################################}
 {% extends "extends/site.html" %}
 {% load staticfiles %}
+{% load common_extras %}
 {#################################}
 {% block body_content %}
 <div id="wrapper">
@@ -25,12 +26,15 @@
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <input type="hidden" id="loginUserId" value="{{ user.userId }}">
-                        <li><a href="#">ID/이름 : {{ user.userId }}/{{ user.userNm }}</a></li>
-                        <li><a href="#">업체ID/매장ID : {{ user.companyId }}/{{ user.shopId }}</a></li>
-                        <li><a href="#">회사/매장명 : {{ user.companyNm }}/{{ user.shopNm }}</a></li>
-                        <li><a href="#">회사구분 : {{ user.companyTpNm }}({{ user.companyTp }})</a></li>
-                        <li><a href="#">매장 : {{ user.shopCnt }} 개</a></li>
-                        <li><a href="#">직원 : {{ user.staffCnt }} 명</a></li>
+                        <li><a href="#">이름 : {{ user.userNm }}</a></li>
+                        <li><a href="#">아이디 : {{ user.userId }}</a></li>
+                        <li><a href="#">소속회사 : {{ user.companyNm }}</a></li>
+                        <li><a href="#">회사구분 : {{ user.companyTpNm }}({{ user.companyTp.srtCd }})</a></li>
+                        <li><a href="#">매장 : {{ user.companyShops|countUseYn:True }} / {{ user.companyShops.count }} 개</a></li>
+                        <li><a href="#">소속매장 : {{ user.orgShopNm }}/{{ user.orgShopId }}</a></li>
+                        <li><a href="#">소속매장직원 : {{ user.orgShopStaffs|countUseYn:True }} / {{ user.orgShopStaffs.count }} 명</a></li>
+                        <li><a href="#">사용매장 : {{ user.shopNm }}/{{ user.shopId }}</a></li>
+                        <li><a href="#">사용매장직원 : {{ user.shopStaffs|countUseYn:True }} / {{ user.shopStaffs.count }} 명</a></li>
                         <!-- 
                         <li><a href="#">소속회사ID : 정기</a></li>
                         <li><a href="#">소속매장 : 매월5일</a></li>

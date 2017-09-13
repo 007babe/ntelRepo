@@ -34,12 +34,12 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="t-label t-l-w">매장</td>
+                                    <td class="t-label t-l-w">소속매장</td>
                                     <td class="t-content t-c-w al">
                                         <span>
-                                            <select id="shopId" name="shopId" class="form-control form-box">
-                                            {% for userShop in userShops %}
-                                            <option value="{{ userShop.shopId }}" {% if userShop.shopId == staffInfo.shopId_id %}selected{% endif %}>{{ userShop.shopNm }}</option>
+                                            <select id="orgShopId" name="orgShopId" class="form-control form-box">
+                                            {% for userOrgShop in userOrgShops %}
+                                            <option value="{{ userOrgShop.shopId }}" {% if userOrgShop.shopId == user.orgShopId_id %}selected{% endif %}>{{ userOrgShop.shopNm }}</option>
                                             {% endfor %}
                                             </select>
                                         </span>

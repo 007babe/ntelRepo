@@ -44,11 +44,11 @@ def staffmanRegistCV(request):
         qryShops = Q()
         qryShops &= Q(useYn__exact=True) 
         if userAuth in ["S0001M", "S0001C", "S0001A"]:
-            qryShops &= Q(companyId__exact=request.user.shopId.companyId)
+            qryShops &= Q(companyId__exact=request.user.orgShopId.companyId)
         else:
-            qryShops &= Q(shopId__exact=request.user.shopId)
+            qryShops &= Q(shopId__exact=request.user.orgShopId)
 
-        userShops = SysShop.objects.filter(
+        userOrgShops = SysShop.objects.filter(
             qryShops
         )
 
@@ -57,7 +57,7 @@ def staffmanRegistCV(request):
             'setting/staffman/regist.html',
             {
                 "userAuths": userAuths,
-                "userShops": userShops,
+                "userOrgShops": userOrgShops,
             },
         )
     else:
@@ -113,11 +113,11 @@ def staffmanDetailCV(request):
         qryShops = Q()
         qryShops &= Q(useYn__exact=True) 
         if userAuth in ["S0001M", "S0001C", "S0001A"]:
-            qryShops &= Q(companyId__exact=request.user.shopId.companyId)
+            qryShops &= Q(companyId__exact=request.user.orgShopId.companyId)
         else:
-            qryShops &= Q(shopId__exact=request.user.shopId)
+            qryShops &= Q(shopId__exact=request.user.orgShopId)
 
-        userShops = SysShop.objects.filter(
+        userOrgShops = SysShop.objects.filter(
             qryShops
         )
 
@@ -133,7 +133,7 @@ def staffmanDetailCV(request):
             {
                 "staffInfo": staffInfo,
                 "userAuths": userAuths,
-                "userShops": userShops,
+                "userOrgShops": userOrgShops,
                 "editable": editable,
             },
         )
@@ -152,7 +152,7 @@ def staffmanJsonList(request):
     if userAuth in ["S0001M", "S0001C", "S0001A", "S0001T"]:
         # 검색조건(Parameter)
         sUseYn = request.POST.get("sUseYn")
-        sShopId = request.POST.get("sShopId")
+        sOrgShopId = request.POST.get("sOrgShopId")
         sUserNm = request.POST.get("sUserNm")
         sUserId = request.POST.get("sUserId")
         sUserAuth = request.POST.get("sUserAuth")
@@ -165,8 +165,8 @@ def staffmanJsonList(request):
         if not is_empty(sUseYn):  # 사용여부
             qry &= Q(useYn__exact=sUseYn)
 
-        if not is_empty(sShopId):  # 검색 매장아이디가 있을 경우
-            qry &= Q(shopId__exact=sShopId)
+        if not is_empty(sOrgShopId):  # 검색 매장아이디가 있을 경우
+            qry &= Q(orgShopId__exact=sOrgShopId)
 
         qry &= Q(userNm__contains=sUserNm)  # 직원명
         qry &= Q(userId__contains=sUserId)  # 직원아이디
@@ -191,11 +191,11 @@ def staffmanJsonList(request):
         staffInfos = None
         if userAuth == "S0001T":  # 점장일 경우
             staffInfos = SysUser.objects.for_shop(
-                shopId=request.user.shopId
+                orgShopId=request.user.orgShopId
             )
         else:
             staffInfos = SysUser.objects.for_company(
-                companyId=request.user.shopId.companyId
+                companyId=request.user.orgShopId.companyId
             )
 
         staffInfos = staffInfos.filter(
@@ -204,6 +204,7 @@ def staffmanJsonList(request):
             qryEx
         ).annotate(
             shopNm=F('shopId__shopNm'),  # 매장명
+            orgShopNm=F('orgShopId__shopNm'),  # 소속매장명
             companyNm=F('shopId__companyId__companyNm'),  # 회사명
             userAuthNm=F('userAuth__comNm'),  # 권한명
             regNm=F('regId__userNm'),  # 등록자명
@@ -212,12 +213,13 @@ def staffmanJsonList(request):
             authSeq=F('userAuth__ordSeq'),  # 권한정렬순서
         ).order_by(
             "-useYn",
-            "shopId",
+            "orgShopId",
             "authSeq",
             "userNm",
         ).values(
             "useYn",
             "shopNm",
+            "orgShopNm",
             "userAuth",
             "userAuthNm",
             "userNm",
@@ -264,7 +266,6 @@ def staffmanJsonModify(request):
         ).get(
             userId__exact=request.POST.get("userId")
         )
-
 
         # 직원정보 수정 폼
         staffModifyForm = StaffModifyForm(
@@ -348,23 +349,14 @@ def shopmanDetailCV(request):
 
     if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
         # Query
-        qry = Q()
-        ####################
-        # 기본 조건
-        ####################
-        # 해당 사용자 ID
-        qry &= Q(
-            shopId__exact=request.POST.get("shopId")
-        )
-
         ####################
         # 조회
         ####################
-        # 직원 정보 데이터 획득
+        # 매장 정보 데이터 획득
         shopInfo = SysShop.objects.for_company(
-            request.user.shopId.companyId
+            companyId=request.user.orgShopId.companyId,
         ).get(
-            qry
+            shopId__exact=request.POST.get("shopId")
         )
 
         # Rendering
@@ -401,21 +393,23 @@ def shopmanJsonList(request):
 
         qry &= Q(shopNm__contains=sShopNm)  # 매장명
 
-        shopInfos = SysShop.objects.for_company(request.user.shopId.companyId)
+        shopInfos = SysShop.objects.for_company(
+            companyId=request.user.orgShopId.companyId
+        )
 
         shopInfos = shopInfos.filter(
             qry
         ).annotate(
-            staffCnt=Count("r_system_sysuser_shop_id"),
+            staffCnt=Count("r_system_sysuser_org_shop_id"),
             staffCntUseY=Count(
                 Case(
-                    When(r_system_sysuser_shop_id__useYn__exact=True, then=1),
+                    When(r_system_sysuser_org_shop_id__useYn__exact=True, then=1),
                     output_field=IntegerField(),
                 )
             ),
             staffCntUseN=Count(
                 Case(
-                    When(r_system_sysuser_shop_id__useYn__exact=False, then=1),
+                    When(r_system_sysuser_org_shop_id__useYn__exact=False, then=1),
                     output_field=IntegerField(),
                 )
             )
@@ -468,7 +462,9 @@ def shopmanJsonModify(request):
         resultData = {}
 
         # 수정할 데이터 획득
-        shopInfo = SysShop.objects.for_company(request.user.shopId.companyId).get(
+        shopInfo = SysShop.objects.for_company(
+            companyId=request.user.orgShopId.companyId,
+        ).get(
             shopId=request.POST.get("shopId")
         )
 
