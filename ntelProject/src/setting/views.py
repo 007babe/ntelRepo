@@ -3,15 +3,13 @@ from __future__ import absolute_import
 import json
 import pprint
 
-from django.core import serializers
 from django.core.exceptions import PermissionDenied
-from django.db import connection, transaction
+from django.db import transaction
 from django.db.models.aggregates import Count
-from django.db.models.expressions import F, Subquery, Case, When
-from django.db.models.fields import CharField, IntegerField
+from django.db.models.expressions import F, Case, When
+from django.db.models.fields import IntegerField
 from django.db.models.query_utils import Q
-from django.http.response import HttpResponse, Http404
-from django.middleware import csrf
+from django.http.response import HttpResponse
 from django.shortcuts import render
 
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
@@ -20,10 +18,9 @@ from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
 from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
     SysComCd
 from utils.ajax import login_required_ajax_post
-from utils.data import is_empty, getComCdList, dictfetchall, getSysShopId, \
+from utils.data import is_empty, getComCdList,  \
     getNetworkCompanyByNetworkGroupList
-from utils.date import getltdt
-from utils.json import makeJsonResult, jsonDefault, JSONSerializer
+from utils.json import makeJsonDump
 
 
 @login_required_ajax_post
@@ -242,13 +239,10 @@ def staffmanJsonList(request):
         )
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    resultData=list(staffInfos)
-                ),
-                default=jsonDefault
+            makeJsonDump(
+                resultData=list(staffInfos),
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -284,14 +278,12 @@ def staffmanJsonModify(request):
             staffModifyForm.save()
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    form=staffModifyForm,
-                    resultMessage="수정되었습니다.",
-                    resultData=resultData
-                )
+            makeJsonDump(
+                form=staffModifyForm,
+                resultMessage="수정되었습니다.",
+                resultData=resultData,
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -318,14 +310,12 @@ def staffmanJsonRegist(request):
             staffRegistForm.save()
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    form=staffRegistForm,
-                    resultMessage="등록되었습니다.",
-                    resultData=resultData
-                )
+            makeJsonDump(
+                form=staffRegistForm,
+                resultMessage="등록되었습니다.",
+                resultData=resultData,
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -458,13 +448,10 @@ def shopmanJsonList(request):
         )
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    resultData=list(shopInfos)
-                ),
-                default=jsonDefault
+            makeJsonDump(
+                resultData=list(shopInfos),
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -497,14 +484,12 @@ def shopmanJsonModify(request):
             shopModifyForm.save()
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    form=shopModifyForm,
-                    resultMessage="수정되었습니다.",
-                    resultData=resultData
-                )
+            makeJsonDump(
+                form=shopModifyForm,
+                resultMessage="수정되었습니다.",
+                resultData=resultData,
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -531,18 +516,15 @@ def shopmanJsonRegist(request):
             shopRegistForm.save()
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    form=shopRegistForm,
-                    resultMessage="등록되었습니다.",
-                    resultData=resultData
-                )
+            makeJsonDump(
+                form=shopRegistForm,
+                resultMessage="등록되었습니다.",
+                resultData=resultData,
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
-
 
 
 @login_required_ajax_post
@@ -713,13 +695,10 @@ def accountmanJsonList(request):
         )
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    resultData=list(accountInfos)
-                ),
-                default=jsonDefault
+            makeJsonDump(
+                resultData=list(accountInfos),
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -765,14 +744,12 @@ def accountmanJsonModify(request):
             comapnyAccount.save()
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    form=accountModifyForm,
-                    resultMessage="수정되었습니다.",
-                    resultData=resultData,
-                )
+            makeJsonDump(
+                form=accountModifyForm,
+                resultMessage="수정되었습니다.",
+                resultData=resultData,
             ),
-            content_type="application/json"
+            content_type="application/json",
         )
     else:
         raise PermissionDenied()
@@ -811,12 +788,10 @@ def accountmanJsonRegist(request):
             )
 
         return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    form=accountRegistForm,
-                    resultMessage="등록되었습니다.",
-                    resultData=resultData
-                )
+            makeJsonDump(
+                form=accountRegistForm,
+                resultMessage="등록되었습니다.",
+                resultData=resultData,
             ),
             content_type="application/json"
         )

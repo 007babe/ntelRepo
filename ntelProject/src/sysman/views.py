@@ -1,18 +1,17 @@
 from __future__ import absolute_import
 
 from datetime import datetime
-import json
 
 from django.db import transaction
 from django.db.models.expressions import F
 from django.db.models.query_utils import Q
-from django.http.response import HttpResponse, Http404
+from django.http.response import HttpResponse
 from django.shortcuts import render
 
 from system.models import SysAppreq, SysCompany, SysShop, SysUser, SysComCd
 from utils.ajax import login_required_ajax, login_required_ajax_post
 from utils.data import getSysSeqId
-from utils.json import makeJsonResult, jsonDefault
+from utils.json import makeJsonDump
 
 
 @login_required_ajax
@@ -27,95 +26,86 @@ def appreqmanIndexCV(request):
     )
 
 
-@login_required_ajax
+@login_required_ajax_post
 def appreqmanDetailCV(request):
     '''
     시스템관리 > 사용관리  : 이용신청관리 :  상세
     '''
-    if request.method == 'POST':
-        qry = Q()
-        qry &= Q(
-            reqId__exact=request.POST.get("reqId")
-        )
+    qry = Q()
+    qry &= Q(
+        reqId__exact=request.POST.get("reqId")
+    )
 
-        appreq = SysAppreq.objects.annotate(
-            companyTpNm=F("companyTp__comNm")
-        ).get(
-            qry
-        )
+    appreq = SysAppreq.objects.annotate(
+        companyTpNm=F("companyTp__comNm")
+    ).get(
+        qry
+    )
 
-        return render(
-            request,
-            'sysman/useman/appreqman/detail.html',
-            {
-                "appreq": appreq
-            },
-        )
-    else:
-        raise Http404
+    return render(
+        request,
+        'sysman/useman/appreqman/detail.html',
+        {
+            "appreq": appreq
+        },
+    )
 
 
-@login_required_ajax
+@login_required_ajax_post
 def appreqmanJsonList(request):
     """
     시스템관리 > 사용관리  : 이용신청관리 : 리스트 데이터 Json
     """
-    if request.method == 'POST':
-        qry = Q()
-        # 검색조건
-        qry &= Q(reqStatus__comCd__contains=request.POST.get("sReqStatus"))  # 진행상태
-        qry &= Q(companyTp__comCd__contains=request.POST.get("sCompanyTp"))  # 회사구분
-        qry &= Q(reqId__contains=request.POST.get("sReqId"))  # 요청번호
-        qry &= Q(companyNm__contains=request.POST.get("sCompanyNm"))  # 회사명
-        qry &= Q(userNm__contains=request.POST.get("sUserNm"))  # 대표자명
+    qry = Q()
+    # 검색조건
+    qry &= Q(reqStatus__comCd__contains=request.POST.get("sReqStatus"))  # 진행상태
+    qry &= Q(companyTp__comCd__contains=request.POST.get("sCompanyTp"))  # 회사구분
+    qry &= Q(reqId__contains=request.POST.get("sReqId"))  # 요청번호
+    qry &= Q(companyNm__contains=request.POST.get("sCompanyNm"))  # 회사명
+    qry &= Q(userNm__contains=request.POST.get("sUserNm"))  # 대표자명
 
-        sysAppreq = SysAppreq.objects.annotate(
-            companyTpNm=F('companyTp__comNm'),
-            companyGradeNm=F('companyGrade__comNm'),
-            reqStatusNm=F('reqStatus__comNm'),
-            reqStatusCss=F('reqStatus__cdCss'),
-            regNm=F('regId__userNm'),
-            modNm=F('modId__userNm'),
-        ).filter(
-            qry
-        ).order_by(
-            '-reqId',
-        ).values(
-            "reqId",
-            "reqDt",
-            "appDt",
-            "companyNm",
-            "companyTpNm",
-            "companyGradeNm",
-            "shopNm",
-            "addr1",
-            "useYn",
-            "telNo1",
-            "telNo2",
-            "telNo3",
-            "cellNo1",
-            "cellNo2",
-            "cellNo3",
-            "regNm",
-            "userId",
-            "userNm",
-            "email",
-            "reqStatus",
-            "reqStatusNm",
-            "reqStatusCss",
-        )
+    sysAppreq = SysAppreq.objects.annotate(
+        companyTpNm=F('companyTp__comNm'),
+        companyGradeNm=F('companyGrade__comNm'),
+        reqStatusNm=F('reqStatus__comNm'),
+        reqStatusCss=F('reqStatus__cdCss'),
+        regNm=F('regId__userNm'),
+        modNm=F('modId__userNm'),
+    ).filter(
+        qry
+    ).order_by(
+        '-reqId',
+    ).values(
+        "reqId",
+        "reqDt",
+        "appDt",
+        "companyNm",
+        "companyTpNm",
+        "companyGradeNm",
+        "shopNm",
+        "addr1",
+        "useYn",
+        "telNo1",
+        "telNo2",
+        "telNo3",
+        "cellNo1",
+        "cellNo2",
+        "cellNo3",
+        "regNm",
+        "userId",
+        "userNm",
+        "email",
+        "reqStatus",
+        "reqStatusNm",
+        "reqStatusCss",
+    )
 
-        return HttpResponse(
-            json.dumps(
-                makeJsonResult(
-                    resultData=list(sysAppreq)
-                ),
-                default=jsonDefault
-            ),
-            content_type="application/json"
-        )
-    else:
-        raise Http404
+    return HttpResponse(
+        makeJsonDump(
+            resultData=list(sysAppreq)
+        ),
+        content_type="application/json"
+    )
 
 
 @login_required_ajax_post
@@ -278,12 +268,9 @@ def appreqmanJsonAppr(request):
     ).first()
 
     return HttpResponse(
-        json.dumps(
-            makeJsonResult(
-                resultMessage="처리가완료되었습니다.",
-                resultData=appreq,
-            ),
-            default=jsonDefault
+        makeJsonDump(
+            resultMessage="처리가완료되었습니다.",
+            resultData=appreq,
         ),
         content_type="application/json"
     )

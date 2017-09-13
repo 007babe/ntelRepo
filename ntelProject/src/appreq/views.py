@@ -14,7 +14,7 @@ from system.models import SysPolicy
 from telecom.models import TelecomNetworkCompany
 from utils.data import getComCdList, getNetworkCompanyByNetworkGroupList
 from utils.data import isUsableId
-from utils.json import makeJsonResult
+from utils.json import makeJsonResult, makeJsonDump
 
 
 def appreqIndexCV(request):
@@ -117,11 +117,9 @@ def appreqJsonRegist(request):
             # 가입후 메일 보내기(함수, 클래스 화 => 쓰레드 처리) ===<
 
     return HttpResponse(
-        json.dumps(
-            makeJsonResult(
-                form=sysAppreqRegistForm,
-                resultData=resultData
-            )
+        makeJsonDump(
+            form=sysAppreqRegistForm,
+            resultData=resultData,
         ),
         content_type="application/json"
     )
