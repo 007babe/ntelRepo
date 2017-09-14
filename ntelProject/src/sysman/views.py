@@ -192,6 +192,7 @@ def appreqmanJsonAppr(request):
             userNm=appreq.userNm,
             userAuth=SysComCd.objects.get(comCd__exact="S0001C"),
             shopId=sysShop,
+            orgShopId=sysShop,
             telNo1=appreq.telNo1,
             telNo2=appreq.telNo2,
             telNo3=appreq.telNo3,
