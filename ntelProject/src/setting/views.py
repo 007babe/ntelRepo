@@ -6,7 +6,7 @@ import pprint
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models.aggregates import Count
-from django.db.models.expressions import F, Case, When
+from django.db.models.expressions import F, Case, When, Func
 from django.db.models.fields import IntegerField
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
@@ -18,7 +18,7 @@ from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
 from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
     SysComCd
 from utils.ajax import login_required_ajax_post
-from utils.data import is_empty, getComCdList,  \
+from utils.data import is_empty, getComCdList, \
     getNetworkCompanyByNetworkGroupList
 from utils.json import makeJsonDump
 
@@ -359,12 +359,22 @@ def shopmanDetailCV(request):
             shopId__exact=request.POST.get("shopId")
         )
 
+        # 매장 직원 정보 데이터 획득
+        staffInfos = SysUser.objects.for_shop(
+            useYn=True,
+            orgShopId=shopInfo,
+        ).order_by(
+            "userAuth__ordSeq",
+            "userNm",
+        )
+
         # Rendering
         return render(
             request,
             'setting/shopman/detail.html',
             {
                 "shopInfo": shopInfo,
+                "staffInfos": staffInfos,
             },
         )
     else:
@@ -412,7 +422,9 @@ def shopmanJsonList(request):
                     When(r_system_sysuser_org_shop_id__useYn__exact=False, then=1),
                     output_field=IntegerField(),
                 )
-            )
+            ),
+            telNo2Mask=Func(F("telNo2"), function="fn_mask_telno"),
+            shopNmMask=Func(F("shopNm"), function="fn_mask_name"),
         ).order_by(
             "-useYn",
         ).values(

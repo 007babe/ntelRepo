@@ -5,7 +5,7 @@ from pprint import pprint
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User, PermissionsMixin
 from django.db import models
-from django.db.models.expressions import F
+from django.db.models.expressions import F, Func
 from django.db.models.query_utils import Q
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -277,6 +277,7 @@ class SysCompany(models.Model):
     zipCd = models.CharField(db_column='zip_cd', max_length=6, null=True, blank=True, verbose_name='회사우편번호') # 우편번호
     addr1 = models.TextField(db_column='addr_1', max_length=200, null=True, blank=True, verbose_name='회사기본주소') # 기본 주소
     addr2 = models.TextField(db_column='addr_2', max_length=200, null=True, blank=True, verbose_name='회사상세주소') # 상세주소
+    loginUserAuthYn = models.BooleanField(db_column='login_user_auth_yn', null=False, blank=False, default=True, verbose_name='총괄대표이외로그인불가설정')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
@@ -299,7 +300,7 @@ class SysCompany(models.Model):
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysCompanyAccountManager(models.Manager):
     '''
-    시스템 거래처 매니저
+    회사별 거래처 매니저
     '''
     def for_company(self, companyId):
         '''
@@ -314,7 +315,8 @@ class SysCompanyAccountManager(models.Manager):
 
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysCompanyAccount(models.Model):
-    """거래처 정보
+    """
+    회사별 거래처 정보
     """
     companyId = models.ForeignKey('system.SysCompany', db_column='company_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_company_id', verbose_name='회사ID')
     accountId = models.ForeignKey('system.SysCompany', db_column='account_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_account_id', verbose_name='거래처ID')
@@ -333,6 +335,47 @@ class SysCompanyAccount(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysShopAccountManager(models.Manager):
+    '''
+    매장별 거래처 매니저
+    '''
+    def for_company(self, companyId):
+        '''
+        자사 거래처 데이터
+        '''
+        qry = Q()
+        qry &= Q(companyId__exact=companyId)
+        return self.get_queryset().filter(
+            qry
+        )
+
+
+@python_2_unicode_compatible  # Python 2.x 지원용
+class SysShopAccount(models.Model):
+    """
+    매장별 거래처 정보
+    """
+    companyId = models.ForeignKey('system.SysCompany', db_column='company_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_company_id', verbose_name='회사ID')
+    accountId = models.ForeignKey('system.SysCompany', db_column='account_id', null=False, blank=False, related_name='r_%(app_label)s_%(class)s_account_id', verbose_name='거래처ID')
+    useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
+    regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
+    regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
+    modId = models.ForeignKey('system.SysUser', db_column='mod_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_mod_id', verbose_name='수정자ID')
+    modDt = models.DateTimeField(db_column='mod_dt', auto_now=True, blank=True, verbose_name='수정일자')
+
+    # Model Manager
+    objects = SysCompanyAccountManager()
+
+    class Meta:
+        db_table = "sys_company_account"
+        unique_together = ('companyId', 'accountId',)
+
+    def __str__(self):
+        return str(self.id)
+
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
@@ -383,6 +426,7 @@ class SysShopManager(models.Manager):
 
         sysShop = SysShop.objects.annotate(
             companyNm=F("companyId__companyNm"),
+            telNo2Masked=Func(F("telNo2"), function="masked_data"),
         ).filter(
             qry
         ).order_by(
@@ -395,6 +439,7 @@ class SysShopManager(models.Manager):
             "addr2",
             "telNo1",
             "telNo2",
+            "telNo2Masked",
             "telNo3",
             "cellNo1",
             "cellNo2",
@@ -545,8 +590,8 @@ class SysUserManager(BaseUserManager):
             orgShopId=orgShopId,
         ).filter(
             userAuth__ordSeq__gte=SysComCd.objects.get(
-                    comCd=userAuth,
-                ).ordSeq
+                comCd=userAuth,
+            ).ordSeq
         )
 
         # 로그인 본인
@@ -608,6 +653,9 @@ class SysUserManager(BaseUserManager):
         return list(
             staffs
         )
+
+        def as_asteric(self, astericYn=True):
+            print(self.telNo2)
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용

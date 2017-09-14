@@ -73,28 +73,34 @@ def loginCheckCV(request):
 
         # 추가 필요 : 업체, 매장, UseYn... authenticate 관련
         if user is not None and user.useYn:
-            # Login 처리
-            login(request, user)
-            jsonResult = makeJsonResult(
-                resultMessage="정상사용자"
-            )
+            # 회사 로그인 정책 처리(SysCompany.loginUserAuthYn=False 일 경우 대표, 총괄을 제외한 직원 로그인 금지
+            if not user.shopId.companyId.loginUserAuthYn and user.userAuth_id not in ["S0001M", "S0001A", "S0001C"]:
+                jsonResult = makeJsonResult(
+                    False,
+                    resultMessage="비밀번호가 일치하지 않거나 사용이 불가한 사용자입니다."
+                )
+            else:
+                # Login 처리
+                login(request, user)
+                jsonResult = makeJsonResult(
+                    resultMessage="정상사용자"
+                )
 
-            # 사용자 접속 정보 기록
-            sysLoginHistory = SysLoginHistory(
-                userId=user,
-                httpUserAgent=request.META['HTTP_USER_AGENT'],
-                remoteAddr=request.META['REMOTE_ADDR'],
-                remoteHost=request.META['REMOTE_HOST'],
-            )
-            sysLoginHistory.save()
-
-            # 사용자 로그인 카운트 증가
-            user.loginCnt += 1
-            user.save()
-
-            # (갱신된)csrf 값을 전달
-            jsonResult["csrfmiddlewaretoken"] = csrf.get_token(request)
-
+                # 사용자 접속 정보 기록
+                sysLoginHistory = SysLoginHistory(
+                    userId=user,
+                    httpUserAgent=request.META['HTTP_USER_AGENT'],
+                    remoteAddr=request.META['REMOTE_ADDR'],
+                    remoteHost=request.META['REMOTE_HOST'],
+                )
+                sysLoginHistory.save()
+    
+                # 사용자 로그인 카운트 증가
+                user.loginCnt += 1
+                user.save()
+    
+                # (갱신된)csrf 값을 전달
+                jsonResult["csrfmiddlewaretoken"] = csrf.get_token(request)
         else:
             jsonResult = makeJsonResult(
                 False,
