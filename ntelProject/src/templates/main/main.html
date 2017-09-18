@@ -49,9 +49,10 @@
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <input type="hidden" id="loginUserId" value="{{ user.userId }}">
-                        <li><a id="aCompanyInfo" href="">회사정보</a></li>
-                        <li><a id="aShopInfo" href="">매장정보</a></li>
-                        <li><a id="aUserInfo" href="">개인정보</a></li>
+                        <li><a id="aCompanyInfo" href="#">회사정보</a></li>
+                        <li><a id="aShopInfo" href="#">매장정보</a></li>
+                        <li><a id="aUserInfo" href="#">개인정보</a></li>
+                        <li><a id="aChangePw" href="#">비밀번호변경</a></li>
                         <li><a href="#">이름 : {{ user.userNm }}</a></li>
                         <li><a href="#">아이디 : {{ user.userId }}</a></li>
                         <li><a href="#">소속회사 : {{ user.companyNm }}</a></li>
@@ -255,6 +256,19 @@ $(document).ready(function() {
 
     $("#aUserInfo").on("click", function() {
 		console.log("aUserInfo Click!!!!!!!!")    		
+	});
+    
+    // 비밀번호 변경 
+    $("#aChangePw").on("click", function() {
+		// main:change_password__detail
+    	console.log("aChangePw Click!!!!!!!!")    		
+        // 상세 팝업
+        $.gfCommonPopUp({
+            popUrl: "{% url 'main:change_password__detail' %}",
+            modalId: "divChangePasswordPopup",
+            width: "600",
+            loginCheck: true,
+        });
 	});
     
 });

@@ -1,21 +1,19 @@
 from __future__ import absolute_import
 
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import PermissionDenied
-from django.db.models.expressions import F
-from django.db.models.query_utils import Q
 from django.http.response import Http404, HttpResponse
-from django.middleware import csrf
 from django.shortcuts import render
 from django.template.exceptions import TemplateDoesNotExist
-from django.urls.base import reverse, reverse_lazy
+from django.urls.base import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
-from system.forms import SysUserChangeShopForm
-from system.models import SysMenu, SysShop, SysCompanyAccount, SysUser
+from system.forms import SysUserChangeShopForm, SysPasswordChangeForm
+from system.models import SysMenu, SysShop, SysUser
 from utils.ajax import login_required_ajax, login_required_ajax_post
-from utils.data import is_empty
 from utils.json import makeJsonDump
 
 
@@ -124,3 +122,42 @@ def jsonChangeShop(request):
     else:
         raise PermissionDenied()
 
+
+@login_required_ajax_post
+def changePasswordDetailCV(request):
+    '''
+    메인 > 비밀번호 변경 : 상세
+    '''
+    # Rendering
+    return render(
+        request,
+        'main/change_password/detail.html',
+        {},
+    )
+
+
+@login_required_ajax_post
+def changePasswordJsonModify(request):
+    '''
+    메인 > 비밀번호 변경 요청처리
+    '''
+    resultData = {}
+
+#    passwordChangeForm = PasswordChangeForm(
+    passwordChangeForm = SysPasswordChangeForm(
+        request.POST,
+        request=request,
+    )
+
+    if passwordChangeForm.is_valid():
+        user = passwordChangeForm.save()
+        update_session_auth_hash(request, user)
+
+    return HttpResponse(
+        makeJsonDump(
+            form=passwordChangeForm,
+            resultMessage="비밀번호가 변경 되었습니다.",
+            resultData=resultData,
+        ),
+        content_type="application/json",
+    )

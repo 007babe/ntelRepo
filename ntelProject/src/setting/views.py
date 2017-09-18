@@ -1,8 +1,5 @@
 from __future__ import absolute_import
 
-import json
-import pprint
-
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models.aggregates import Count
@@ -13,7 +10,7 @@ from django.http.response import HttpResponse
 from django.shortcuts import render
 
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
-    ShopRegistForm, CompanyAccountRegistForm, \
+    ShopRegistForm, \
     AccountRegistForm, AccountModifyForm
 from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
     SysComCd

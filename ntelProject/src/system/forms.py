@@ -2,9 +2,10 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, \
     UserCreationForm, UserChangeForm
 from django.forms.models import ModelForm
+from django.utils.translation import gettext as _
 
 from system.models import SysUser, SysCompany
-from utils.data import getSysSeqId, isUsableId
+from utils.data import getSysSeqId
 
 
 class SysCompanyForm(ModelForm):
@@ -134,3 +135,48 @@ class SysUserChangeForm(UserChangeForm):
     class Meta:
         model = SysUser
         fields = ('userId',)
+
+
+class SysPasswordChangeForm(forms.Form):
+    '''
+    비밀번호 변경 Form
+    '''
+    newPassword = forms.CharField(
+        min_length=6,
+        max_length=20,
+    )
+    newPasswordChk = forms.CharField(
+        min_length=6,
+        max_length=20,
+    )
+
+    field_order = [
+        'newPassword',
+        'newPasswordChk',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # request 객체
+        super(SysPasswordChangeForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(SysPasswordChangeForm, self).clean()
+
+        # 비밀번호 & 비밀번호 확인 일치 여부 체크
+        password = cleaned_data.get('newPassword')
+        passwordChk = cleaned_data.get('newPasswordChk')
+        if password != passwordChk:
+            self.add_error('newPassword', _('비밀번호확인과 일치하지 않습니다.'))
+
+    def save(self, commit=True):
+        password = self.cleaned_data["newPassword"]
+        self.request.user.set_password(password)
+
+        self.request.user.modId = self.request.user
+
+        if commit:
+            self.request.user.save()
+        return self.request.user
+
+    class Meta:
+        model = SysUser
