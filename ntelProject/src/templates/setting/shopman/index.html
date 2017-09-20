@@ -64,7 +64,7 @@ $(document).ready(function() {
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
-        	'상태', '매장마스크', '매장', '매장ID', '전체', '사용중', '미사용', '전화No2', '전화', 'Fax', '휴대폰', '주소', '등록일'
+        	'상태', '매장', '매장ID', '전체', '사용중', '미사용', '전화', 'Fax', '휴대폰', '주소', '등록일'
         ],
         align: "center",
         colModel:[
@@ -78,11 +78,6 @@ $(document).ready(function() {
                 formatter: function(cellvalue, options, rowObject) {
                     return $.jqGridUseYnFormat(rowObject.useYn);
                 }
-            },
-            {
-                name: 'shopNmMask',
-                width: 120,
-                align: "center",
             },
             {
                 name: 'shopNm',
@@ -112,11 +107,6 @@ $(document).ready(function() {
                 name: 'staffCntUseN',
                 width: 50,
                 align: "right"
-            },
-            {
-                name: 'telNo2Mask',
-                width: 120,
-                align: "center",
             },
             {
                 name: 'telNo',

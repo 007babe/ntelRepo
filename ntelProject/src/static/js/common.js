@@ -1106,6 +1106,10 @@ $.gfInitComCd2ComboBox = function(formOnly) {
         var setValue = $.isEmpty(_item.attr("setValue")) ? "" : _item.attr("setValue");
         var isDisabled = _item.attr("isDisabled") == "true" ? true : false;
         var grpOpt = $.isEmpty(_item.attr("grpOpt")) ? "" : _item.attr("grpOpt");
+        var dnOrdSeq = $.isEmpty(_item.attr("dnOrdSeq")) ? "" : _item.attr("dnOrdSeq");
+        var dneOrdSeq = $.isEmpty(_item.attr("dneOrdSeq")) ? "" : _item.attr("dneOrdSeq");
+        var upOrdSeq = $.isEmpty(_item.attr("upOrdSeq")) ? "" : _item.attr("upOrdSeq");
+        var upeOrdSeq = $.isEmpty(_item.attr("upeOrdSeq")) ? "" : _item.attr("upeOrdSeq");
         var triggerEvent = $.n2s(_item.attr("triggerEvent"));
 
         _item.gfSetComCd2ComboBox({
@@ -1116,6 +1120,10 @@ $.gfInitComCd2ComboBox = function(formOnly) {
             setValue : setValue,
             isDisabled : isDisabled,
             grpOpt: grpOpt,
+            dnOrdSeq: dnOrdSeq,
+            dneOrdSeq: dneOrdSeq,
+            upOrdSeq: upOrdSeq,
+            upeOrdSeq: upeOrdSeq,
             triggerEvent: triggerEvent
         });
     });
@@ -1133,6 +1141,10 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
     var grpCd  = opts.grpCd; // 그룹코드(필수)
     var useYn  = opts.useYn; // 사용여부값 적용(true 일경우 useYn = "Y"만 세팅, 기본값 false)
     var grpOpt = opts.grpOpt; // 그룹 옵션
+    var dnOrdSeq = opts.dnOrdSeq; // 순서 등급 하위
+    var dneOrdSeq = opts.dneOrdSeq; // 순서 등급 하위(=포함)
+    var upOrdSeq = opts.upOrdSeq; // 순서 등급 상위
+    var upeOrdSeq = opts.upeOrdSeq; // 순서 등급 상위(=포함)
 
     var isSetNF = $.isEmpty(opts.isSetNF) ? false : opts.isSetNF; // 값이 없는 필드를 가지는지 여부 기본값(true일 경우 Null Option 멤버 추가, 기본값 false)
     var textNF = $.isEmpty(opts.textNF) ? "" : opts.textNF; // 값이 없는 필드의 Text
@@ -1143,7 +1155,11 @@ $.fn.gfSetComCd2ComboBox = function(opts) {
     var gdComcdF = $.fgGetComCdData({
         grpCd: opts.grpCd,
         useYn: opts.useYn,
-        grpOpt: opts.grpOpt
+        grpOpt: opts.grpOpt,
+        dnOrdSeq: opts.dnOrdSeq,
+        dneOrdSeq: opts.dneOrdSeq,
+        upOrdSeq: opts.upOrdSeq,
+        upeOrdSeq: opts.upeOrdSeq,
     });
 
     // 초기화
@@ -1777,11 +1793,19 @@ $.fgGetComCdData = function(opts) {
     var grpCd = opts.grpCd; // 그룹코드(필수)
     var useYn = $.n2s(opts.useYn); // 사용여부값 적용(true 일경우 useYn = "Y"만 세팅, 기본값 false)
     var grpOpt = $.n2s(opts.grpOpt); // 그룹옵션
+    var dnOrdSeq = $.n2s(opts.dnOrdSeq); // 순서 등급 하위
+    var dneOrdSeq = $.n2s(opts.dneOrdSeq); // 순서 등급 하위(=포함)
+    var upOrdSeq = $.n2s(opts.upOrdSeq); // 순서 등급 상위
+    var upeOrdSeq = $.n2s(opts.upeOrdSeq); // 순서 등급 상위(=포함)
 
     return $.grep(GD_SYS_COM_CD, function(el, inx){
     	return el.grpCd == grpCd
             && (useYn == "" ? true : el.useYn == useYn)
             && (grpOpt == "" ? true : el.grpOpt.indexOf(grpOpt) > -1)
+            && (dnOrdSeq == "" ? true : el.ordSeq > dnOrdSeq)
+            && (dneOrdSeq == "" ? true : el.ordSeq >= dneOrdSeq)
+            && (upOrdSeq == "" ? true : el.ordSeq < upOrdSeq)
+            && (upeOrdSeq == "" ? true : el.ordSeq <= upeOrdSeq)
             ;
     });
 };

@@ -143,7 +143,6 @@ def changePasswordJsonModify(request):
     '''
     resultData = {}
 
-#    passwordChangeForm = PasswordChangeForm(
     passwordChangeForm = SysPasswordChangeForm(
         request.POST,
         request=request,
@@ -151,6 +150,7 @@ def changePasswordJsonModify(request):
 
     if passwordChangeForm.is_valid():
         user = passwordChangeForm.save()
+        # 현재 로그인 세션의 정보 업데이트(하지 않으면 다시 로그인 해야함)
         update_session_auth_hash(request, user)
 
     return HttpResponse(

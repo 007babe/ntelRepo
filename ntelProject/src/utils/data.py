@@ -10,10 +10,19 @@ from telecom.models import TelecomNetwork, TelecomNetworkCompany
 from utils.const import NTEL_EXCLUDE_IDS
 
 
-def getComCdList(grpCd=None, useYn=None, grpOpt=None, orderOpt=True):
+def getComCdList(grpCd=None, useYn=None, grpOpt=None, gtOrdSeq=None, gteOrdSeq=None, ltOrdSeq=None, lteOrdSeq=None, orderOpt=True,):
     '''공통코드 조회 리스트
     '''
-    return SysComCd.objects.for_grp(grpCd, grpOpt, useYn, orderOpt)
+    return SysComCd.objects.for_grp(
+        grpCd=grpCd,
+        useYn=useYn,
+        grpOpt=grpOpt,
+        gtOrdSeq=gtOrdSeq,
+        gteOrdSeq=gteOrdSeq,
+        ltOrdSeq=ltOrdSeq,
+        lteOrdSeq=lteOrdSeq,
+        orderOpt=orderOpt,
+    )
 
 
 def getSysSeqId(seqCd):
@@ -54,8 +63,11 @@ def getSysShopId(companyId):
     '''
     신규 매장(SysShop) ID 코드 획득
     '''
-    shops = SysShop.objects.for_company(companyId).all().last()
-    lastShopId = shops.shopId
+    lastShop = SysShop.objects.for_company(
+        companyId=companyId
+    ).all().last()
+
+    lastShopId = lastShop.shopId
     companyId = lastShopId[:-4]
     shopIdSeq = str(int(lastShopId[len(lastShopId) - 4:]) + 1).zfill(4)
 

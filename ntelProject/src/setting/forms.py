@@ -220,8 +220,10 @@ class ShopRegistForm(ModelForm):
 
         # 매장번호 획득 후 세팅
         instanceShopRegist.shopId = getSysShopId(self.request.user.shopId.companyId)
+        
         # 회사ID 세팅
         instanceShopRegist.companyId = self.request.user.shopId.companyId
+        print("hahahahahaha3")
         # 등록자 ID
         instanceShopRegist.regId = self.request.user
         # 수정자 ID

@@ -15,7 +15,7 @@ class SysComCdManager(models.Manager):
     '''
     공통코드 매니저
     '''
-    def for_grp(self, grpCd=None, grpOpt=None, useYn=None, orderOpt=True):
+    def for_grp(self, grpCd=None, useYn=None, grpOpt=None, ltOrdSeq=None, lteOrdSeq=None, gtOrdSeq=None, gteOrdSeq=None, orderOpt=True):
         '''
         그룹옵션 적용 데이터
         '''
@@ -26,6 +26,14 @@ class SysComCdManager(models.Manager):
             qry &= Q(grpOpt__contains=grpOpt)
         if useYn is not None:
             qry &= Q(useYn__exact=useYn)
+        if ltOrdSeq is not None:
+            qry &= Q(ordSeq__lt=ltOrdSeq)
+        if lteOrdSeq is not None:
+            qry &= Q(ordSeq__lte=lteOrdSeq)
+        if gtOrdSeq is not None:
+            qry &= Q(ordSeq__gt=gtOrdSeq)
+        if gteOrdSeq is not None:
+            qry &= Q(ordSeq__gte=gteOrdSeq)
 
         return self.get_queryset().filter(
             qry
@@ -33,16 +41,26 @@ class SysComCdManager(models.Manager):
             ("" if orderOpt else "-") + "ordSeq"
         )
 
-    def as_list(self, useYn=None):
+    def as_list(self, grpCd=None, useYn=None, grpOpt=None, ltOrdSeq=None, lteOrdSeq=None, gtOrdSeq=None, gteOrdSeq=None, orderOpt=True):
         '''
         list데이터용
         '''
         return list(
-            self.for_grp(useYn=useYn).values(
+            self.for_grp(
+                grpCd=grpCd,
+                useYn=useYn,
+                grpOpt=grpOpt,
+                gtOrdSeq=gtOrdSeq,
+                gteOrdSeq=gteOrdSeq,
+                ltOrdSeq=ltOrdSeq,
+                lteOrdSeq=lteOrdSeq,
+                orderOpt=orderOpt,
+            ).values(
                 'grpCd',
                 'comCd',
                 'comNm',
                 'grpOpt',
+                'ordSeq',
                 'useYn',
             ).order_by(
                 'grpCd',
@@ -377,7 +395,6 @@ class SysShopAccount(models.Model):
         return str(self.id)
 
 
-
 @python_2_unicode_compatible  # Python 2.x 지원용
 class SysShopManager(models.Manager):
     '''
@@ -426,7 +443,7 @@ class SysShopManager(models.Manager):
 
         sysShop = SysShop.objects.annotate(
             companyNm=F("companyId__companyNm"),
-            telNo2Masked=Func(F("telNo2"), function="masked_data"),
+            telNo2Masked=Func(F("telNo2"), function="fn_mask_telno"),
         ).filter(
             qry
         ).order_by(
@@ -723,8 +740,9 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
         '''
         사용자 소속 회사ID
         '''
-        return self.orgShopId.companyId
+        return self.orgShopId.companyId.companyId
 
+    @property
     def companyNm(self):
         '''
         사용자 소속 회사명
@@ -736,6 +754,13 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
         회사구분
         '''
         return self.orgShopId.companyId.companyTp
+
+    @property
+    def companyTpSrtCd(self):
+        '''
+        회사구분(단축코드)
+        '''
+        return self.orgShopId.companyId.companyTp.srtCd
 
     def companyTpNm(self):
         '''
@@ -759,6 +784,7 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
             orgShopId__exact=self.shopId,
         )
 
+    @property
     def orgShopStaffs(self):
         '''
         소속매장의 소속직원

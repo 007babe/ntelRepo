@@ -25,7 +25,7 @@
                 </div>
                 <label class="col-sm control-label search">권한</label>
                 <div class="col-sm">
-                    <select id="sUserAuth" name="sUserAuth" class="form-control form-box" formType="comSel" grpCd="S0001" isSetNF="true" textNF="전체" grpOpt="{{ request.user.userAuth.srtCd }}">
+                    <select id="sUserAuth" name="sUserAuth" class="form-control form-box" formType="comSel" grpCd="S0001" isSetNF="true" textNF="전체" grpOpt="{{ request.user.companyTpSrtCd }}" dneOrdSeq="{{ request.user.userAuth.ordSeq }}">
                     </select>
                 </div>
                 <label class="col-sm control-label search">직원명</label>
@@ -96,7 +96,8 @@ $(document).ready(function() {
             {
                 name: 'shopNm',
                 width: 50,
-                align: "center"
+                align: "center",
+                hidden: true
             },
             {
                 name: 'orgShopNm',

@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-import json
+import pprint
 
 from django.http import HttpResponse
 
@@ -16,7 +16,6 @@ def getJsonSysComCd(request):
     공통코드(com_cd) 데이터 획득(Json)
     """
     sysComCds = SysComCd.objects.as_list(useYn=True)
-
     return HttpResponse(
         makeJsonDump(
             resultData=sysComCds

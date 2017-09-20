@@ -31,10 +31,8 @@ def staffmanRegistCV(request):
         # 권한리스트 데이터 획득
         userAuths = getComCdList(
             grpCd='S0001',
-            grpOpt=request.user.userAuth.srtCd,
-        ).filter(
-            # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
-            ordSeq__gt=request.user.userAuth.ordSeq
+            grpOpt=request.user.companyTpSrtCd,
+            gtOrdSeq=request.user.userAuth.ordSeq,   # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
         )
 
         # 매장리스트 데이터 획득
@@ -100,10 +98,8 @@ def staffmanDetailCV(request):
         # 권한리스트 데이터 획득
         userAuths = getComCdList(
             grpCd='S0001',
-            grpOpt=request.user.userAuth.srtCd,
-        ).filter(
-            # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
-            ordSeq__gt=request.user.userAuth.ordSeq
+            grpOpt=request.user.companyTpSrtCd,
+            gtOrdSeq=request.user.userAuth.ordSeq,   # 현재 사용자 권한에 따른 조건 처리(자신 포함 자신의 상위 권한 제외)
         )
 
         # 매장리스트 데이터 획득
