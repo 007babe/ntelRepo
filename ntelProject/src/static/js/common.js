@@ -1290,6 +1290,19 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
 };
 
 /*
+ * Switch 버튼 초기화
+ */
+$.gfInitSwitchButton = function(formOnly) {
+    
+    var _jsSwich = $(".js-switch");
+
+    $.each(_jsSwich, function(i, item){
+    	new Switchery(item, { color: "#428bca" });
+    });    
+};
+
+
+/*
  * 매장 데이터 SelectBox 초기화
  */
 $.gfInitShop2ComboBox = function(formOnly) {
@@ -1787,6 +1800,7 @@ $.gfNotiMsgSvr = function(opts) {
  *  opts.grpOpt : 그룹옵션(Default All else 해당 옵션)
  */
 $.fgGetComCdData = function(opts) {
+    var comCdData;
 
     if($.isEmpty(opts)) return null;
 
@@ -1797,8 +1811,9 @@ $.fgGetComCdData = function(opts) {
     var dneOrdSeq = $.n2s(opts.dneOrdSeq); // 순서 등급 하위(=포함)
     var upOrdSeq = $.n2s(opts.upOrdSeq); // 순서 등급 상위
     var upeOrdSeq = $.n2s(opts.upeOrdSeq); // 순서 등급 상위(=포함)
+    var sortR = $.isEmpty(opts.sortR) ? false : opts.sortR; // 역정렬 순서 여부(기본 오름차순)
 
-    return $.grep(GD_SYS_COM_CD, function(el, inx){
+    comCdData = $.grep(GD_SYS_COM_CD, function(el, inx){
     	return el.grpCd == grpCd
             && (useYn == "" ? true : el.useYn == useYn)
             && (grpOpt == "" ? true : el.grpOpt.indexOf(grpOpt) > -1)
@@ -1808,6 +1823,14 @@ $.fgGetComCdData = function(opts) {
             && (upeOrdSeq == "" ? true : el.ordSeq <= upeOrdSeq)
             ;
     });
+    
+    if(sortR){
+		comCdData = comCdData.sort(function(a, b){
+			return b.ordSeq - a.ordSeq;
+		});	
+	}
+    
+    return comCdData;
 };
 
 /*
@@ -1850,6 +1873,9 @@ $.gfInitFormField = function(formOnly) {
     
     // 매장 필드 초기화
     $.gfInitShop2ComboBox(formOnly);
+    
+    // Switch 버튼 초기화
+    $.gfInitSwitchButton(formOnly);
 
 };
 

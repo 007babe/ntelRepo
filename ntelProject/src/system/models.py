@@ -295,7 +295,13 @@ class SysCompany(models.Model):
     zipCd = models.CharField(db_column='zip_cd', max_length=6, null=True, blank=True, verbose_name='회사우편번호') # 우편번호
     addr1 = models.TextField(db_column='addr_1', max_length=200, null=True, blank=True, verbose_name='회사기본주소') # 기본 주소
     addr2 = models.TextField(db_column='addr_2', max_length=200, null=True, blank=True, verbose_name='회사상세주소') # 상세주소
-    loginUserAuthYn = models.BooleanField(db_column='login_user_auth_yn', null=False, blank=False, default=True, verbose_name='총괄대표이외로그인불가설정')
+    loginUserAuthYn = models.BooleanField(db_column='login_user_auth_yn', null=False, blank=False, default=False, verbose_name='로그인가능사용자권한사용여부')
+    loginUserAuth = models.ForeignKey('system.SysComCd', db_column='login_user_auth', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_login_user_auth', verbose_name='로그인가능사용자권한')
+    loginTimeSetYn = models.BooleanField(db_column='login_time_set_yn', null=False, blank=False, default=False, verbose_name='로그인시간대설정여부')
+    loginTimeFrom = models.CharField(db_column='login_time_from', max_length=5, null=False, blank=False, default="00:00", verbose_name='로그인시간대시작시분')
+    loginTimeTo = models.CharField(db_column='login_time_to', max_length=5, null=False, blank=False, default="24:00", verbose_name='로그인시간대종료시분')
+    maskUserAuthYn = models.BooleanField(db_column='mask_user_auth_yn', null=False, blank=False, default=False, verbose_name='데이터마스킹사용자권한사용여부')
+    maskUserAuth = models.ForeignKey('system.SysComCd', db_column='mask_user_auth', null=True, blank=False, default=None, related_name='r_%(app_label)s_%(class)s_mask_user_auth', verbose_name='데이터마스킹사용자권한')
     useYn = models.BooleanField(db_column='use_yn', default=True, verbose_name='사용여부')
     regId = models.ForeignKey('system.SysUser', db_column='reg_id', null=True, blank=True, related_name='r_%(app_label)s_%(class)s_reg_id', verbose_name='등록자ID')
     regDt = models.DateTimeField(db_column='reg_dt', auto_now_add=True, null=True, blank=True, verbose_name='등록일자')
@@ -670,9 +676,6 @@ class SysUserManager(BaseUserManager):
         return list(
             staffs
         )
-
-        def as_asteric(self, astericYn=True):
-            print(self.telNo2)
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용

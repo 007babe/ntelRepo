@@ -220,10 +220,8 @@ class ShopRegistForm(ModelForm):
 
         # 매장번호 획득 후 세팅
         instanceShopRegist.shopId = getSysShopId(self.request.user.shopId.companyId)
-        
         # 회사ID 세팅
         instanceShopRegist.companyId = self.request.user.shopId.companyId
-        print("hahahahahaha3")
         # 등록자 ID
         instanceShopRegist.regId = self.request.user
         # 수정자 ID
@@ -315,7 +313,6 @@ class AccountRegistForm(ModelForm):
 
         # 통신사 선택 체크
         companyTp = self.request.POST.get('companyTp')
-        print(self.request.POST.get('companyTp'))
         if companyTp == 'S0004D':  # 딜러점일 경우
             if is_empty(self.request.POST.getlist("networkCompanyIdD")):
                 self.add_error('networkCompanyIdD', _('통신사를 선택해 주세요.'))
