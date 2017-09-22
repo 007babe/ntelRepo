@@ -46,4 +46,9 @@ urlpatterns = [
     # 매장 등록 화면
     url(r'^shopman/regist/$', views.shopmanRegistCV, name='shopman__regist'),
 
+    #===============================>
+    # 기본설정
+    #===============================<
+    # 기본설정 정보 수정(Json)
+    url(r'^basicman/json/modify/$', views.basicmanJsonModify, name='basicman__json__modify'),
 ]

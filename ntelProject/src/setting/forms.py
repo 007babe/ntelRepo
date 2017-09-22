@@ -463,3 +463,38 @@ class AccountModifyForm(ModelForm):
             "bizKind",
             "modId",
         ]
+
+
+class BasicModifyForm(ModelForm):
+    '''
+    기본설정정보 변경 Form
+    '''
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # request 객체
+        super(BasicModifyForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(BasicModifyForm, self).clean()
+
+    def save(self, commit=True):
+        cleaned_data = super(BasicModifyForm, self).clean()
+        instanceBasicModify = super(BasicModifyForm, self).save(commit=False)
+
+        instanceBasicModify.modId = self.request.user  # 수정자ID
+
+        if commit:
+            instanceBasicModify.save()
+        return instanceBasicModify
+
+    class Meta:
+        model = SysCompany
+        fields = [
+            "loginUserAuthYn",
+            "loginUserAuth",
+            "loginTimeSetYn",
+            "loginTimeFrom",
+            "loginTimeTo",
+            "maskUserAuthYn",
+            "maskUserAuth",
+        ]

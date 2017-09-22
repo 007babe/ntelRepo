@@ -11,7 +11,7 @@ from django.shortcuts import render
 
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
     ShopRegistForm, \
-    AccountRegistForm, AccountModifyForm
+    AccountRegistForm, AccountModifyForm, BasicModifyForm
 from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
     SysComCd
 from utils.ajax import login_required_ajax_post
@@ -798,3 +798,42 @@ def accountmanJsonRegist(request):
         )
     else:
         raise PermissionDenied()
+
+
+@login_required_ajax_post
+def basicmanJsonModify(request):
+    '''
+    환경설정 > 기본정보 수정 요청처리
+    '''
+    userAuth = request.user.userAuth_id  # 사용자 권한 코드
+
+    if userAuth in ["S0001M", "S0001C", "S0001A"]:  # 시스템관리자, 대표, 총괄만 가능
+        resultData = {}
+
+        # 수정할 데이터 획득
+        companyInfo = SysCompany.objects.get(
+            companyId=request.user.shopId.companyId,
+        )
+
+        # 기본설정 수정 폼
+        basicModifyForm = BasicModifyForm(
+            request.POST,
+            instance=companyInfo,
+            request=request,
+        )
+
+        # 데이터 검증 후 저장
+        if basicModifyForm.is_valid():
+            basicModifyForm.save()
+
+        return HttpResponse(
+            makeJsonDump(
+                form=basicModifyForm,
+                resultMessage="수정되었습니다.",
+                resultData=resultData,
+            ),
+            content_type="application/json",
+        )
+    else:
+        raise PermissionDenied()
+

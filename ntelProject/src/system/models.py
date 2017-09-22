@@ -198,18 +198,6 @@ class SysCompanyManager(models.Manager):
     '''
     시스템 회사 매니저
     '''
-    def for_company(self, companyId):
-        '''
-        동일회사 데이터
-        '''
-        qry = Q()
-        qry &= Q(companyId__exact=companyId)
-        return self.get_queryset().filter(
-            qry
-        ).order_by(
-            "shopId"
-        )
-
     def for_account(self, companyId, realYn=True):
         '''
         자사 거래처 데이터
