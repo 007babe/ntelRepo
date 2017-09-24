@@ -1,8 +1,8 @@
 import datetime
 from io import StringIO
-
 import json
 
+from django.conf import settings
 from django.core.serializers.json import Serializer
 
 
@@ -39,6 +39,7 @@ def jsonDefault(value):
     '''
     if isinstance(value, datetime.date):
         return value.strftime('%Y-%m-%d %H:%M:%S')
+
     raise TypeError('not JSON serializable')
 
 

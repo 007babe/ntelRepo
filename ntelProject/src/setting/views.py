@@ -1,13 +1,15 @@
 from __future__ import absolute_import
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models.aggregates import Count
 from django.db.models.expressions import F, Case, When, Func
-from django.db.models.fields import IntegerField
+from django.db.models.fields import IntegerField, CharField
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 from django.shortcuts import render
+from keyczar.keyczar import Crypter
 
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
     ShopRegistForm, \
@@ -386,6 +388,14 @@ def shopmanJsonList(request):
         sUseYn = request.POST.get("sUseYn")
         sShopNm = request.POST.get("sShopNm")
 
+        print("sShopNm:", sShopNm)
+        crypter = Crypter.Read(settings.ENCRYPTED_FIELDS_KEYDIR)
+        sShopNmEncrypt = crypter.Encrypt(sShopNm)
+        print("sShopNmEncrypt:", sShopNmEncrypt)
+        sShopNmDecrypt = crypter.Decrypt(sShopNmEncrypt)
+        print("sShopNmDecrypt:", sShopNmDecrypt)
+        print("AEDMl7jhVJ3uSrJClh7PVdBpQCFYAfsUx96IqsKtLoGJIpTX6gXHod1Lna7cePau8y5DWaDal8d9", crypter.Decrypt("AEDMl7jhVJ3uSrJClh7PVdBpQCFYAfsUx96IqsKtLoGJIpTX6gXHod1Lna7cePau8y5DWaDal8d9"))
+
         # Query
         qry = Q()
         ####################
@@ -394,13 +404,12 @@ def shopmanJsonList(request):
         if not is_empty(sUseYn):  # 사용여부
             qry &= Q(useYn__exact=sUseYn)
 
-        qry &= Q(shopNm__contains=sShopNm)  # 매장명
+        if not is_empty(sShopNm):  # 매장명
+            qry = Q(shopNm__exact=sShopNm)
 
         shopInfos = SysShop.objects.for_company(
             companyId=request.user.orgShopId.companyId
-        )
-
-        shopInfos = shopInfos.filter(
+        ).filter(
             qry
         ).annotate(
             staffCnt=Count("r_system_sysuser_org_shop_id"),
@@ -416,7 +425,11 @@ def shopmanJsonList(request):
                     output_field=IntegerField(),
                 )
             ),
-            telNo2Mask=Func(F("telNo2"), function="fn_mask_telno"),
+            telNo2Mask=Func(
+                F("telNo2"),
+                function="fn_mask_telno",
+                output_field=CharField(max_length=5),
+            ),
             shopNmMask=Func(F("shopNm"), function="fn_mask_name"),
         ).order_by(
             "-useYn",
@@ -432,6 +445,7 @@ def shopmanJsonList(request):
             "cellNo3",
             "telNo1",
             "telNo2",
+            "telNo2Mask",
             "telNo3",
             "faxNo1",
             "faxNo2",

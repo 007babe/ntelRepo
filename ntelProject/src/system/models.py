@@ -8,6 +8,7 @@ from django.db import models
 from django.db.models.expressions import F, Func
 from django.db.models.query_utils import Q
 from django.utils.encoding import python_2_unicode_compatible
+from encrypted_fields.fields import EncryptedCharField
 
 
 @python_2_unicode_compatible  # Python 2.x 지원용
@@ -269,13 +270,13 @@ class SysCompany(models.Model):
     bizLicNo2 = models.CharField(db_column='biz_lic_no2', max_length=2, null=True, blank=True, verbose_name='사업자번호2')
     bizLicNo3 = models.CharField(db_column='biz_lic_no3', max_length=5, null=True, blank=True, verbose_name='사업자번호3')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='회사전화1')
-    telNo2 = models.CharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사전화2')
+    telNo2 = EncryptedCharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사전화2')
     telNo3 = models.CharField(db_column='tel_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사전화3')
     faxNo1 = models.CharField(db_column='fax_no1', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX1')
-    faxNo2 = models.CharField(db_column='fax_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX2')
+    faxNo2 = EncryptedCharField(db_column='fax_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX2')
     faxNo3 = models.CharField(db_column='fax_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX3')
     cellNo1 = models.CharField(db_column='cell_no1', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰1')
-    cellNo2 = models.CharField(db_column='cell_no2', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰2')
+    cellNo2 = EncryptedCharField(db_column='cell_no2', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰2')
     cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=True, blank=True, default=None, verbose_name='담당자휴대폰3')
     chargerNm = models.CharField(db_column='charger_nm', max_length=30, null=True, blank=True, verbose_name='담당자 이름')
     bizTp = models.CharField(db_column='biz_tp', max_length=100, null=True, blank=True, verbose_name='업태')
@@ -473,13 +474,13 @@ class SysShop(models.Model):
     shopNm = models.CharField(db_column='shop_nm', max_length=100, blank=True, verbose_name='매장명')
     mainYn = models.BooleanField(db_column='mainYn', default=False, verbose_name='기본매장여부')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화1')
-    telNo2 = models.CharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화2')
+    telNo2 = EncryptedCharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화2')
     telNo3 = models.CharField(db_column='tel_no3', max_length=5, null=True, blank=True, default=None, verbose_name='매장전화3')
     faxNo1 = models.CharField(db_column='fax_no1', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX1')
-    faxNo2 = models.CharField(db_column='fax_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX2')
+    faxNo2 = EncryptedCharField(db_column='fax_no2', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX2')
     faxNo3 = models.CharField(db_column='fax_no3', max_length=5, null=True, blank=True, default=None, verbose_name='회사FAX3')
     cellNo1 = models.CharField(db_column='cell_no1', max_length=5, null=True, blank=True, default=None, verbose_name='매장휴대폰1')
-    cellNo2 = models.CharField(db_column='cell_no2', max_length=5, null=True, blank=True, default=None, verbose_name='매장휴대폰2')
+    cellNo2 = EncryptedCharField(db_column='cell_no2', max_length=5, null=True, blank=True, default=None, verbose_name='매장휴대폰2')
     cellNo3 = models.CharField(db_column='cell_no3', max_length=5, null=True, blank=True, default=None, verbose_name='매장휴대폰3')
     zipCd = models.CharField(db_column='zip_cd', max_length=6, blank=True, verbose_name='매장우편번호')
     addr1 = models.TextField(db_column='addr_1', max_length=200, blank=True, verbose_name='매장기본주소')

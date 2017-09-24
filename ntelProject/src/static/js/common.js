@@ -8,11 +8,11 @@
 var console = window.console || {log:function(){}};
 
 $(document).ready(function() {
-	// AjaxSetup
+    // AjaxSetup
     $.gfAjaxSetup();
 
-	// 가능한 추가 하지 마시요
-	// ajax 실행시 로딩중 Spinner 표시
+    // 가능한 추가 하지 마시요
+    // ajax 실행시 로딩중 Spinner 표시
     $(document).ajaxStart(function() {
     }).ajaxSend(function( event, jqxhr, settings ) {
 //        $.gfToggleLoading($("#boxContents"), true);
@@ -176,7 +176,7 @@ $.gfLoadContentsData = function(opts) {
     var menuId = opts.menuId;
     var params = $.isEmpty(opts.params) ? {} : opts.params;
 
-    params.menuId = menuId;    
+    params.menuId = menuId;
 
     $.gfAjax({
         type: "POST",
@@ -210,7 +210,7 @@ $.gfLoadInitPage = function () {
 
     // 메뉴정보가 없을 경우
     if(!$.gfIsValidMenu()) {
-        
+
         // 메뉴리스트 중에서 제일 첫번째 세팅
         var upMenuId = GD_SYS_MENU[0].upMenuId;
         var menuId   = GD_SYS_MENU[0].menuId;
@@ -228,15 +228,15 @@ $.gfLoadInitPage = function () {
     $('#menu_' + menuId).trigger('click');
 };
 
-/* 
+/*
  * 쿠키에 메뉴정보가 있는지 메뉴정보가 존재하는지 확인
  */
 $.gfIsValidMenu = function() {
     var isValidMenu = false;
-    
+
     // 쿠키에 메뉴정보가 없을 경우
     if($.isEmpty($.cookie("menuInfo"))) return false;
-    
+
     // 메뉴가 공통메뉴 데이터에 있을 경우
     var menuId = $.cookie("menuInfo").split(',')[1];
     $.each(GD_SYS_MENU, function(index, value) {
@@ -304,7 +304,7 @@ $.gfCommonPopUp = function(opts) {
 
             // body에 추가
             $(document.body).append(_divPop);
-            
+
             // 모달 Show 이벤트
             _divPop.on("show.bs.modal", function(e) {
             });
@@ -316,7 +316,7 @@ $.gfCommonPopUp = function(opts) {
                     $.fnInitPop();
                 }
             });
-            
+
             // 모달 Hide 이벤트
             _divPop.on("hide.bs.modal", function(e) {
             });
@@ -330,7 +330,7 @@ $.gfCommonPopUp = function(opts) {
 
             // 팝업 보이기
             _divPop.modal("show");
-            
+
         },
         failFunc: function(jqXHR, textStatus, errorThrown) {
             // Http Error처리
@@ -339,7 +339,7 @@ $.gfCommonPopUp = function(opts) {
                 textStatus : textStatus,
                 errorThrown : errorThrown,
                 loginRequired : loginRequired
-            });            
+            });
         }
     });
 };
@@ -1013,18 +1013,18 @@ $.fn.gfSetUserId = function() {
     // Input Event
     _item.on("input", function(e, params) {
         var _this = $(this);
-        
+
         // 숫자 영문자만 입력받게 하기
         _this.val(_this.val().replace(/[^0-9a-zA-Z]/g, ""));
 
         var len = _this.val().length;
-        
+
         if(len < 6) {
             if(!$.isEmpty(_noti)){
                 _noti.html("* 아이디는 6~20자 사이의 영문으로 시작하는 영문/숫자 조합으로 입력해주세요.");
                 _noti.css("color", "#f13221");
             }
-        } 
+        }
 
         if(len >= 6) _this.trigger("change");
 
@@ -1033,7 +1033,7 @@ $.fn.gfSetUserId = function() {
             _this.trigger("change");
         }
     });
-    
+
     // Change Event
     _item.on("change", function(e, params) {
         var _this = $(this);
@@ -1293,12 +1293,12 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
  * Switch 버튼 초기화
  */
 $.gfInitSwitchButton = function(formOnly) {
-    
+
     var _jsSwich = $(".js-switch");
 
     $.each(_jsSwich, function(i, item){
-    	new Switchery(item, { color: "#428bca" });
-    });    
+        new Switchery(item, { color: "#428bca" });
+    });
 };
 
 
@@ -1814,7 +1814,7 @@ $.fgGetComCdData = function(opts) {
     var sortR = $.isEmpty(opts.sortR) ? false : opts.sortR; // 역정렬 순서 여부(기본 오름차순)
 
     comCdData = $.grep(GD_SYS_COM_CD, function(el, inx){
-    	return el.grpCd == grpCd
+        return el.grpCd == grpCd
             && (useYn == "" ? true : el.useYn == useYn)
             && (grpOpt == "" ? true : el.grpOpt.indexOf(grpOpt) > -1)
             && (dnOrdSeq == "" ? true : el.ordSeq > dnOrdSeq)
@@ -1823,13 +1823,13 @@ $.fgGetComCdData = function(opts) {
             && (upeOrdSeq == "" ? true : el.ordSeq <= upeOrdSeq)
             ;
     });
-    
+
     if(sortR){
-		comCdData = comCdData.sort(function(a, b){
-			return b.ordSeq - a.ordSeq;
-		});	
-	}
-    
+        comCdData = comCdData.sort(function(a, b){
+            return b.ordSeq - a.ordSeq;
+        });
+    }
+
     return comCdData;
 };
 
@@ -1870,10 +1870,10 @@ $.gfInitFormField = function(formOnly) {
 
     // Chosen Select 초기화
     $.gfInitChosen(formOnly);
-    
+
     // 매장 필드 초기화
     $.gfInitShop2ComboBox(formOnly);
-    
+
     // Switch 버튼 초기화
     $.gfInitSwitchButton(formOnly);
 
@@ -2503,10 +2503,10 @@ $.gfSetSysMenu = function() {
  * Post 방식의 CSRF Token 쿠키 세팅
  */
 $.gfAjaxSetup = function() {
-	// CSRF 세팅
-	$.ajaxSetup({
+    // CSRF 세팅
+    $.ajaxSetup({
         headers: { "X-CSRFToken": $.cookie("csrftoken") }
-	});
+    });
 };
 
 /*
@@ -2547,7 +2547,7 @@ $.gfAjax = function(opts) {
     var alwaysFunc      = opts.alwaysFunc;     // Ajax 항상실행 처리할 함수
     var _spinTarget     = opts.spinTarget;     // Ajax 실행시 spinner 처리 대상
 
-    // POST방식일 경우 
+    // POST방식일 경우
     if(type == "POST") data.csrfmiddlewaretoken = $.gfGetCsrfToken();
 
     try {
@@ -2655,9 +2655,9 @@ $.gfHttpErrorPopup = function(opts) {
  * Ajax 호출 후 결과 처리
  */
 $.gfAjaxSetResult = function(data) {
-	var resultCode = data["resultCode"];
-	var resultMessage = data["resultMessage"];
-	var errorItem = data["errorItem"];
+    var resultCode = data["resultCode"];
+    var resultMessage = data["resultMessage"];
+    var errorItem = data["errorItem"];
 
     if(resultCode != 'OK') {
 
@@ -2670,15 +2670,15 @@ $.gfAjaxSetResult = function(data) {
             _errorItem.focus();
         }
 
-		$.gfNotiMsg({
-			msgCd : "",
-			msgType : "warning",
-		    title : "확인",
-		    msg : resultMessage,
-		    msgFrom : "S"
-		});
+        $.gfNotiMsg({
+            msgCd : "",
+            msgType : "warning",
+            title : "확인",
+            msg : resultMessage,
+            msgFrom : "S"
+        });
 
-		return false
+        return false
     }
 
     return true
@@ -2689,7 +2689,7 @@ $.gfAjaxSetResult = function(data) {
  * http://t4t5.github.io/sweetalert/ 참조
  */
 $.gfAlert = function(opts) {
-    
+
     if($.isEmpty(opts)) return false;
 
     var title = $.isEmpty(opts.title) ? "확인" : opts.title;
@@ -2707,7 +2707,7 @@ $.gfAlert = function(opts) {
     function(){
         if(!$.isEmpty(opts.cbFunc)) opts.cbFunc();
     });
-} 
+}
 
 
 /*
@@ -2717,11 +2717,11 @@ $.gfAlert = function(opts) {
 $.gfComfirm = function(opts) {
 
     if($.isEmpty(opts)) return false;
-    
+
     var title = $.isEmpty(opts.title) ? "확인" : opts.title;
     var text = $.isEmpty(opts.text) ? "처리하시겠습니까?" : opts.text;
     var confirmButtonText = $.isEmpty(opts.confirmButtonText) ? "확인" : opts.confirmButtonText;
-    
+
     swal({
         title: title,
         text: text,
@@ -2737,6 +2737,21 @@ $.gfComfirm = function(opts) {
     function(isConfirm){
         if(!$.isEmpty(opts.cbFunc)) opts.cbFunc(isConfirm);
     });
+};
+
+
+/*
+ *  Json 데이터를 특정 컬럼기준 배열로 획득
+ */
+$.gfJsonToArray = function(jsonData, colNm){
+
+    var rtnArr = [];
+
+    $.each(jsonData, function(i, item) {
+        rtnArr.push(eval("item." + colNm));
+    });
+
+    return rtnArr;
 };
 
 

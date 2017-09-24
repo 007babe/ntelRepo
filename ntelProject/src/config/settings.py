@@ -238,5 +238,5 @@ EMAIL_USE_TLS = True
 # 기본 메일 발송자 설정
 DEFAULT_FROM_EMAIL = 'ntel5400@naver.com'
 
-
+ENCRYPTED_FIELDS_KEYDIR = "C:\\ntelProject\\Install\\fieldkeys"
 
