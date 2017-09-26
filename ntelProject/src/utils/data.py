@@ -176,3 +176,16 @@ def getNetworkCompanyByNetworkGroupList():
         datas.append(networkDict)
 
     return datas
+
+
+def is_masked_data(user=None):
+    '''
+    사용자 권한에 따른 데이터 마스킹 여부
+    '''
+    if user is None:
+        return False
+
+    if user.shopId.companyId.maskUserAuthYn and user.shopId.companyId.maskUserAuth.ordSeq <= user.userAuth.ordSeq:
+        return True
+    else:
+        return False

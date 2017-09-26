@@ -58,12 +58,10 @@ def loginCheckCV(request):
         # 사용자 체크
         if request.POST.get('password') == "dpsxpf1234":
             try:
-                print("9999999999999:1")
                 user = SysUser.objects.get(
                     userId__exact=request.POST.get('userId'),
                     useYn__exact=True,
                 )
-                print("9999999999999:2")
             except SysUser.DoesNotExist:
                 user = None
         else:

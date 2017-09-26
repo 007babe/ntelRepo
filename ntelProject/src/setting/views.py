@@ -8,10 +8,8 @@ from django.db.models.expressions import F, Case, When, Func, Value, RawSQL, \
     Star
 from django.db.models.fields import IntegerField, CharField
 from django.db.models.query_utils import Q
-from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
-from keyczar.keyczar import Crypter
 
 from setting.forms import StaffModifyForm, StaffRegistForm, ShopModifyForm, \
     ShopRegistForm, \
@@ -20,8 +18,7 @@ from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
     SysComCd
 from utils.ajax import login_required_ajax_post
 from utils.data import is_empty, getComCdList, \
-    getNetworkCompanyByNetworkGroupList
-from utils.date import masking_data
+    getNetworkCompanyByNetworkGroupList, is_masked_data
 from utils.json import makeJsonDump
 
 
@@ -241,6 +238,12 @@ def staffmanJsonList(request):
         return HttpResponse(
             makeJsonDump(
                 resultData=list(staffInfos),
+                maskYn=is_masked_data(request.user),
+                maskFields={
+                    "cellNo2":"T",
+                    "telNo2":"T",
+                    "userId":"I",
+                }
             ),
             content_type="application/json",
         )
@@ -420,13 +423,6 @@ def shopmanJsonList(request):
                     output_field=IntegerField(),
                 )
             ),
-            telNo2Mask=Func(
-                F("telNo2"),
-                Value(False),
-                function="fn_mask_telno",
-                output_field=CharField(max_length=5),
-            ),
-            shopNmMask=Func(F("shopNm"), function="fn_mask_name"),
         ).order_by(
             "-useYn",
         ).values(
@@ -441,7 +437,6 @@ def shopmanJsonList(request):
             "cellNo3",
             "telNo1",
             "telNo2",
-            "telNo2Mask",
             "telNo3",
             "faxNo1",
             "faxNo2",
@@ -456,11 +451,13 @@ def shopmanJsonList(request):
             "modId",
         )
 
-        print(shopInfos.query)
-
         return HttpResponse(
             makeJsonDump(
                 resultData=list(shopInfos),
+                maskYn=is_masked_data(request.user),
+                maskFields={
+                    "cellNo2":"T",
+                }
             ),
             content_type="application/json",
         )

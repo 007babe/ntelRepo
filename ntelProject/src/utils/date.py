@@ -15,19 +15,3 @@ def getltdt(strDt=None):
         return strDt
 
     return ltdt
-
-
-def masking_data(data=None, maskingYn=True, encyptYn=False):
-    '''
-    데이터 마스킹 처리
-    '''
-    print(data, type(data))
-
-    if data is not None and maskingYn:
-        # 암호화 데이터 일 경우 복호화 처리
-        if encyptYn:
-            crypter = Crypter.Read(settings.ENCRYPTED_FIELDS_KEYDIR)
-            data = crypter.Decrypt(data)
-
-    return "aaab"
-#    return data
