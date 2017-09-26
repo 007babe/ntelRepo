@@ -11,6 +11,7 @@ from django.urls.base import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 
+from main.forms import UserInfoModifyForm
 from system.forms import SysUserChangeShopForm, SysPasswordChangeForm
 from system.models import SysMenu, SysShop, SysUser
 from utils.ajax import login_required_ajax, login_required_ajax_post
@@ -121,6 +122,48 @@ def jsonChangeShop(request):
         )
     else:
         raise PermissionDenied()
+
+
+@login_required_ajax_post
+def userInfoDetailCV(request):
+    '''
+    메인 > 사용자정보 : 상세
+    '''
+    # Rendering
+    return render(
+        request,
+        'main/user_info/detail.html',
+        {},
+    )
+
+
+@login_required_ajax_post
+def userInfoJsonModify(request):
+    '''
+    사용자정보 수정 요청처리
+    '''
+    resultData = {}
+
+    # 사용자정보 수정 폼
+    userInfoModifyForm = UserInfoModifyForm(
+        request.POST,
+        instance=request.user,
+        request=request,
+    )
+
+    # 데이터 검증 후 저장
+    if userInfoModifyForm.is_valid():
+        userInfoModifyForm.save()
+        resultData["userNm"] = request.user.userNm  # 사용자 이름을 전달
+
+    return HttpResponse(
+        makeJsonDump(
+            form=userInfoModifyForm,
+            resultMessage="수정되었습니다.",
+            resultData=resultData,
+        ),
+        content_type="application/json",
+    )
 
 
 @login_required_ajax_post

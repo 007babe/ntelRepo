@@ -1293,10 +1293,14 @@ $.fn.gfSetStaff2ComboBox = function(opts) {
  * Switch 버튼 초기화
  */
 $.gfInitSwitchButton = function(formOnly) {
+    var conditionSelector = "[formType='switch']";
 
-    var _jsSwich = $(".js-switch");
+    if(!$.isEmpty(formOnly)) conditionSelector += "[formOnly='" + formOnly + "']";
 
-    $.each(_jsSwich, function(i, item){
+    // Switch 로 세팅될 값들을 찾아온다(formType="switch")
+    var _switch = $(conditionSelector); // 공통코드 Select 박스 대상들
+
+    $.each(_switch, function(i, item){
         new Switchery(item, { color: "#428bca" });
     });
 };

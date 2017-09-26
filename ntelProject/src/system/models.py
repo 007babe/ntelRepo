@@ -681,7 +681,7 @@ class SysUser(AbstractBaseUser, PermissionsMixin):
     userNm = models.CharField(db_column='user_nm', max_length=30, null=False, blank=False, verbose_name='사용자 이름')
     shopId = models.ForeignKey('system.SysShop', on_delete=models.CASCADE, db_column='shop_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_shop_id', verbose_name='사용매장ID')  # SysShop.shopId
     orgShopId = models.ForeignKey('system.SysShop', on_delete=models.CASCADE, db_column='org_shop_id', null=True, blank=True, default=None, related_name='r_%(app_label)s_%(class)s_org_shop_id', verbose_name='소속매장ID')  # SysShop.shopId
-    email = models.EmailField(db_column='email', max_length=255, null=True, blank=True, default=None, verbose_name='이메일')
+    email = models.EmailField(db_column='email', max_length=255, null=False, blank=False, default=None, verbose_name='이메일')
     telNo1 = models.CharField(db_column='tel_no1', max_length=5, null=True, blank=True, default=None, verbose_name='전화1')
     telNo2 = EncryptedCharField(db_column='tel_no2', max_length=5, null=True, blank=True, default=None, verbose_name='전화2')
     telNo3 = models.CharField(db_column='tel_no3', max_length=5, null=True, blank=True, default=None, verbose_name='전화3')

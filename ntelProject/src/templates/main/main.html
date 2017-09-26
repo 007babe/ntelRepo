@@ -40,7 +40,7 @@
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear">
                             <span class="block m-t-xs">
-                                <strong class="font-bold">{{ user.userNm }}</strong>
+                                <strong class="font-bold"><span id="spanMainUserNm">{{ user.userNm }}</span></strong>
                             </span>
                             <span class="text-muted text-xs block">
                                 {{ user.userAuthNm }} <b class="caret"></b>
@@ -49,10 +49,11 @@
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <input type="hidden" id="loginUserId" value="{{ user.userId }}">
+                        <li><a id="aUserInfo" href="#">사용자정보</a></li>
+                        <li><a id="aChangePw" href="#">비밀번호변경</a></li>
+                        <!-- 
                         <li><a id="aCompanyInfo" href="#">회사정보</a></li>
                         <li><a id="aShopInfo" href="#">매장정보</a></li>
-                        <li><a id="aUserInfo" href="#">개인정보</a></li>
-                        <li><a id="aChangePw" href="#">비밀번호변경</a></li>
                         <li><a href="#">이름 : {{ user.userNm }}</a></li>
                         <li><a href="#">아이디 : {{ user.userId }}</a></li>
                         <li><a href="#">소속회사 : {{ user.companyNm }}</a></li>
@@ -62,7 +63,6 @@
                         <li><a href="#">소속매장직원 : {{ user.orgShopStaffs|countUseYn:True }} / {{ user.orgShopStaffs.count }} 명</a></li>
                         <li><a href="#">사용매장 : {{ user.shopNm }}/{{ user.shopId }}</a></li>
                         <li><a href="#">사용매장직원 : {{ user.shopStaffs|countUseYn:True }} / {{ user.shopStaffs.count }} 명</a></li>
-                        <!-- 
                         <li><a href="#">소속회사ID : 정기</a></li>
                         <li><a href="#">소속매장 : 매월5일</a></li>
                         <li><a href="#">등급 : 기본형</a></li>
@@ -255,13 +255,17 @@ $(document).ready(function() {
 	});
 
     $("#aUserInfo").on("click", function() {
-		console.log("aUserInfo Click!!!!!!!!")    		
+        // 상세 팝업
+        $.gfCommonPopUp({
+            popUrl: "{% url 'main:user_info__detail' %}",
+            modalId: "divLoginUserInfoPopup",
+            width: "600",
+            loginCheck: true,
+        });
 	});
     
     // 비밀번호 변경 
     $("#aChangePw").on("click", function() {
-		// main:change_password__detail
-    	console.log("aChangePw Click!!!!!!!!")    		
         // 상세 팝업
         $.gfCommonPopUp({
             popUrl: "{% url 'main:change_password__detail' %}",
