@@ -42,7 +42,6 @@ def jsonDefault(value):
 
     raise TypeError('not JSON serializable')
 
-
 def makeJsonResult(result=True, resultMessage=None, form=None, resultData=None):
     '''
     json결과 세팅
@@ -95,4 +94,5 @@ def makeJsonDump(result=True, resultMessage=None, form=None, resultData=None):
     return json.dumps(
         jsonData,
         default=jsonDefault,
+        indent=2,
     )

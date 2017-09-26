@@ -4,9 +4,11 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models.aggregates import Count
-from django.db.models.expressions import F, Case, When, Func
+from django.db.models.expressions import F, Case, When, Func, Value, RawSQL, \
+    Star
 from django.db.models.fields import IntegerField, CharField
 from django.db.models.query_utils import Q
+from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from keyczar.keyczar import Crypter
@@ -19,6 +21,7 @@ from system.models import SysUser, SysShop, SysCompanyAccount, SysCompany, \
 from utils.ajax import login_required_ajax_post
 from utils.data import is_empty, getComCdList, \
     getNetworkCompanyByNetworkGroupList
+from utils.date import masking_data
 from utils.json import makeJsonDump
 
 
@@ -388,14 +391,6 @@ def shopmanJsonList(request):
         sUseYn = request.POST.get("sUseYn")
         sShopNm = request.POST.get("sShopNm")
 
-        print("sShopNm:", sShopNm)
-        crypter = Crypter.Read(settings.ENCRYPTED_FIELDS_KEYDIR)
-        sShopNmEncrypt = crypter.Encrypt(sShopNm)
-        print("sShopNmEncrypt:", sShopNmEncrypt)
-        sShopNmDecrypt = crypter.Decrypt(sShopNmEncrypt)
-        print("sShopNmDecrypt:", sShopNmDecrypt)
-        print("AEDMl7jhVJ3uSrJClh7PVdBpQCFYAfsUx96IqsKtLoGJIpTX6gXHod1Lna7cePau8y5DWaDal8d9", crypter.Decrypt("AEDMl7jhVJ3uSrJClh7PVdBpQCFYAfsUx96IqsKtLoGJIpTX6gXHod1Lna7cePau8y5DWaDal8d9"))
-
         # Query
         qry = Q()
         ####################
@@ -427,6 +422,7 @@ def shopmanJsonList(request):
             ),
             telNo2Mask=Func(
                 F("telNo2"),
+                Value(False),
                 function="fn_mask_telno",
                 output_field=CharField(max_length=5),
             ),
@@ -459,6 +455,8 @@ def shopmanJsonList(request):
             "modDt",
             "modId",
         )
+
+        print(shopInfos.query)
 
         return HttpResponse(
             makeJsonDump(

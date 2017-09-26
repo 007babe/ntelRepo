@@ -64,7 +64,7 @@ $(document).ready(function() {
     $("#dataGrid").jqGridInit({
         pager: "#pagerList",
         colNames:[
-        	'상태', '매장', '매장ID', '전체', '사용중', '미사용', '전화', 'Fax', '휴대폰', '주소', '등록일'
+        	'상태', '매장', '매장ID', '전체', '사용중', '미사용', '전화마스크', '전화', 'Fax', '휴대폰', '주소', '등록일'
         ],
         align: "center",
         colModel:[
@@ -109,11 +109,16 @@ $(document).ready(function() {
                 align: "right"
             },
             {
+                name: 'telNo2Mask',
+                width: 120,
+                align: "center",
+            },
+            {
                 name: 'telNo',
                 width: 120,
                 align: "center",
                 formatter: function(cellvalue, options, rowObject) {
-                    return $.jqGridTelNoFormat(rowObject.telNo1, rowObject.telNo2Mask, rowObject.telNo3);
+                    return $.jqGridTelNoFormat(rowObject.telNo1, rowObject.telNo2, rowObject.telNo3);
                 }
             },
             {

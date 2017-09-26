@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Added Module
+    'django_extensions',
+
     # Added Apps
     'common.apps.CommonConfig',  # 공통 App
     'system.apps.SystemConfig',  # System 관련 App
@@ -239,4 +242,4 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'ntel5400@naver.com'
 
 ENCRYPTED_FIELDS_KEYDIR = "C:\\ntelProject\\Install\\fieldkeys"
-
+ENCRYPTED_FIELD_KEYS_DIR = "C:\\ntelProject\\Install\\fieldkeys"
